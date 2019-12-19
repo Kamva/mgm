@@ -82,14 +82,16 @@ const (
 	// From         = "from" // Declared
 	LocalField   = "localField"
 	ForeignField = "foreignField"
+	Let          = "let"
+	Pipeline     = "pipeline"
 	// As           = "as" // Declared
 )
 
 // $merge
 const (
-	Into           = "into"
-	On             = "on"
-	Let            = "let"
+	Into = "into"
+	On   = "on"
+	// Let            = "let" // Declared
 	WhenMatched    = "whenMatched"
 	WhenNotMatched = "whenNotMatched"
 )
