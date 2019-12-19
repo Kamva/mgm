@@ -2,7 +2,7 @@ package mgm
 
 import "go.mongodb.org/mongo-driver/bson"
 
-// S is simple map that can be substitute  of `bson.M` type of mongo to
+// S is simple map that can be substitute  of `bson.M` to
 // having simpler map structure on query,aggregate,...
 type S []Operator
 

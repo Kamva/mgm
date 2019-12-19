@@ -1,4 +1,4 @@
-package operators
+package operator
 
 // Arithmetic Expression Operators
 const (

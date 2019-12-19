@@ -1,4 +1,4 @@
-package operators
+package operator
 
 // Modifiers
 const (

@@ -4,6 +4,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"mgm/field"
 )
 
 type Collection struct {
@@ -18,7 +19,7 @@ func (coll *Collection) FindById(id interface{}, model Model) error {
 		return err
 	}
 
-	return first(coll, bson.M{"_id": id}, model)
+	return first(coll, bson.M{field.Id: id}, model)
 }
 
 func (coll *Collection) First(filter interface{}, model Model, opts ...*options.FindOneOptions) error {

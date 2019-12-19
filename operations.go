@@ -3,6 +3,7 @@ package mgm
 import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"mgm/field"
 )
 
 func create(c *Collection, model Model) error {
@@ -33,7 +34,7 @@ func update(c *Collection, model Model) error {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx(), bson.M{"_id": model.GetId()}, bson.M{"$set": model})
+	res, err := c.UpdateOne(ctx(), bson.M{field.Id: model.GetId()}, bson.M{"$set": model})
 
 	if err != nil {
 		return err
@@ -46,7 +47,7 @@ func del(c *Collection, model Model) error {
 	if err := callToBeforeDeleteHooks(model); err != nil {
 		return err
 	}
-	res, err := c.DeleteOne(ctx(), bson.M{"_id": model.GetId()})
+	res, err := c.DeleteOne(ctx(), bson.M{field.Id: model.GetId()})
 	if err != nil {
 		return err
 	}

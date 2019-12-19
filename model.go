@@ -17,3 +17,11 @@ type DefaultModel struct {
 	IdField    `bson:",inline"`
 	DateFields `bson:",inline"`
 }
+
+func (model *DefaultModel) Creating() error {
+	return model.DateFields.Creating()
+}
+
+func (model *DefaultModel) Saving() error {
+	return model.DateFields.Saving()
+}

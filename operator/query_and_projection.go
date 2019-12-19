@@ -1,4 +1,4 @@
-package operators
+package operator
 
 // Comparison
 const (
