@@ -48,10 +48,6 @@ type Doc struct {
 	Age  int    `bson:"age"`
 }
 
-func (d *Doc) CollectionName() string {
-	return "docs"
-}
-
 func NewDoc(name string, age int) *Doc {
 	return &Doc{Name: name, Age: age}
 }

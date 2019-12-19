@@ -7,9 +7,12 @@ type CollectionGetter interface {
 	Collection() *Collection
 }
 
-type Model interface {
+type CollectionNameGetter interface {
+	// Collection method return collection
 	CollectionName() string
+}
 
+type Model interface {
 	// PrepareId convert id value if need, and then
 	// return it.(e.g convert string to objectId)
 	PrepareId(id interface{}) (interface{}, error)
