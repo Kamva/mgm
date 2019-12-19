@@ -37,7 +37,7 @@ func TestGetCollection(t *testing.T) {
 	// Setup connection
 	setupDefConnection()
 
-	col := mgm.GetCollection("test_collection")
+	col := mgm.CollectionByName("test_collection")
 
 	require.Equal(t, col.Name(), "test_collection")
 }

@@ -15,8 +15,8 @@ func setupDefConnection() {
 }
 
 func resetCollection() {
-	_, err := mgm.ModelCollection(&Doc{}).DeleteMany(mgm.Ctx(), bson.M{})
-	_, err2 := mgm.ModelCollection(&Person{}).DeleteMany(mgm.Ctx(), bson.M{})
+	_, err := mgm.Coll(&Doc{}).DeleteMany(mgm.Ctx(), bson.M{})
+	_, err2 := mgm.Coll(&Person{}).DeleteMany(mgm.Ctx(), bson.M{})
 
 	internal.PanicErr(err)
 	internal.PanicErr(err2)
@@ -29,14 +29,14 @@ func seed() {
 		NewDoc("Reza", 26),
 		NewDoc("Omid", 27),
 	}
-	_, err := mgm.ModelCollection(&Doc{}).InsertMany(mgm.Ctx(), docs)
+	_, err := mgm.Coll(&Doc{}).InsertMany(mgm.Ctx(), docs)
 
 	internal.PanicErr(err)
 }
 
 func findDoc(t *testing.T) *Doc {
 	found := &Doc{}
-	internal.AssertErrIsNil(t, mgm.ModelCollection(found).FindOne(mgm.Ctx(), bson.M{}).Decode(found))
+	internal.AssertErrIsNil(t, mgm.Coll(found).FindOne(mgm.Ctx(), bson.M{}).Decode(found))
 
 	return found
 }
@@ -48,8 +48,8 @@ type Doc struct {
 	Age  int    `bson:"age"`
 }
 
-func (d *Doc) Collection() *mgm.Collection {
-	return mgm.GetCollection("docs")
+func (d *Doc) CollectionName() string {
+	return "docs"
 }
 
 func NewDoc(name string, age int) *Doc {

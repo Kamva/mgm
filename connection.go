@@ -79,8 +79,8 @@ func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOption
 	return nil
 }
 
-// GetCollection return new collection from default config
-func GetCollection(name string, opts ...*options.CollectionOptions) *Collection {
+// CollectionByName return new collection from default config
+func CollectionByName(name string, opts ...*options.CollectionOptions) *Collection {
 	return NewCollection(db, name)
 }
 

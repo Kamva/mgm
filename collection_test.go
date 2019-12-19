@@ -13,7 +13,7 @@ func TestFindByIdWithInvalidId(t *testing.T) {
 	resetCollection()
 	seed()
 
-	require.NotNil(t, mgm.ModelCollection(&Doc{}).FindById("invalid id", &Doc{}))
+	require.NotNil(t, mgm.Coll(&Doc{}).FindById("invalid id", &Doc{}))
 }
 
 func TestFindFirst(t *testing.T) {
@@ -22,7 +22,7 @@ func TestFindFirst(t *testing.T) {
 	seed()
 
 	d := &Doc{}
-	internal.AssertErrIsNil(t, mgm.ModelCollection(&Doc{}).First(bson.M{}, d))
+	internal.AssertErrIsNil(t, mgm.Coll(&Doc{}).First(bson.M{}, d))
 
 	require.False(t, d.IsNew())
 }
@@ -33,14 +33,14 @@ func TestCreateDoc(t *testing.T) {
 
 	doc := NewDoc("Ali", 24)
 
-	internal.AssertErrIsNil(t, doc.Collection().Create(doc))
+	internal.AssertErrIsNil(t, mgm.Coll(doc).Create(doc))
 
 	// Inserted model's id should not be nil:
 	require.NotNil(t, doc.Id, "Expected document having id after insertion, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	internal.AssertErrIsNil(t, doc.Collection().FindById(doc.Id, foundDoc))
+	internal.AssertErrIsNil(t, mgm.Coll(doc).FindById(doc.Id, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -52,14 +52,14 @@ func TestSaveNewDoc(t *testing.T) {
 
 	doc := NewDoc("Ali", 24)
 
-	internal.AssertErrIsNil(t, doc.Collection().Save(doc))
+	internal.AssertErrIsNil(t, mgm.Coll(doc).Save(doc))
 
 	// Inserted model's id should not be nil:
 	require.NotNil(t, doc.Id, "Expected document having id after save, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	internal.AssertErrIsNil(t, doc.Collection().FindById(doc.Id, foundDoc))
+	internal.AssertErrIsNil(t, mgm.Coll(doc).FindById(doc.Id, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -75,7 +75,7 @@ func TestUpdateDoc(t *testing.T) {
 	found.Name = found.Name + "_extra_val"
 	found.Age = found.Age + 4
 
-	internal.AssertErrIsNil(t, found.Collection().Update(found))
+	internal.AssertErrIsNil(t, mgm.Coll(found).Update(found))
 
 	// Find that doc again:
 	newFound := findDoc(t)
@@ -97,7 +97,7 @@ func TestSaveExistedDoc(t *testing.T) {
 	found.Name = found.Name + "_extra_val"
 	found.Age = found.Age + 4
 
-	internal.AssertErrIsNil(t, found.Collection().Save(found))
+	internal.AssertErrIsNil(t, mgm.Coll(found).Save(found))
 
 	// Find that doc again:
 	newFound := findDoc(t)
@@ -117,7 +117,7 @@ func TestDeleteDoc(t *testing.T) {
 
 	found := findDoc(t)
 
-	internal.AssertErrIsNil(t, found.Collection().Delete(found))
+	internal.AssertErrIsNil(t, mgm.Coll(found).Delete(found))
 
 	// Find that doc again:
 	newFound := findDoc(t)

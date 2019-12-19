@@ -19,8 +19,8 @@ type Person struct {
 	Age  int    `bson:"age"`
 }
 
-func (d *Person) Collection() *mgm.Collection {
-	return mgm.GetCollection("persons")
+func (d *Person) CollectionName() string {
+	return "persons"
 }
 
 func NewPerson(name string, age int) *Person {
@@ -34,7 +34,7 @@ func insertPerson(person *Person) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.PanicErr(person.Collection().Save(person))
+	internal.PanicErr(mgm.Coll(person).Save(person))
 }
 
 //--------------------------------
@@ -91,13 +91,13 @@ func TestReturnErrorInCreatingHook(t *testing.T) {
 	// Set listeners to mocked hooks:
 	person.On("Creating").Return(creatingErr)
 
-	err := person.Collection().Create(person)
+	err := mgm.Coll(person).Create(person)
 
 	require.Equal(t, creatingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
 
 	// Expected do not inserting this model:
-	count, _ := person.Collection().CountDocuments(mgm.Ctx(), bson.M{})
+	count, _ := mgm.Coll(person).CountDocuments(mgm.Ctx(), bson.M{})
 	require.Equal(t, count, int64(0))
 }
 
@@ -113,7 +113,7 @@ func TestCreatingDocHooks(t *testing.T) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.AssertErrIsNil(t, person.Collection().Create(person))
+	internal.AssertErrIsNil(t, mgm.Coll(person).Create(person))
 	person.AssertExpectations(t)
 }
 
@@ -128,13 +128,13 @@ func TestReturnErrorInSavingHook(t *testing.T) {
 	person.On("Creating").Return(nil)
 	person.On("Saving").Return(savingErr)
 
-	err := person.Collection().Save(person)
+	err := mgm.Coll(person).Save(person)
 
 	require.Equal(t, savingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
 
 	// Expected do not inserting this model:
-	count, _ := person.Collection().CountDocuments(mgm.Ctx(), bson.M{})
+	count, _ := mgm.Coll(person).CountDocuments(mgm.Ctx(), bson.M{})
 	require.Equal(t, count, int64(0))
 }
 
@@ -150,7 +150,7 @@ func TestSavingDocHooks(t *testing.T) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.AssertErrIsNil(t, person.Collection().Create(person))
+	internal.AssertErrIsNil(t, mgm.Coll(person).Create(person))
 	person.AssertExpectations(t)
 }
 func TestReturnErrorInUpdatingHook(t *testing.T) {
@@ -166,14 +166,14 @@ func TestReturnErrorInUpdatingHook(t *testing.T) {
 	// Set listeners to mocked hooks:
 	person.On("Updating").Return(updatingErr)
 
-	err := person.Collection().Update(person)
+	err := mgm.Coll(person).Update(person)
 
 	require.Equal(t, updatingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
 
 	// Expected do not update this model:
 	oldPerson := &Person{}
-	internal.PanicErr(person.Collection().FindById(person.Id, oldPerson))
+	internal.PanicErr(mgm.Coll(person).FindById(person.Id, oldPerson))
 	require.Equal(t, oldName, oldPerson.Name, "Expected person's name be %s name, but is %s", oldName, person.Name)
 }
 
@@ -191,14 +191,14 @@ func TestUpdatingDocHooks(t *testing.T) {
 	person.On("Updating").Return(nil)
 	person.On("Updated", int64(1), int64(1)).Return(nil)
 
-	err := person.Collection().Update(person)
+	err := mgm.Coll(person).Update(person)
 
 	internal.AssertErrIsNil(t, err)
 	person.AssertExpectations(t)
 
 	// Expected do not update this model:
 	newPerson := &Person{}
-	internal.PanicErr(person.Collection().FindById(person.Id, newPerson))
+	internal.PanicErr(mgm.Coll(person).FindById(person.Id, newPerson))
 	require.Equal(t, newName, newPerson.Name, "Expected person's name be %s , but is %s", newName, person.Name)
 }
 
@@ -213,13 +213,13 @@ func TestReturnErrorInDeletingHook(t *testing.T) {
 	// Set listeners to mocked hooks:
 	person.On("Deleting").Return(deletingErr)
 
-	err := person.Collection().Delete(person)
+	err := mgm.Coll(person).Delete(person)
 
 	require.Equal(t, deletingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
 
 	// Expected do not delete this model:
-	count, _ := person.Collection().CountDocuments(mgm.Ctx(), bson.M{})
+	count, _ := mgm.Coll(person).CountDocuments(mgm.Ctx(), bson.M{})
 	require.Equal(t, count, int64(1), "Expected having one document,got ", count)
 }
 
@@ -232,13 +232,13 @@ func TestDeletingDocHooks(t *testing.T) {
 
 	// Set listeners to mocked hooks:
 	person.On("Deleting").Return(nil)
-	person.On("Deleted",int64(1)).Return(nil)
+	person.On("Deleted", int64(1)).Return(nil)
 
-	internal.AssertErrIsNil(t, person.Collection().Delete(person))
+	internal.AssertErrIsNil(t, mgm.Coll(person).Delete(person))
 
 	person.AssertExpectations(t)
 
 	// Expected do not delete this model:
-	count, _ := person.Collection().CountDocuments(mgm.Ctx(), bson.M{})
+	count, _ := mgm.Coll(person).CountDocuments(mgm.Ctx(), bson.M{})
 	require.Equal(t, count, int64(0), "Expected having no documents,got ", count)
 }
