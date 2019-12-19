@@ -9,32 +9,32 @@ type Collection struct {
 }
 
 // Find a doc and decode it to model, otherwise return error
-func (c *Collection) Find(id interface{}, model Model) error {
+func (coll *Collection) First(id interface{}, model Model) error {
 	id, err := model.PrepareId(id)
 
 	if err != nil {
 		return err
 	}
 
-	return find(c, id, model)
+	return find(coll, id, model)
 }
 
-func (c *Collection) Create(model Model) error {
-	return create(c, model)
+func (coll *Collection) Create(model Model) error {
+	return create(coll, model)
 }
 
-func (c *Collection) Update(model Model) error {
-	return update(c, model)
+func (coll *Collection) Update(model Model) error {
+	return update(coll, model)
 }
 
-func (c *Collection) Save(model Model) error {
+func (coll *Collection) Save(model Model) error {
 	if model.IsNew() {
-		return create(c, model)
+		return create(coll, model)
 	}
 
-	return update(c, model)
+	return update(coll, model)
 }
 
-func (c *Collection) Delete(model Model) error {
-	return del(c, model)
+func (coll *Collection) Delete(model Model) error {
+	return del(coll, model)
 }
