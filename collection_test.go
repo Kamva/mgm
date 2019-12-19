@@ -2,17 +2,29 @@ package mgm_test
 
 import (
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson"
 	"mgm"
 	"mgm/internal"
 	"testing"
 )
 
-func TestFindDocWithInvalidId(t *testing.T) {
+func TestFindByIdWithInvalidId(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
 	seed()
 
-	require.NotNil(t, mgm.ModelCollection(&Doc{}).First("invalid id", &Doc{}))
+	require.NotNil(t, mgm.ModelCollection(&Doc{}).FindById("invalid id", &Doc{}))
+}
+
+func TestFindFirst(t *testing.T) {
+	setupDefConnection()
+	resetCollection()
+	seed()
+
+	d := &Doc{}
+	internal.AssertErrIsNil(t, mgm.ModelCollection(&Doc{}).First(bson.M{}, d))
+
+	require.False(t, d.IsNew())
 }
 
 func TestCreateDoc(t *testing.T) {
@@ -28,7 +40,7 @@ func TestCreateDoc(t *testing.T) {
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	internal.AssertErrIsNil(t, doc.Collection().First(doc.Id, foundDoc))
+	internal.AssertErrIsNil(t, doc.Collection().FindById(doc.Id, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -47,7 +59,7 @@ func TestSaveNewDoc(t *testing.T) {
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	internal.AssertErrIsNil(t, doc.Collection().First(doc.Id, foundDoc))
+	internal.AssertErrIsNil(t, doc.Collection().FindById(doc.Id, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)

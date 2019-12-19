@@ -2,6 +2,7 @@ package mgm
 
 import (
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func create(c *Collection, model Model) error {
@@ -22,8 +23,8 @@ func create(c *Collection, model Model) error {
 	return callToAfterCreateHooks(model)
 }
 
-func find(c *Collection, id interface{}, model Model) error {
-	return c.FindOne(ctx(), bson.M{"_id": id}).Decode(model)
+func first(c *Collection, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
+	return c.FindOne(ctx(), filter, opts...).Decode(model)
 }
 
 func update(c *Collection, model Model) error {

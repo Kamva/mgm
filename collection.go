@@ -1,7 +1,9 @@
 package mgm
 
 import (
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Collection struct {
@@ -9,14 +11,18 @@ type Collection struct {
 }
 
 // Find a doc and decode it to model, otherwise return error
-func (coll *Collection) First(id interface{}, model Model) error {
+func (coll *Collection) FindById(id interface{}, model Model) error {
 	id, err := model.PrepareId(id)
 
 	if err != nil {
 		return err
 	}
 
-	return find(coll, id, model)
+	return first(coll, bson.M{"_id": id}, model)
+}
+
+func (coll *Collection) First(filter interface{}, model Model, opts ...*options.FindOneOptions) error {
+	return first(coll, filter, model, opts...)
 }
 
 func (coll *Collection) Create(model Model) error {
