@@ -1,0 +1,9 @@
+.idea
+.env
+/lab
+# Compiled test files
+*.test
+
+# Coverage output files
+cover.txt
+cover.html
