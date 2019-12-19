@@ -1,10 +1,10 @@
 package mgm
 
 import (
+	"github.com/Kamva/mgm/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"mgm/field"
 )
 
 type Collection struct {

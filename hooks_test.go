@@ -2,12 +2,12 @@ package mgm_test
 
 import (
 	"errors"
+	"github.com/Kamva/mgm"
+	"github.com/Kamva/mgm/internal"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"mgm"
-	"mgm/internal"
 	"testing"
 )
 

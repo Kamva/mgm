@@ -1,9 +1,9 @@
 package mgm
 
 import (
+	"github.com/Kamva/mgm/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"mgm/field"
 )
 
 func create(c *Collection, model Model) error {
