@@ -1,4 +1,5 @@
-package mgm
+// builder package help us to write aggregate,filter,update maps simpler.
+package builder
 
 import "go.mongodb.org/mongo-driver/bson"
 
@@ -15,3 +16,6 @@ func (s *S) MarshalBSON() ([]byte, error) {
 
 	return bson.Marshal(m)
 }
+
+
+

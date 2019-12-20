@@ -1,4 +1,4 @@
-package mgm
+package builder
 
 type Operator interface {
 	GetKey() string
