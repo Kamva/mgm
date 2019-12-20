@@ -8,14 +8,15 @@ import "go.mongodb.org/mongo-driver/bson"
 type S []Operator
 
 func (s *S) MarshalBSON() ([]byte, error) {
+	return bson.Marshal(s.ToMap())
+}
+
+func (s *S) ToMap() map[string]interface{} {
 	m := make(map[string]interface{})
 
 	for _, o := range *s {
 		m[o.GetKey()] = o.GetVal()
 	}
 
-	return bson.Marshal(m)
+	return m
 }
-
-
-

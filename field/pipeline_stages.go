@@ -82,9 +82,10 @@ const (
 	// From         = "from" // Declared
 	LocalField   = "localField"
 	ForeignField = "foreignField"
+	// As           = "as" // Declared
+
 	Let          = "let"
 	Pipeline     = "pipeline"
-	// As           = "as" // Declared
 )
 
 // $merge

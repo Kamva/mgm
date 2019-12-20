@@ -18,7 +18,7 @@ func (operator *BaseOperator) GetVal() interface{} {
 	return operator.val
 }
 
-func NewOperator(key string, val interface{}) Operator {
+func New(key string, val interface{}) Operator {
 	return &BaseOperator{
 		key: key,
 		val: val,
