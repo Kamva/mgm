@@ -1,4 +1,4 @@
-package internal
+package util
 
 import (
 	"github.com/stretchr/testify/require"

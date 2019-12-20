@@ -2,7 +2,7 @@ package mgm_test
 
 import (
 	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -47,11 +47,11 @@ func TestGetNewClient(t *testing.T) {
 	setupDefConnection()
 
 	client, err := mgm.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-	internal.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, err)
 
 	// Check client connection:
 	err = client.Ping(mgm.Ctx(), readpref.Primary())
-	internal.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, err)
 
 	// Get New Collection:
 	coll := mgm.NewCollection(client.Database("test_db"), "test_col")
@@ -71,9 +71,9 @@ func TestGetDefaultConfigAfterSettingItUp(t *testing.T) {
 
 	conf, client, db, err := mgm.DefaultConfigs()
 
-	if internal.AnyNil(conf, client, db) {
+	if util.AnyNil(conf, client, db) {
 		t.Errorf("expired get config,client,db after setting up default config, got %v,%v,%v", conf, client, db)
 	}
 
-	internal.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, err)
 }

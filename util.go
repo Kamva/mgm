@@ -1,7 +1,7 @@
 package mgm
 
 import (
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"github.com/jinzhu/inflection"
 	"reflect"
 )
@@ -24,5 +24,5 @@ func CollName(m Model) string {
 
 	name := reflect.TypeOf(m).Elem().Name()
 
-	return inflection.Plural(internal.ToSnakeCase(name))
+	return inflection.Plural(util.ToSnakeCase(name))
 }

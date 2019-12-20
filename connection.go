@@ -3,7 +3,7 @@ package mgm
 import (
 	"context"
 	"errors"
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
@@ -85,7 +85,7 @@ func CollectionByName(name string, opts ...*options.CollectionOptions) *Collecti
 }
 
 func DefaultConfigs() (*Config, *mongo.Client, *mongo.Database, error) {
-	if internal.AnyNil(config, client, db) {
+	if util.AnyNil(config, client, db) {
 		return nil, nil, nil, errors.New("please setup default config before acquiring it")
 	}
 

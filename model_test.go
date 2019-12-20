@@ -1,7 +1,7 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
@@ -21,5 +21,5 @@ func TestPrepareId(t *testing.T) {
 	val, err := d.PrepareId(hexId)
 	id, _ := primitive.ObjectIDFromHex(hexId)
 	require.Equal(t, val.(primitive.ObjectID), id)
-	internal.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, err)
 }

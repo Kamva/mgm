@@ -2,14 +2,14 @@ package mgm_test
 
 import (
 	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"testing"
 )
 
 func setupDefConnection() {
-	internal.PanicErr(
+	util.PanicErr(
 		mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("mongodb://root:12345@localhost:27017")),
 	)
 }
@@ -18,8 +18,8 @@ func resetCollection() {
 	_, err := mgm.Coll(&Doc{}).DeleteMany(mgm.Ctx(), bson.M{})
 	_, err2 := mgm.Coll(&Person{}).DeleteMany(mgm.Ctx(), bson.M{})
 
-	internal.PanicErr(err)
-	internal.PanicErr(err2)
+	util.PanicErr(err)
+	util.PanicErr(err2)
 }
 
 func seed() {
@@ -31,12 +31,12 @@ func seed() {
 	}
 	_, err := mgm.Coll(&Doc{}).InsertMany(mgm.Ctx(), docs)
 
-	internal.PanicErr(err)
+	util.PanicErr(err)
 }
 
 func findDoc(t *testing.T) *Doc {
 	found := &Doc{}
-	internal.AssertErrIsNil(t, mgm.Coll(found).FindOne(mgm.Ctx(), bson.M{}).Decode(found))
+	util.AssertErrIsNil(t, mgm.Coll(found).FindOne(mgm.Ctx(), bson.M{}).Decode(found))
 
 	return found
 }

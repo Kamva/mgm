@@ -3,7 +3,7 @@ package mgm_test
 import (
 	"errors"
 	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal"
+	"github.com/Kamva/mgm/internal/util"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -34,7 +34,7 @@ func insertPerson(person *Person) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.PanicErr(mgm.Coll(person).Save(person))
+	util.PanicErr(mgm.Coll(person).Save(person))
 }
 
 //--------------------------------
@@ -113,7 +113,7 @@ func TestCreatingDocHooks(t *testing.T) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.AssertErrIsNil(t, mgm.Coll(person).Create(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).Create(person))
 	person.AssertExpectations(t)
 }
 
@@ -150,7 +150,7 @@ func TestSavingDocHooks(t *testing.T) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	internal.AssertErrIsNil(t, mgm.Coll(person).Create(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).Create(person))
 	person.AssertExpectations(t)
 }
 func TestReturnErrorInUpdatingHook(t *testing.T) {
@@ -173,7 +173,7 @@ func TestReturnErrorInUpdatingHook(t *testing.T) {
 
 	// Expected do not update this model:
 	oldPerson := &Person{}
-	internal.PanicErr(mgm.Coll(person).FindById(person.Id, oldPerson))
+	util.PanicErr(mgm.Coll(person).FindById(person.Id, oldPerson))
 	require.Equal(t, oldName, oldPerson.Name, "Expected person's name be %s name, but is %s", oldName, person.Name)
 }
 
@@ -193,12 +193,12 @@ func TestUpdatingDocHooks(t *testing.T) {
 
 	err := mgm.Coll(person).Update(person)
 
-	internal.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, err)
 	person.AssertExpectations(t)
 
 	// Expected do not update this model:
 	newPerson := &Person{}
-	internal.PanicErr(mgm.Coll(person).FindById(person.Id, newPerson))
+	util.PanicErr(mgm.Coll(person).FindById(person.Id, newPerson))
 	require.Equal(t, newName, newPerson.Name, "Expected person's name be %s , but is %s", newName, person.Name)
 }
 
@@ -234,7 +234,7 @@ func TestDeletingDocHooks(t *testing.T) {
 	person.On("Deleting").Return(nil)
 	person.On("Deleted", int64(1)).Return(nil)
 
-	internal.AssertErrIsNil(t, mgm.Coll(person).Delete(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).Delete(person))
 
 	person.AssertExpectations(t)
 
