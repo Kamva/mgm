@@ -1,7 +1,6 @@
 package aggregate
 
 import (
-	"fmt"
 	"github.com/Kamva/mgm"
 	"github.com/Kamva/mgm/builder"
 	"github.com/Kamva/mgm/field"
@@ -50,7 +49,7 @@ func lookup() error {
 		}
 
 		// do something with result....
-		fmt.Printf("%+v\n", result)
+		//fmt.Printf("%+v\n", result)
 	}
 
 	return nil

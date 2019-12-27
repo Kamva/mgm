@@ -1,6 +1,7 @@
 package mgm
 
 import (
+	"github.com/Kamva/mgm/builder"
 	"github.com/Kamva/mgm/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -44,4 +45,34 @@ func (coll *Collection) Save(model Model) error {
 
 func (coll *Collection) Delete(model Model) error {
 	return del(coll, model)
+}
+
+//--------------------------------
+// Aggregation helper methods
+//--------------------------------
+
+// SimpleAggregate doing simple aggregation and decode aggregate result to the results.
+// stages value can be Operator|bson.M
+func (coll *Collection) SimpleAggregate(results interface{}, stages ...interface{}) error {
+	cur, err := coll.SimpleAggregateCursor(stages...)
+	if err != nil {
+		return err
+	}
+
+	return cur.All(ctx(), results)
+}
+
+// SimpleAggregateCursor doing simple aggregation and return cursor.
+func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cursor, error) {
+	pipeline := bson.A{}
+
+	for _, stage := range stages {
+		if operator, ok := stage.(builder.Operator); ok {
+			pipeline = append(pipeline, builder.S(operator))
+		} else {
+			pipeline = append(pipeline, stage)
+		}
+	}
+
+	return coll.Aggregate(ctx(), pipeline, nil)
 }

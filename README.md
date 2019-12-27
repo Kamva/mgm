@@ -256,7 +256,25 @@ func (model *Book) Collection() *mgm.Collection {
 while we can haveing Mongo Go Driver Aggregate features, mgm also 
 provide simpler methods to aggregate:
 
-example:
+Run aggregate and decode result:
+```go
+authorCollName := mgm.Coll(&Author{}).Name()
+result := []Book{}
+
+
+// Lookup in just single line
+_ := mgm.Coll(&Book{}).SimpleAggregate(&result, builder.Lookup(authorCollName, "auth_id", "_id", "author"))
+
+// Multi stage(mix of mgm builders and raw stages)
+_ := mgm.Coll(&Book{}).SimpleAggregate(&result,
+		builder.Lookup(authorCollName, "auth_id", "_id", "author"),
+		M{operator.Project: M{"pages": 0}},
+)
+
+// Do something with result...
+```
+
+Do aggregate using mongo Aggregation method:
 ```go
 import (
    "github.com/Kamva/mgm"

@@ -2,7 +2,9 @@ package mgm_test
 
 import (
 	"github.com/Kamva/mgm"
+	"github.com/Kamva/mgm/builder"
 	"github.com/Kamva/mgm/internal/util"
+	"github.com/Kamva/mgm/operator"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"testing"
@@ -27,7 +29,7 @@ func TestFindFirst(t *testing.T) {
 	require.False(t, d.IsNew())
 }
 
-func TestCreateDoc(t *testing.T) {
+func TestCollection_Create(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
 
@@ -65,7 +67,7 @@ func TestSaveNewDoc(t *testing.T) {
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
 }
 
-func TestUpdateDoc(t *testing.T) {
+func TestCollection_Update(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
 	seed()
@@ -110,7 +112,7 @@ func TestSaveExistedDoc(t *testing.T) {
 	require.Equal(t, found.Age, newFound.Age)
 }
 
-func TestDeleteDoc(t *testing.T) {
+func TestCollection_Delete(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
 	seed()
@@ -123,4 +125,37 @@ func TestDeleteDoc(t *testing.T) {
 	newFound := findDoc(t)
 
 	require.NotEqual(t, found.Id, newFound.Id)
+}
+
+func TestCollection_SimpleAggregate(t *testing.T) {
+	setupDefConnection()
+	resetCollection()
+	seed()
+
+	expectedResult := []Doc{}
+	gotResult := []Doc{}
+
+	// We dont want to change document.
+	group := builder.Group("$_id", nil)
+
+	project := bson.M{operator.Project: bson.M{"age": 0}}
+
+	err := mgm.Coll(&Doc{}).SimpleAggregate(&gotResult, group, project)
+
+	util.AssertErrIsNil(t, err)
+
+	// Create same aggregation by raw methods
+	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group), project}, nil)
+	util.AssertErrIsNil(t, err)
+
+	util.AssertErrIsNil(t, cur.All(mgm.Ctx(), &expectedResult))
+
+	require.Equal(t, len(expectedResult), len(gotResult))
+
+	// We should have same documents
+	for i, expectedDoc := range expectedResult {
+		if expectedDoc != gotResult[i] {
+			t.Errorf("Expected %v, got %v", expectedDoc, gotResult[i])
+		}
+	}
 }

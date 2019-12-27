@@ -25,7 +25,7 @@ func resetCollection() {
 func seed() {
 	docs := []interface{}{
 		NewDoc("Ali", 24),
-		NewDoc("Mehran", 25),
+		NewDoc("Mehran", 24),
 		NewDoc("Reza", 26),
 		NewDoc("Omid", 27),
 	}
