@@ -1,4 +1,4 @@
-package curd
+package crud
 
 import (
 	"github.com/stretchr/testify/require"
@@ -6,5 +6,5 @@ import (
 )
 
 func TestCrud(t *testing.T) {
-	require.Nil(t, CRUD())
+	require.Nil(t, crud())
 }

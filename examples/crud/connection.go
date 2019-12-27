@@ -1,4 +1,4 @@
-package curd
+package crud
 
 import (
 	"github.com/Kamva/mgm"
