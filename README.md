@@ -298,7 +298,7 @@ if err != nil {
 ````
 
 -----------------
-### `mgm` packages 
+### Mongo Go Models other packages 
 
 **We implemented these packages to simplify query and aggregate in mongo**
 
