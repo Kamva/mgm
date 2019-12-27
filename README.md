@@ -66,16 +66,13 @@ func NewBook(name string, pages int) *Book {
 }
 ```
 
-Inset new document:
+Insert new document:
 ```go
 book:=NewBook("Pride and Prejudice", 345)
 
-// Get Document's collection 
-coll := mgm.Coll(book)
-
-err := coll.Create(book)
-// Or call to save method
-// err:=coll.Save(book)
+err := mgm.Coll(book).Create(book)
+// Or 
+// err:=mgm.Coll(book).Save(book)
 ```
 
 Find one document 
@@ -186,6 +183,13 @@ coll.FindOne(mgm.Ctx(),bson.M{})
 
 
 #### Collection
+Get model's collection:
+```go
+coll:=mgm.Coll(&Book{})
+
+// Do something with result
+```
+
 `mgm` automatically detect model's collection name:
 ```go
 book:=Book{}
@@ -202,7 +206,7 @@ func (model *Book) CollectionName() string {
    return "my_books"
 }
 
-// now mgm return "my_books" collection
+// mgm return "my_books" collection
 coll:=mgm.Coll(&Book{})
 ````  
 
