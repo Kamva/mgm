@@ -23,7 +23,7 @@ func (coll *Collection) FindByID(id interface{}, model Model) error {
 		return err
 	}
 
-	return first(coll, bson.M{field.Id: id}, model)
+	return first(coll, bson.M{field.ID: id}, model)
 }
 
 // First method search and return first document of search result.

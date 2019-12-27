@@ -34,7 +34,7 @@ func update(c *Collection, model Model) error {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx(), bson.M{field.Id: model.GetID()}, bson.M{"$set": model})
+	res, err := c.UpdateOne(ctx(), bson.M{field.ID: model.GetID()}, bson.M{"$set": model})
 
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func del(c *Collection, model Model) error {
 	if err := callToBeforeDeleteHooks(model); err != nil {
 		return err
 	}
-	res, err := c.DeleteOne(ctx(), bson.M{field.Id: model.GetID()})
+	res, err := c.DeleteOne(ctx(), bson.M{field.ID: model.GetID()})
 	if err != nil {
 		return err
 	}

@@ -9,14 +9,14 @@ type book struct {
 	mgm.DefaultModel `bson:",inline"`
 	Name             string             `json:"name" bson:"name"`
 	Pages            int                `json:"pages" bson:"pages"`
-	AuthorId         primitive.ObjectID `json:"author_id" bson:"author_id"`
+	AuthorID         primitive.ObjectID `json:"author_id" bson:"author_id"`
 }
 
-func newBook(name string, pages int, authId primitive.ObjectID) *book {
+func newBook(name string, pages int, authID primitive.ObjectID) *book {
 	return &book{
 		Name:     name,
 		Pages:    pages,
-		AuthorId: authId,
+		AuthorID: authID,
 	}
 }
 

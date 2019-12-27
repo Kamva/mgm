@@ -2,10 +2,11 @@ package util
 
 import "reflect"
 
-// To check real value of interface is nil or not, should using
-// reflection, check this https://play.golang.org/p/Isoo0CcAvr.
-// Firstly check `val==nil` because reflection
-// can not get value of zero val.
+// IsNil function check value is nil or no.To check real value of interface
+// is nil or not, should using reflection, check this
+// https://play.golang.org/p/Isoo0CcAvr. Firstly check
+// `val==nil` because reflection can not get value of
+// zero val.
 func IsNil(val interface{}) (result bool) {
 
 	if val == nil {

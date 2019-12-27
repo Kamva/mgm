@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// Bucket function return mongo $bucket operator to using in aggregates.
 func Bucket(groupBy, boundaries, def, output interface{}) Operator {
 	m := bson.M{}
 
@@ -17,6 +18,7 @@ func Bucket(groupBy, boundaries, def, output interface{}) Operator {
 	return New(o.Bucket, m)
 }
 
+// BucketAuto function return mongo $bucketAuto operator to using in aggregates.
 func BucketAuto(groupBy, buckets, output, granularity interface{}) Operator {
 	m := bson.M{}
 
@@ -28,6 +30,7 @@ func BucketAuto(groupBy, buckets, output, granularity interface{}) Operator {
 	return New(o.BucketAuto, m)
 }
 
+// CollStats function return mongo $collStats operator to using in aggregates.
 func CollStats(latencyStats, storageStats, count interface{}) Operator {
 	m := bson.M{}
 
@@ -38,6 +41,7 @@ func CollStats(latencyStats, storageStats, count interface{}) Operator {
 	return New(o.CollStats, m)
 }
 
+// CurrentOp function return mongo $currentOp operator to using in aggregates.
 func CurrentOp(allUsers, idleConnections, idleCursors, idleSessions, localOps interface{}) Operator {
 	m := bson.M{}
 
@@ -53,10 +57,11 @@ func CurrentOp(allUsers, idleConnections, idleCursors, idleSessions, localOps in
 // $geoNear,$graphLookup has many params, those functions
 // will have too many params and do not make readable code.
 
-func Group(Id interface{}, params bson.M) Operator {
+// Group function return mongo $group operator to using in aggregates.
+func Group(ID interface{}, params bson.M) Operator {
 	m := bson.M{}
 
-	appendIfHasVal(m, f.Id, Id)
+	appendIfHasVal(m, f.ID, ID)
 
 	for key, val := range params {
 		appendIfHasVal(m, key, val)
@@ -65,6 +70,7 @@ func Group(Id interface{}, params bson.M) Operator {
 	return New(o.Group, m)
 }
 
+// Lookup function return mongo $lookup operator to using in aggregates.
 func Lookup(from, localField, foreignField, as interface{}) Operator {
 	m := bson.M{}
 
@@ -76,6 +82,7 @@ func Lookup(from, localField, foreignField, as interface{}) Operator {
 	return New(o.Lookup, m)
 }
 
+// UncorrelatedLookup function return mongo $lookup operator to using in aggregates.
 func UncorrelatedLookup(from, let, pipeline, as interface{}) Operator {
 	m := bson.M{}
 
@@ -87,7 +94,7 @@ func UncorrelatedLookup(from, let, pipeline, as interface{}) Operator {
 	return New(o.Lookup, m)
 }
 
-
+// Merge function return mongo $merge operator to using in aggregates.
 func Merge(into, on, let, whenMatched, whenNotMatched interface{}) Operator {
 	m := bson.M{}
 
@@ -100,6 +107,7 @@ func Merge(into, on, let, whenMatched, whenNotMatched interface{}) Operator {
 	return New(o.Merge, m)
 }
 
+// ReplaceRoot function return mongo $replaceRoot operator to using in aggregates.
 func ReplaceRoot(newRoot interface{}) Operator {
 	m := bson.M{}
 
@@ -108,6 +116,7 @@ func ReplaceRoot(newRoot interface{}) Operator {
 	return New(o.ReplaceRoot, m)
 }
 
+// Sample function return mongo sample operator to using in aggregates.
 func Sample(size interface{}) Operator {
 	m := bson.M{}
 
@@ -116,6 +125,7 @@ func Sample(size interface{}) Operator {
 	return New(o.Sample, m)
 }
 
+// Unwind function return mongo $unwind operator to using in aggregates.
 func Unwind(path, includeArrayIndex, preserveNullAndEmptyArrays interface{}) Operator {
 	m := bson.M{}
 

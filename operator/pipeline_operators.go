@@ -162,7 +162,7 @@ const (
 	ToDouble   = "$toDouble"
 	ToInt      = "$toInt"
 	ToLong     = "$toLong"
-	ToObjectId = "$toObjectId"
+	ToObjectID = "$toObjectId"
 	//ToString   = "$toString" // Declared
 	//Type       = "$type" // Declared
 )

@@ -29,7 +29,7 @@ const (
 // Evaluation
 const (
 	Expr       = "$expr"
-	JsonSchema = "$jsonSchema"
+	JSONSchema = "$jsonSchema"
 	Mod        = "$mod"
 	Regex      = "$regex"
 	Text       = "$text"

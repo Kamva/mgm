@@ -123,7 +123,7 @@ func TestGroup(t *testing.T) {
 		{
 			inputs: []interface{}{"foo", bson.M{"bar": "baz", "qux": "quux"}},
 			result: builder.New(operator.Group, bson.M{
-				field.Id: "foo",
+				field.ID: "foo",
 				"bar":    "baz",
 				"qux":    "quux",
 			}),
@@ -132,7 +132,7 @@ func TestGroup(t *testing.T) {
 		{
 			inputs: []interface{}{"foo", bson.M{}},
 			result: builder.New(operator.Group, bson.M{
-				field.Id: "foo",
+				field.ID: "foo",
 			}),
 		},
 	}

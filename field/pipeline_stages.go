@@ -71,7 +71,10 @@ const (
 )
 
 var (
+	// EmptyDoc is empty document.
 	EmptyDoc    = bson.M{}
+
+	// AllUsersDoc is document that contains "allUsers":true value.
 	AllUsersDoc = bson.M{AllUsers: true}
 )
 
