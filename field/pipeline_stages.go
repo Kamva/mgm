@@ -72,7 +72,7 @@ const (
 
 var (
 	// EmptyDoc is empty document.
-	EmptyDoc    = bson.M{}
+	EmptyDoc = bson.M{}
 
 	// AllUsersDoc is document that contains "allUsers":true value.
 	AllUsersDoc = bson.M{AllUsers: true}
@@ -87,8 +87,8 @@ const (
 	ForeignField = "foreignField"
 	// As           = "as" // Declared
 
-	Let          = "let"
-	Pipeline     = "pipeline"
+	Let      = "let"
+	Pipeline = "pipeline"
 )
 
 // $merge

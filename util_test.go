@@ -13,7 +13,7 @@ func TestGetModelCollection(t *testing.T) {
 	doc := &Doc{}
 	coll := mgm.Coll(doc)
 	name := mgm.CollName(doc)
-	require.Equal(t, coll.Name(), name, "Expected doc's collection , got %v", )
+	require.Equal(t, coll.Name(), name, "Expected doc's collection , got %v")
 }
 
 func TestGetDefaultCollName(t *testing.T) {

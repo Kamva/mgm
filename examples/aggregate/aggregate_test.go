@@ -5,7 +5,7 @@ import (
 )
 
 func TestLookup(t *testing.T) {
-	if err:=lookup();err!=nil{
+	if err := lookup(); err != nil {
 		panic(err)
 	}
 	//require.Nil(t, lookup())
