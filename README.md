@@ -195,7 +195,7 @@ Get model's collection:
 ```go
 coll:=mgm.Coll(&Book{})
 
-// Do something with result
+// Do something with the collection
 ```
 
 `mgm` automatically detect model's collection name:
