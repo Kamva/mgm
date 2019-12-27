@@ -2,11 +2,10 @@
 <img width="250" src="https://user-images.githubusercontent.com/22454054/71487214-759cb680-282f-11ea-9bcf-caa663b3e348.png" />
 </p>
 
+
 <p align="center">
-  <a href="https://goreportcard.com/report/go.mongodb.org/mongo-driver"><img src="https://goreportcard.com/badge/go.mongodb.org/mongo-driver"></a>
-  <a href="https://godoc.org/go.mongodb.org/mongo-driver/mongo"><img src="etc/assets/godoc-mongo-blue.svg" alt="GoDoc"></a>
-  <a href="https://godoc.org/go.mongodb.org/mongo-driver/bson"><img src="etc/assets/godoc-bson-blue.svg" alt="GoDoc"></a>
-  <a href="https://docs.mongodb.com/ecosystem/drivers/go/"><img src="etc/assets/docs-mongodb-green.svg"></a>
+  <a href="https://goreportcard.com/report/github.com/kamva/mgm"><img src="https://goreportcard.com/badge/github.com/kamva/mgm"></a>
+  <a href="https://godoc.org/github.com/kamva/mgm"><img src="https://godoc.org/github.com/kamva/mgm?status.svg" alt="GoDoc"></a>
 </p>
   
 
