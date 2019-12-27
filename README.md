@@ -15,9 +15,11 @@ The Mongo ODM for Go
 <!-- Insert badges here -->
 
 - [Requirements](#requirements)
-- [Install](#installation)
+- [Install](#install)
 - [Usage](#usage)
-- [Bugs / Feature Reporting](#bugs--feature-reporting)
+- [Bugs / Feature Reporting](#bugs--feature-request)
+- [Communication](#communicate-with-us)
+- [Contributing](#contributing)
 - [License](#license)
 
 ### Requirements
@@ -332,12 +334,10 @@ _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
  ```
  
 ### Bugs / Feature request
-New Features and bugs can be reported on G[Github issue tracker](https://github.com/kamva/mongo-go-models/issues).
+New Features and bugs can be reported on [Github issue tracker](https://github.com/kamva/mongo-go-models/issues).
 
 ### Communicate With Us
 
-If you want to work on Mongo Go Models, write documentation,
-ask question, request new feature:
 * Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
 * Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/kamva/mongo-go-models/issues)  
 
@@ -353,4 +353,4 @@ ask question, request new feature:
 
 ### License
 
-Mongo Go Models is released under the [Apache V2 License](https://github.com/kamva/mongo-go-models/blob/master/LICENSE)
+Mongo Go Models is released under the [Apache License](https://github.com/kamva/mongo-go-models/blob/master/LICENSE)
