@@ -15,7 +15,7 @@ func TestFindByIdWithInvalidId(t *testing.T) {
 	resetCollection()
 	seed()
 
-	require.NotNil(t, mgm.Coll(&Doc{}).FindById("invalid id", &Doc{}))
+	require.NotNil(t, mgm.Coll(&Doc{}).FindByID("invalid id", &Doc{}))
 }
 
 func TestFindFirst(t *testing.T) {
@@ -38,11 +38,11 @@ func TestCollection_Create(t *testing.T) {
 	util.AssertErrIsNil(t, mgm.Coll(doc).Create(doc))
 
 	// Inserted model's id should not be nil:
-	require.NotNil(t, doc.Id, "Expected document having id after insertion, got nil")
+	require.NotNil(t, doc.ID, "Expected document having id after insertion, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	util.AssertErrIsNil(t, mgm.Coll(doc).FindById(doc.Id, foundDoc))
+	util.AssertErrIsNil(t, mgm.Coll(doc).FindByID(doc.ID, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -57,11 +57,11 @@ func TestSaveNewDoc(t *testing.T) {
 	util.AssertErrIsNil(t, mgm.Coll(doc).Save(doc))
 
 	// Inserted model's id should not be nil:
-	require.NotNil(t, doc.Id, "Expected document having id after save, got nil")
+	require.NotNil(t, doc.ID, "Expected document having id after save, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
-	util.AssertErrIsNil(t, mgm.Coll(doc).FindById(doc.Id, foundDoc))
+	util.AssertErrIsNil(t, mgm.Coll(doc).FindByID(doc.ID, foundDoc))
 
 	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
 	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
@@ -82,7 +82,7 @@ func TestCollection_Update(t *testing.T) {
 	// Find that doc again:
 	newFound := findDoc(t)
 
-	if found.Id != newFound.Id {
+	if found.ID != newFound.ID {
 		panic("two fond document dont have same id!")
 	}
 	require.Equal(t, found.Name, newFound.Name)
@@ -104,7 +104,7 @@ func TestSaveExistedDoc(t *testing.T) {
 	// Find that doc again:
 	newFound := findDoc(t)
 
-	if found.Id != newFound.Id {
+	if found.ID != newFound.ID {
 		panic("two fond document dont have same id!")
 	}
 
@@ -124,7 +124,7 @@ func TestCollection_Delete(t *testing.T) {
 	// Find that doc again:
 	newFound := findDoc(t)
 
-	require.NotEqual(t, found.Id, newFound.Id)
+	require.NotEqual(t, found.ID, newFound.ID)
 }
 
 func TestCollection_SimpleFind(t *testing.T) {

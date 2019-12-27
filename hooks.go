@@ -2,43 +2,43 @@ package mgm
 
 import "go.mongodb.org/mongo-driver/mongo"
 
-// Call before saving new model into database
+// CreatingHook call before saving new model into database
 type CreatingHook interface {
 	Creating() error
 }
 
-// Call after model has been created
+// CreatedHook call after model has been created
 type CreatedHook interface {
 	Created() error
 }
 
-// Call when before updating model
+// UpdatingHook call when before updating model
 type UpdatingHook interface {
 	Updating() error
 }
 
-// Call after model updated
+// UpdatedHook call after model updated
 type UpdatedHook interface {
 	Updated(result *mongo.UpdateResult) error
 }
 
-// Call before save model(new or existed
+// SavingHook call before save model(new or existed
 // model) into database.
 type SavingHook interface {
 	Saving() error
 }
 
-// Call after model has been saved in database.
+// SavedHook call after model has been saved in database.
 type SavedHook interface {
 	Saved() error
 }
 
-// Call before deleting model
+// DeletingHook call before deleting model
 type DeletingHook interface {
 	Deleting() error
 }
 
-// Call after model has been deleted)
+// DeletedHook call after model has been deleted)
 type DeletedHook interface {
 	Deleted(result *mongo.DeleteResult) error
 }

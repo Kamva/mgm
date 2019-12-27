@@ -1,36 +1,44 @@
 package mgm
 
-// By Implementing CollectionGetter interface for model's
-// struct, you can returning model's custom collection.
+// CollectionGetter interface contain method to return
+// model's custom collection.
 type CollectionGetter interface {
 	// Collection method return collection
 	Collection() *Collection
 }
 
+// CollectionNameGetter interface contain method to return
+// collection name of model.
 type CollectionNameGetter interface {
-	// Collection method return collection
+	// CollectionName method return model collection's name.
 	CollectionName() string
 }
 
+// Model interface is base method that must implement by
+// each model, If you're using `DefaultModel` struct in your model,
+// don't need to implement any of those method.
 type Model interface {
-	// PrepareId convert id value if need, and then
+	// PrepareID convert id value if need, and then
 	// return it.(e.g convert string to objectId)
-	PrepareId(id interface{}) (interface{}, error)
+	PrepareID(id interface{}) (interface{}, error)
 
 	IsNew() bool
-	GetId() interface{}
-	SetId(id interface{})
+	GetID() interface{}
+	SetID(id interface{})
 }
 
+// DefaultModel struct contain model's default fields.
 type DefaultModel struct {
-	IdField    `bson:",inline"`
+	IDField    `bson:",inline"`
 	DateFields `bson:",inline"`
 }
 
+// Creating function call to it's inner fields defined hooks
 func (model *DefaultModel) Creating() error {
 	return model.DateFields.Creating()
 }
 
+// Saving function call to it's inner fields defined hooks
 func (model *DefaultModel) Saving() error {
 	return model.DateFields.Saving()
 }

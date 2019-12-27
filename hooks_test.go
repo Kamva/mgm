@@ -173,7 +173,7 @@ func TestReturnErrorInUpdatingHook(t *testing.T) {
 
 	// Expected do not update this model:
 	oldPerson := &Person{}
-	util.PanicErr(mgm.Coll(person).FindById(person.Id, oldPerson))
+	util.PanicErr(mgm.Coll(person).FindByID(person.ID, oldPerson))
 	require.Equal(t, oldName, oldPerson.Name, "Expected person's name be %s name, but is %s", oldName, person.Name)
 }
 
@@ -198,7 +198,7 @@ func TestUpdatingDocHooks(t *testing.T) {
 
 	// Expected do not update this model:
 	newPerson := &Person{}
-	util.PanicErr(mgm.Coll(person).FindById(person.Id, newPerson))
+	util.PanicErr(mgm.Coll(person).FindByID(person.ID, newPerson))
 	require.Equal(t, newName, newPerson.Name, "Expected person's name be %s , but is %s", newName, person.Name)
 }
 

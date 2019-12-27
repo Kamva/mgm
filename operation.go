@@ -19,7 +19,7 @@ func create(c *Collection, model Model) error {
 	}
 
 	// Set new id
-	model.SetId(res.InsertedID)
+	model.SetID(res.InsertedID)
 
 	return callToAfterCreateHooks(model)
 }
@@ -34,7 +34,7 @@ func update(c *Collection, model Model) error {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx(), bson.M{field.Id: model.GetId()}, bson.M{"$set": model})
+	res, err := c.UpdateOne(ctx(), bson.M{field.Id: model.GetID()}, bson.M{"$set": model})
 
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func del(c *Collection, model Model) error {
 	if err := callToBeforeDeleteHooks(model); err != nil {
 		return err
 	}
-	res, err := c.DeleteOne(ctx(), bson.M{field.Id: model.GetId()})
+	res, err := c.DeleteOne(ctx(), bson.M{field.Id: model.GetID()})
 	if err != nil {
 		return err
 	}

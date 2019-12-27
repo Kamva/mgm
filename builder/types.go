@@ -1,4 +1,4 @@
-// builder package help us to write aggregate,filter,update maps simpler.
+// Package builder help us to write aggregate,filter,update maps simpler.
 package builder
 
 import "go.mongodb.org/mongo-driver/bson"
@@ -9,6 +9,7 @@ type SMap struct {
 	Operators []Operator
 }
 
+// ToMap function convert our Simple map to bson.M to using in filters,stages,...
 func (s *SMap) ToMap() bson.M {
 	m := bson.M{}
 
@@ -19,6 +20,7 @@ func (s *SMap) ToMap() bson.M {
 	return m
 }
 
+// S get operators as param and return bson.M to using result as filter,stage,...
 func S(operators ...Operator) bson.M {
 	s := &SMap{Operators: operators}
 

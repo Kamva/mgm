@@ -8,13 +8,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Collection performs operations on models and given Mongodb collection
 type Collection struct {
 	*mongo.Collection
 }
 
-// Find a doc and decode it to model, otherwise return error
-func (coll *Collection) FindById(id interface{}, model Model) error {
-	id, err := model.PrepareId(id)
+// FindByID method find a doc and decode it to model, otherwise return error.
+// id field can be any value that if passed to `PrepareID` method, it return
+// valid id(e.g string,bson.ObjectId).
+func (coll *Collection) FindByID(id interface{}, model Model) error {
+	id, err := model.PrepareID(id)
 
 	if err != nil {
 		return err
@@ -23,18 +26,24 @@ func (coll *Collection) FindById(id interface{}, model Model) error {
 	return first(coll, bson.M{field.Id: id}, model)
 }
 
+// First method search and return first document of search result.
 func (coll *Collection) First(filter interface{}, model Model, opts ...*options.FindOneOptions) error {
 	return first(coll, filter, model, opts...)
 }
 
+// Create method insert new model into database.
 func (coll *Collection) Create(model Model) error {
 	return create(coll, model)
 }
 
+// Update function update save changed model into database.
+// On call to this method also mgm call to model's updating,updated,
+// saving,saved hooks.
 func (coll *Collection) Update(model Model) error {
 	return update(coll, model)
 }
 
+// Save method save model(insert,update).
 func (coll *Collection) Save(model Model) error {
 	if model.IsNew() {
 		return create(coll, model)
@@ -43,6 +52,9 @@ func (coll *Collection) Save(model Model) error {
 	return update(coll, model)
 }
 
+// Delete method delete model (doc) from collection.
+// If you want to doing something on deleting some model
+// use hooks, don't need to override this method.
 func (coll *Collection) Delete(model Model) error {
 	return del(coll, model)
 }

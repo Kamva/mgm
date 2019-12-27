@@ -16,6 +16,9 @@ func Coll(m Model) *Collection {
 	return CollectionByName(CollName(m))
 }
 
+// CollName check if you provided collection name in your
+// model, return it's name, otherwise guess model
+// collection's name.
 func CollName(m Model) string {
 
 	if collNameGetter, ok := m.(CollectionNameGetter); ok {

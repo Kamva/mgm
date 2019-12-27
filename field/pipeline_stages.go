@@ -62,7 +62,7 @@ const (
 
 // $group
 const (
-// Id="_id" // Declared
+// ID="_id" // Declared
 )
 
 // $listLocalSessions

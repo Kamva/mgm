@@ -13,17 +13,21 @@ var config *Config
 var client *mongo.Client
 var db *mongo.Database
 
+// Config struct contain extra config of mgm package.
 type Config struct {
 	// Set to 10 second (10*time.Second) for example.
 	CtxTimeout time.Duration
 }
 
+// NewCtx function create and return new context with your specified timeout.
 func NewCtx(timeout time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), timeout)
 
 	return ctx
 }
 
+// Ctx function create new context with default
+// timeout and return it.
 func Ctx() context.Context {
 	return ctx()
 }
@@ -32,6 +36,7 @@ func ctx() context.Context {
 	return NewCtx(config.CtxTimeout)
 }
 
+// NewClient return new mongodb client.
 func NewClient(opts ...*options.ClientOptions) (*mongo.Client, error) {
 	client, err := mongo.NewClient(opts...)
 	if err != nil {
@@ -84,6 +89,7 @@ func CollectionByName(name string, opts ...*options.CollectionOptions) *Collecti
 	return NewCollection(db, name)
 }
 
+// DefaultConfigs return you'r default mongodb configs.
 func DefaultConfigs() (*Config, *mongo.Client, *mongo.Database, error) {
 	if util.AnyNil(config, client, db) {
 		return nil, nil, nil, errors.New("please setup default config before acquiring it")
