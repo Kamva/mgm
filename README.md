@@ -31,7 +31,7 @@ The Mongo ODM for Go
 ### Install
 
 ```console
-go get github.com/Kamva/mongo-go-models
+go get github.com/Kamva/mgm
 ```
 
 
@@ -334,17 +334,17 @@ _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
  ```
  
 ### Bugs / Feature request
-New Features and bugs can be reported on [Github issue tracker](https://github.com/kamva/mongo-go-models/issues).
+New Features and bugs can be reported on [Github issue tracker](https://github.com/kamva/mgm/issues).
 
 ### Communicate With Us
 
 * Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
-* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/kamva/mongo-go-models/issues)  
+* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/kamva/mgm/issues)  
 
 ### Contributing
 
 1. Fork the repository
-1. Clone your fork (`git clone https://github.com/<your_username>/mongo-go-models && cd mongo-go-models`)
+1. Clone your fork (`git clone https://github.com/<your_username>/mgm && cd mgm`)
 1. Create your feature branch (`git checkout -b my-new-feature`)
 1. Make changes and add them (`git add .`)
 1. Commit your changes (`git commit -m 'Add some feature'`)
@@ -353,4 +353,4 @@ New Features and bugs can be reported on [Github issue tracker](https://github.c
 
 ### License
 
-Mongo Go Models is released under the [Apache License](https://github.com/kamva/mongo-go-models/blob/master/LICENSE)
+Mongo Go Models is released under the [Apache License](https://github.com/kamva/mgm/blob/master/LICENSE)
