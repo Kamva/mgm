@@ -39,30 +39,30 @@ go get https://github.com/Kamva/mongo-go-models
 To get started, import the `mgm` package, setup default config:
 ```go
 import (
-	"github.com/Kamva/mgm"
-	"go.mongodb.org/mongo-driver/mongo/options"
+   "github.com/Kamva/mgm"
+   "go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func init() {
-	// Setup mgm default config
-	err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+   // Setup mgm default config
+   err := mgm.SetDefaultConfig(nil, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
 }
 ```
 
 Define your model:
 ```go
 type Book struct {
-	// DefaultModel add _id,created_at and updated_at fields to the Model
-	mgm.DefaultModel `bson:",inline"`
-	Name             string `json:"name" bson:"name"`
-	Pages            int    `json:"pages" bson:"pages"`
+   // DefaultModel add _id,created_at and updated_at fields to the Model
+   mgm.DefaultModel `bson:",inline"`
+   Name             string `json:"name" bson:"name"`
+   Pages            int    `json:"pages" bson:"pages"`
 }
 
 func NewBook(name string, pages int) *Book {
-	return &Book{
-		Name:  name,
-		Pages: pages,
-	}
+   return &Book{
+      Name:  name,
+      Pages: pages,
+   }
 }
 ```
 
@@ -119,57 +119,57 @@ this fields:
 
 #### Model's hooks:
 
-Each model has this hooks :
-- `Creating` : Call On creating new model.  
+Each model has these hooks :
+- `Creating`: Call On creating a new model.  
 Signature : `Creating() error`
 
-- `Created` : Call On new model created.  
+- `Created`: Call On new model created.  
 Signature : `Created() error` 
 
-- `Updating` : Call on updating model.  
+- `Updating`: Call on updating model.  
 Signature : `Updating() error`
 
 - `Updated` : Call on models updated.  
 Signature : `Updated(result *mongo.UpdateResult) error`
 
-- `Saving` : Call on creating or updating model.  
+- `Saving`: Call on creating or updating the model.  
 Signature : `Saving() error`
 
-- `Saved` : Call on models Created or updated.  
+- `Saved`: Call on models Created or updated.  
 Signature: `Saved() error`
 
 - `Deleting`: Call on deleting model.  
 Signature: `Deleting() error`
 
-- `Deleted` : Call on models deleted.  
+- `Deleted`: Call on models deleted.  
 Signature: `Deleted(result *mongo.DeleteResult) error`
 
 **Important Note**: Each model by default using 
-`Creating` and `Saving` hooks, So if you want to define those hooks ,
+`Creating` and `Saving` hooks, So if you want to define those hooks,
 call to `DefaultModel` hooks in your defined hooks.
 
 Example:
 ```go
 func (model *Book) Creating() error {
-	// Call to DefaultModel Creating hook
-	if err:=model.DefaultModel.Creating();err!=nil{
-		return err
-	}
+   // Call to DefaultModel Creating hook
+   if err:=model.DefaultModel.Creating();err!=nil{
+      return err
+   }
 
-	// We can check if model fields is not valid, return error to
-	// cancel document insertion .
-	if model.Pages < 1 {
-		return errors.New("book must have at least one page")
-	}
+   // We can check if model fields is not valid, return error to
+   // cancel document insertion .
+   if model.Pages < 1 {
+      return errors.New("book must have at least one page")
+   }
 
-	return nil
+   return nil
 }
 ```
 #### config :
 `mgm` default config contain context's timeout:
 ```go
 func init() {
-	_ = mgm.SetDefaultConfig(&mgm.Config{CtxTimeout:12 * time.Second}, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+   _ = mgm.SetDefaultConfig(&mgm.Config{CtxTimeout:12 * time.Second}, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
 }
 
 // To get context , just call to Ctx() method.
@@ -199,7 +199,7 @@ You can also set custom collection name for your model by
 implementing `CollectionNameGetter` interface:
 ```go
 func (model *Book) CollectionName() string {
-	return "my_books"
+   return "my_books"
 }
 
 // now mgm return "my_books" collection
@@ -210,7 +210,7 @@ Get collection by it's name (without need of defining
 model for it):
 ```go
 coll := mgm.CollectionByName("my_coll")
-	
+   
 //Do Aggregation,... with collection
 ```
 
@@ -219,14 +219,14 @@ interface:
 ```go
 func (model *Book) Collection() *mgm.Collection {
     // Get default connection client
-	_,client,_, err := mgm.DefaultConfigs()
+   _,client,_, err := mgm.DefaultConfigs()
 
-	if err != nil {
-		panic(err)
-	}
+   if err != nil {
+      panic(err)
+   }
 
-	db := client.Database("another_db")
-	return mgm.NewCollection(db, "my_collection")
+   db := client.Database("another_db")
+   return mgm.NewCollection(db, "my_collection")
 }
 ```
 
@@ -234,18 +234,18 @@ Or return model's collection from another connection:
 
 ```go
 func (model *Book) Collection() *mgm.Collection {
-	// Create new client
-	client, err := mgm.NewClient(options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+   // Create new client
+   client, err := mgm.NewClient(options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
 
-	if err != nil {
-		panic(err)
-	}
+   if err != nil {
+      panic(err)
+   }
 
-	// Get model's db
-	db := client.Database("my_second_db")
+   // Get model's db
+   db := client.Database("my_second_db")
 
-	// return model's custom collection
-	return mgm.NewCollection(db, "my_collection")
+   // return model's custom collection
+   return mgm.NewCollection(db, "my_collection")
 }
 ````
 #### Aggregation
@@ -255,11 +255,11 @@ provide simpler methods to aggregate:
 example:
 ```go
 import (
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/builder"
-	"github.com/Kamva/mgm/field"
-	. "go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+   "github.com/Kamva/mgm"
+   "github.com/Kamva/mgm/builder"
+   "github.com/Kamva/mgm/field"
+   . "go.mongodb.org/mongo-driver/bson"
+   "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Author model's collection
@@ -274,12 +274,12 @@ cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
 More complex and mix with mongo raw pipelines:
 ```go
 import (
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/builder"
-	"github.com/Kamva/mgm/field"
-	"github.com/Kamva/mgm/operator"
-	. "go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+   "github.com/Kamva/mgm"
+   "github.com/Kamva/mgm/builder"
+   "github.com/Kamva/mgm/field"
+   "github.com/Kamva/mgm/operator"
+   . "go.mongodb.org/mongo-driver/bson"
+   "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Author model's collection
@@ -300,9 +300,9 @@ if err != nil {
 -----------------
 ### `mgm` packages 
 
-**We implemneted this packages to simplify query and aggregate in mongo**
+**We implemented these packages to simplify query and aggregate in mongo**
 
-`builder` : simplify mongo query and aggregation.  
+`builder`: simplify mongo query and aggregation.  
 
 `operator` : contain mongo operators as predefined variable.  
 (e.g `Eq  = "$eq"` , `Gt  = "$gt"`)  
@@ -314,10 +314,10 @@ and ... as predefined variable.
  example:
  ```go
 import (
-	"github.com/Kamva/mgm"
-	f "github.com/Kamva/mgm/field"
-	o "github.com/Kamva/mgm/operator"
-	"go.mongodb.org/mongo-driver/bson"
+   "github.com/Kamva/mgm"
+   f "github.com/Kamva/mgm/field"
+   o "github.com/Kamva/mgm/operator"
+   "go.mongodb.org/mongo-driver/bson"
 )
 
 // Instead of hard-coding mongo's operators and fields 
