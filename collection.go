@@ -47,8 +47,20 @@ func (coll *Collection) Delete(model Model) error {
 	return del(coll, model)
 }
 
+// SimpleFind find and decode result to results.
+func (coll *Collection) SimpleFind(results interface{}, filter interface{}, opts ...*options.FindOptions) error {
+	ctx := ctx()
+	cur, err := coll.Find(ctx, filter, opts...)
+
+	if err != nil {
+		return err
+	}
+
+	return cur.All(ctx, results)
+}
+
 //--------------------------------
-// Aggregation helper methods
+// Aggregation methods
 //--------------------------------
 
 // SimpleAggregate doing simple aggregation and decode aggregate result to the results.

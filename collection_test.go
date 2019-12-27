@@ -127,6 +127,35 @@ func TestCollection_Delete(t *testing.T) {
 	require.NotEqual(t, found.Id, newFound.Id)
 }
 
+func TestCollection_SimpleFind(t *testing.T) {
+	setupDefConnection()
+	resetCollection()
+	seed()
+
+	expectedResult := []Doc{}
+	gotResult := []Doc{}
+
+	filter := bson.M{"age": bson.M{operator.Gt: 24}}
+	err := mgm.Coll(&Doc{}).SimpleFind(&gotResult, filter)
+
+	util.AssertErrIsNil(t, err)
+
+	// Create same aggregation by raw methods
+	cur, err := mgm.Coll(&Doc{}).Find(mgm.Ctx(), filter)
+	util.AssertErrIsNil(t, err)
+
+	util.AssertErrIsNil(t, cur.All(mgm.Ctx(), &expectedResult))
+
+	require.Equal(t, len(expectedResult), len(gotResult))
+
+	// We should have same documents
+	for i, expectedDoc := range expectedResult {
+		if expectedDoc != gotResult[i] {
+			t.Errorf("Expected %v, got %v", expectedDoc, gotResult[i])
+		}
+	}
+}
+
 func TestCollection_SimpleAggregate(t *testing.T) {
 	setupDefConnection()
 	resetCollection()

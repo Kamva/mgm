@@ -106,6 +106,14 @@ Delete document
 // Just find and delete your document
 err := mgm.Coll(book).Delete(book)
 ```
+
+Find and decode result:
+```go
+result := []Book{}
+
+err := mgm.Coll(&Book{}).SimpleFind(&result, bson.M{"age": bson.M{operator.Gt: 24}})
+```
+
 #### Model's default fields
 Each model by default (by using `DefaultModel` struct) has
 this fields:  
