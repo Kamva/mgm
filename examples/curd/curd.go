@@ -3,9 +3,9 @@ package curd
 import "github.com/Kamva/mgm"
 
 func CRUD() error {
-	coll := mgm.Coll(&book{})
-
 	book := newBook("test", 124)
+	coll := mgm.Coll(book)
+
 
 	if err := coll.Create(book); err != nil {
 		return err
@@ -17,4 +17,9 @@ func CRUD() error {
 	}
 
 	return coll.Delete(book)
+}
+
+func find(){
+	// Get document's collection
+	mgm.Coll(&book{})
 }
