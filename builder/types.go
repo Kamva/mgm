@@ -3,20 +3,24 @@ package builder
 
 import "go.mongodb.org/mongo-driver/bson"
 
-// S is simple map that can be substitute  of `bson.M` to
+// SMap is simple map that can be substitute  of `bson.M` to
 // having simpler map structure on query,aggregate,...
-type S []Operator
-
-func (s *S) MarshalBSON() ([]byte, error) {
-	return bson.Marshal(s.ToMap())
+type SMap struct {
+	Operators []Operator
 }
 
-func (s *S) ToMap() map[string]interface{} {
-	m := make(map[string]interface{})
+func (s *SMap) ToMap() bson.M {
+	m := bson.M{}
 
-	for _, o := range *s {
+	for _, o := range s.Operators {
 		m[o.GetKey()] = o.GetVal()
 	}
 
 	return m
+}
+
+func S(operators ...Operator) bson.M {
+	s := &SMap{Operators: operators}
+
+	return s.ToMap()
 }

@@ -1,6 +1,13 @@
-<!--![Logo](https://user-images.githubusercontent.com/22454054/71487214-759cb680-282f-11ea-9bcf-caa663b3e348.png)-->
+<p align="center">
+<img width="250" src="https://user-images.githubusercontent.com/22454054/71487214-759cb680-282f-11ea-9bcf-caa663b3e348.png" />
+</p>
 
-# Mongo Go Models
+<!--
+TODO: Insert repo badges
+-->
+  
+
+### Mongo Go Models
 
 The Mongo ODM for Go 
 
@@ -11,18 +18,21 @@ The Mongo ODM for Go
 - [Install](#installation)
 - [Usage](#usage)
 - [Bugs / Feature Reporting](#bugs--feature-reporting)
-- [Testing / Development](#testing--development)
-- [Continuous Integration](#continuous-integration)
 - [License](#license)
 
-## Requirements
+### Requirements
+- Go 1.10 or higher.
 - MongoDB 2.6 and higher.
 
-## Install
+
+
+### Install
 
 ```console
 go get https://github.com/Kamva/mongo-go-models
 ```
+
+
 ### Usage
 To get started, import the `mgm` package, setup default config:
 ```go
@@ -99,14 +109,14 @@ err := mgm.Coll(book).Delete(book)
 ```
 #### Model's default fields
 Each model by default (by using `DefaultModel` struct) has
-this fields:
-`_id` : mongo document id
-`created_at`: Creation date of doc. On save new doc, this field 
-fill automatically by mgm hooks(`Creating` hook). 
-`updated_at`: Last update date of doc. On save doc, this field update by 
-mgm hooks (`Saving` hook)
+this fields:  
+- `_id` : Document's Id.
+
+- `created_at`: Creation date of doc. On save new doc, autofill by `Creating` hook.   
+- `updated_at`: Last update date of doc. On save doc, autofill by `Saving` hook  
 
 #### Model's hooks:
+
 Each model has this hooks :
 - `Creating` : Call On creating new model.  
 Signature : `Creating() error`
@@ -132,11 +142,11 @@ Signature: `Deleting() error`
 - `Deleted` : Call on models deleted.  
 Signature: `Deleted(result *mongo.DeleteResult) error`
 
-**Important Note**: `DefaultModel` struct of each model by
-default using `Creating` and `Saving` hooks, so if you
-defined those hooks, call to that hook on `DefaultModel`.
+**Important Note**: Each model by default using 
+`Creating` and `Saving` hooks, So if you want to define those hooks ,
+call to `DefaultModel` hooks in your defined hooks.
 
-Using hooks:
+Example:
 ```go
 func (model *Book) Creating() error {
 	// Call to DefaultModel Creating hook
@@ -154,7 +164,7 @@ func (model *Book) Creating() error {
 }
 ```
 #### config :
-mgm's default config contain context's timeout:
+`mgm` default config contain context's timeout:
 ```go
 func init() {
 	_ = mgm.SetDefaultConfig(&mgm.Config{CtxTimeout:12 * time.Second}, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
@@ -174,7 +184,7 @@ coll.FindOne(mgm.Ctx(),bson.M{})
 
 
 #### Collection
-mgm automatically detect model's collection name:
+`mgm` automatically detect model's collection name:
 ```go
 book:=Book{}
 
@@ -237,7 +247,7 @@ func (model *Book) Collection() *mgm.Collection {
 }
 ````
 #### Aggregation
-while we can have mongo go driver Aggregate feature, mgm also 
+while we can haveing Mongo Go Driver Aggregate features, mgm also 
 provide simpler methods to aggregate:
 
 example:
@@ -245,36 +255,59 @@ example:
 import (
 	"github.com/Kamva/mgm"
 	"github.com/Kamva/mgm/builder"
-	"github.com/Kamva/mgm/operator"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/Kamva/mgm/field"
+	. "go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-_, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
-    // S is our Simple Map that can accept mgm operators.
-    // Lookup method return $lookup operator
-    builder.S{builder.Lookup("authors", "author_id", "_id", "authors")},
-    builder.S{builder.Group("pages", bson.M{operator.Push: bson.M{"books": "$name"}})},
+// Author model's collection
+authorColl := mgm.Coll(&Author{})
+
+cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
+    // S function get operators and return bson.M type.
+    builder.S(builder.Lookup(authorColl.Name(), "author_id", field.Id, "author")),
 })
-
-// Mix of using our simple map and mongo map:
-
-_, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
-    builder.S{builder.Lookup("authors", "author_id", "_id", "authors")},
-    bson.M{}
-})
-
 ```
 
-#### mgm packages to simplify Aggregation and query:
+More complex and mix with mongo raw pipelines:
+```go
+import (
+	"github.com/Kamva/mgm"
+	"github.com/Kamva/mgm/builder"
+	"github.com/Kamva/mgm/field"
+	"github.com/Kamva/mgm/operator"
+	. "go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
+// Author model's collection
+authorColl := mgm.Coll(&Author{})
+
+_, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
+    // S function get operators and return bson.M type.
+    builder.S(builder.Lookup(authorColl.Name(), "author_id", field.Id, "author")),
+    builder.S(builder.Group("pages", M{"books": M{operator.Push: M{"name": "$name", "author": "$author"}}})),
+    M{operator.Unwind: "$books"},
+})
+
+if err != nil {
+    panic(err)
+}
+````
+
+-----------------
+### `mgm` packages 
+
+**We implemneted this packages to simplify query and aggregate in mongo**
 
 `builder` : simplify mongo query and aggregation.  
 
 `operator` : contain mongo operators as predefined variable.  
-(e.g Eq  = "$eq" , Gt  = "$gt")  
+(e.g `Eq  = "$eq"` , `Gt  = "$gt"`)  
 
 `field` : contain mongo fields using in aggregation 
 and ... as predefined variable.
-(e.g LocalField = "localField", ForeignField = "foreignField") 
+(e.g `LocalField = "localField"`, `ForeignField = "foreignField"`) 
  
  example:
  ```go
@@ -297,6 +330,27 @@ _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
     bson.M{o.Project: bson.M{f.Id: 0}},
 })
  ```
+ 
+### Bugs / Feature request
+New Features and bugs can be reported on G[Github issue tracker](https://github.com/kamva/mongo-go-models/issues).
 
+### Communicate With Us
 
+If you want to work on Mongo Go Models, write documentation,
+ask question, request new feature:
+* Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
+* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/kamva/mongo-go-models/issues)  
 
+### Contributing
+
+1. Fork the repository
+1. Clone your fork (`git clone https://github.com/<your_username>/mongo-go-models && cd mongo-go-models`)
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Make changes and add them (`git add .`)
+1. Commit your changes (`git commit -m 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create new pull request
+
+### License
+
+Mongo Go Models is released under the [Apache V2 License](https://github.com/kamva/mongo-go-models/blob/master/LICENSE)

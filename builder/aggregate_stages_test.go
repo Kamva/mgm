@@ -292,31 +292,31 @@ func TestGetSimpleMap(t *testing.T) {
 	dataItems := []TestLookupData{
 		{
 			inputs: []interface{}{"foo", "bar", "baz", "qux"},
-			result: builder.S{
+			result: builder.S(
 				builder.New(operator.Lookup, bson.M{
 					field.From:     "foo",
 					field.Let:      "bar",
 					field.Pipeline: "baz",
 					field.As:       "qux",
 				}),
-			},
+			),
 		},
 		{
 			inputs: []interface{}{"foo", "bar", "baz", nil},
-			result: builder.S{
+			result: builder.S(
 				builder.New(operator.Lookup, bson.M{
 					field.From:     "foo",
 					field.Let:      "bar",
 					field.Pipeline: "baz",
 				}),
-			},
+			),
 		},
 	}
 
 	for _, item := range dataItems {
-		res := builder.S{
+		res := builder.S(
 			builder.UncorrelatedLookup(item.inputs[0], item.inputs[1], item.inputs[2], item.inputs[3]),
-		}
+		)
 
 		require.Equal(t, item.result, res)
 	}

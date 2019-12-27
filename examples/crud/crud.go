@@ -4,12 +4,7 @@ import "github.com/Kamva/mgm"
 
 func crud() error {
 
-	author := newAuthor("Mehran")
-	if err := mgm.Coll(author).Create(author); err != nil {
-		return err
-	}
-
-	book := newBook("Test", 124, author.Id)
+	book := newBook("Test", 124)
 	booksColl := mgm.Coll(book)
 
 	if err := booksColl.Create(book); err != nil {
@@ -21,11 +16,7 @@ func crud() error {
 		return err
 	}
 
-	if err := booksColl.Delete(book); err != nil {
-		return err
-	}
-
-	return mgm.Coll(author).Delete(author)
+	return booksColl.Delete(book)
 }
 
 func find() {
