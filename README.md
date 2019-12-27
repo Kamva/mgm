@@ -31,7 +31,7 @@ The Mongo ODM for Go
 ### Install
 
 ```console
-go get https://github.com/Kamva/mongo-go-models
+go get github.com/Kamva/mongo-go-models
 ```
 
 
