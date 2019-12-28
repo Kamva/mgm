@@ -119,7 +119,7 @@ err := mgm.Coll(&Book{}).SimpleFind(&result, bson.M{"age": bson.M{operator.Gt: 2
 #### Model's default fields
 Each model by default (by using `DefaultModel` struct) has
 this fields:  
-- `_id` : Document's Id.
+- `_id` : Document Id.
 
 - `created_at`: Creation date of doc. On save new doc, autofill by `Creating` hook.   
 - `updated_at`: Last update date of doc. On save doc, autofill by `Saving` hook  
@@ -151,7 +151,7 @@ Signature: `Deleting() error`
 - `Deleted`: Call on models deleted.  
 Signature: `Deleted(result *mongo.DeleteResult) error`
 
-**Important Note**: Each model by default using 
+**Important Note**: Each model by default is using 
 `Creating` and `Saving` hooks, So if you want to define those hooks,
 call to `DefaultModel` hooks in your defined hooks.
 
@@ -173,7 +173,7 @@ func (model *Book) Creating() error {
 }
 ```
 #### config :
-`mgm` default config contain context's timeout:
+`mgm` default config contains context timeout:
 ```go
 func init() {
    _ = mgm.SetDefaultConfig(&mgm.Config{CtxTimeout:12 * time.Second}, "mgm_lab", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
@@ -193,7 +193,7 @@ coll.FindOne(mgm.Ctx(),bson.M{})
 
 
 #### Collection
-Get model's collection:
+Get model collection:
 ```go
 coll:=mgm.Coll(&Book{})
 
@@ -204,7 +204,7 @@ coll:=mgm.Coll(&Book{})
 ```go
 book:=Book{}
 
-// Print your model's collection name.
+// Print your model collection name.
 collName := mgm.CollName(&book)
 fmt.Println(collName) // print: books
 ````
@@ -220,7 +220,7 @@ func (model *Book) CollectionName() string {
 coll:=mgm.Coll(&Book{})
 ````  
 
-Get collection by it's name (without need of defining
+Get collection by its name (without need of defining
 model for it):
 ```go
 coll := mgm.CollectionByName("my_coll")
@@ -228,7 +228,7 @@ coll := mgm.CollectionByName("my_coll")
 //Do Aggregation,... with collection
 ```
 
-Customize model's db by implementing `CollectionGetter`
+Customize model db by implementing `CollectionGetter`
 interface:
 ```go
 func (model *Book) Collection() *mgm.Collection {
@@ -244,7 +244,7 @@ func (model *Book) Collection() *mgm.Collection {
 }
 ```
 
-Or return model's collection from another connection:
+Or return model collection from another connection:
 
 ```go
 func (model *Book) Collection() *mgm.Collection {
@@ -255,10 +255,10 @@ func (model *Book) Collection() *mgm.Collection {
       panic(err)
    }
 
-   // Get model's db
+   // Get model db
    db := client.Database("my_second_db")
 
-   // return model's custom collection
+   // return model custom collection
    return mgm.NewCollection(db, "my_collection")
 }
 ````
@@ -294,7 +294,7 @@ import (
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Author model's collection
+// Author model collection
 authorColl := mgm.Coll(&Author{})
 
 cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
@@ -314,7 +314,7 @@ import (
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Author model's collection
+// Author model collection
 authorColl := mgm.Coll(&Author{})
 
 _, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
@@ -352,7 +352,7 @@ import (
    "go.mongodb.org/mongo-driver/bson"
 )
 
-// Instead of hard-coding mongo's operators and fields 
+// Instead of hard-coding mongo operators and fields 
 _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
     bson.M{"$count": ""},
     bson.M{"$project": bson.M{"_id": 0}},
