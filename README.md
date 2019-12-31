@@ -24,9 +24,9 @@ The Mongo ODM for Go
 
 ### Features
 - Define your models and do CRUD operations with hooks before/after each operation.
-- `mgm` makes mongo search and aggregation super easy to do in Golang.
+- `mgm` makes Mongo search and aggregation super easy to do in Golang.
 - Just set up your configs one time and get collections anywhere you need those.
-- `mgm` predefined all mongo operators and keys, So you don't have to hardcode them.
+- `mgm` predefined all Mongo operators and keys, So you don't have to hardcode them.
 - The wrapper of the official Mongo Go Driver.
 
 ### Requirements
