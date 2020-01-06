@@ -4,8 +4,18 @@
 
 
 <p align="center">
-  <a href="https://goreportcard.com/report/github.com/kamva/mgm"><img src="https://goreportcard.com/badge/github.com/kamva/mgm"></a>
-  <a href="https://godoc.org/github.com/kamva/mgm"><img src="https://godoc.org/github.com/kamva/mgm?status.svg" alt="GoDoc"></a>
+  <a href="https://goreportcard.com/report/github.com/kamva/mgm">
+    <img src="https://goreportcard.com/badge/github.com/kamva/mgm">
+  </a>
+  <a href="https://godoc.org/github.com/kamva/mgm">
+    <img src="https://godoc.org/github.com/kamva/mgm?status.svg" alt="GoDoc">
+  </a>
+  <a href="https://travis-ci.com/Kamva/mgm">
+    <img src="https://travis-ci.com/Kamva/mgm.svg?branch=master" alt="Build Status">
+  </a>
+  <a href="https://codecov.io/gh/Kamva/mgm">
+    <img src="https://codecov.io/gh/Kamva/mgm/branch/master/graph/badge.svg" />
+  </a>
 </p>
   
 

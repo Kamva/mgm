@@ -1,0 +1,32 @@
+language: go
+
+go:
+  - 1.11.x
+  - 1.12.x
+  - 1.13.x
+
+env:
+  - GO111MODULE=on
+
+services:
+  - mongodb
+
+before_install:
+  - go get -t -v
+
+before_script:
+  - sleep 15 # To Fix issue of https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
+  - |
+    mongo admin --eval 'db.createUser(
+      {
+        user: "root",
+        pwd: "12345",
+        roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+      }
+    )'
+
+script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
