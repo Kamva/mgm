@@ -17,13 +17,13 @@ before_install:
 before_script:
   - sleep 15 # To Fix issue of https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
   - |
-    db.createUser(
+    mongo admin --eval 'db.createUser(
       {
         user: "root",
         pwd: "12345"
         roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
       }
-    )
+    )'
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
