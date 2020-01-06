@@ -19,13 +19,11 @@
 </p>
   
 
-### Mongo Go Models
+### Mongo Go Models 
 
-The Mongo ODM for Go 
+The Mongo ODM for Go
 
-
-<!-- Insert badges here -->
-
+- [Features](#features)
 - [Requirements](#requirements)
 - [Install](#install)
 - [Usage](#usage)
@@ -33,6 +31,13 @@ The Mongo ODM for Go
 - [Communication](#communicate-with-us)
 - [Contributing](#contributing)
 - [License](#license)
+
+### Features
+- Define your models and do CRUD operations with hooks before/after each operation.
+- `mgm` makes Mongo search and aggregation super easy to do in Golang.
+- Just set up your configs one time and get collections anywhere you need those.
+- `mgm` predefined all Mongo operators and keys, So you don't have to hardcode them.
+- The wrapper of the official Mongo Go Driver.
 
 ### Requirements
 - Go 1.10 or higher.
