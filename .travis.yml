@@ -20,7 +20,7 @@ before_script:
     mongo admin --eval 'db.createUser(
       {
         user: "root",
-        pwd: "12345"
+        pwd: "12345",
         roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
       }
     )'
