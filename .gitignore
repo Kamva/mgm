@@ -5,5 +5,5 @@
 *.test
 
 # Coverage output files
-cover.txt
-cover.html
+coverage.txt
+coverage.html
