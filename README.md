@@ -87,6 +87,7 @@ Insert new document:
 ```go
 book:=NewBook("Pride and Prejudice", 345)
 
+// Make sure pass the model by reference.
 err := mgm.Coll(book).Create(book)
 // Or 
 // err:=mgm.Coll(book).Save(book)
