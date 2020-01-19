@@ -87,6 +87,7 @@ Insert new document:
 ```go
 book:=NewBook("Pride and Prejudice", 345)
 
+// Make sure pass the model by reference.
 err := mgm.Coll(book).Create(book)
 // Or 
 // err:=mgm.Coll(book).Save(book)
@@ -99,7 +100,7 @@ book := &Book{}
 coll := mgm.Coll(book)
 
 // Find and decode doc to the book model.
-_ = coll.FindById("5e0518aa8f1a52b0b9410ee3", book)
+_ = coll.FindByID("5e0518aa8f1a52b0b9410ee3", book)
 
 // Get first doc of collection 
 _ = coll.First(bson.M{}, book)
