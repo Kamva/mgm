@@ -18,8 +18,3 @@ func crud() error {
 
 	return booksColl.Delete(book)
 }
-
-func find() {
-	// Get document's collection
-	mgm.Coll(&book{})
-}
