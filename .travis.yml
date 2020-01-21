@@ -21,9 +21,10 @@ before_script:
       {
         user: "root",
         pwd: "12345",
-        roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+        roles: [ { role: 'root', db: 'admin' } ]
       }
     )'
+  - mongo admin -u root -p 12345 --eval 'rs.initiate()'
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
