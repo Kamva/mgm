@@ -1,18 +1,19 @@
 package mgm
 
 import (
+	"context"
 	"github.com/Kamva/mgm/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func create(c *Collection, model Model) error {
+func create(ctx context.Context, c *Collection, model Model) error {
 	// Call to saving hook
 	if err := callToBeforeCreateHooks(model); err != nil {
 		return err
 	}
 
-	res, err := c.InsertOne(ctx(), model)
+	res, err := c.InsertOne(ctx, model)
 
 	if err != nil {
 		return err
@@ -24,17 +25,17 @@ func create(c *Collection, model Model) error {
 	return callToAfterCreateHooks(model)
 }
 
-func first(c *Collection, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
-	return c.FindOne(ctx(), filter, opts...).Decode(model)
+func first(ctx context.Context, c *Collection, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
+	return c.FindOne(ctx, filter, opts...).Decode(model)
 }
 
-func update(c *Collection, model Model) error {
+func update(ctx context.Context, c *Collection, model Model) error {
 	// Call to saving hook
 	if err := callToBeforeUpdateHooks(model); err != nil {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx(), bson.M{field.ID: model.GetID()}, bson.M{"$set": model})
+	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model})
 
 	if err != nil {
 		return err
@@ -43,11 +44,11 @@ func update(c *Collection, model Model) error {
 	return callToAfterUpdateHooks(res, model)
 }
 
-func del(c *Collection, model Model) error {
+func del(ctx context.Context, c *Collection, model Model) error {
 	if err := callToBeforeDeleteHooks(model); err != nil {
 		return err
 	}
-	res, err := c.DeleteOne(ctx(), bson.M{field.ID: model.GetID()})
+	res, err := c.DeleteOne(ctx, bson.M{field.ID: model.GetID()})
 	if err != nil {
 		return err
 	}

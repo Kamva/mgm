@@ -14,6 +14,7 @@ services:
 before_install:
   - go get -t -v
 
+# Add user and replica set to mongo by help of https://georgeshank.com/how-to-enable-a-mongodb-replica-set-on-travis/
 before_script:
   - sleep 15 # To Fix issue of https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
   - |
@@ -21,9 +22,14 @@ before_script:
       {
         user: "root",
         pwd: "12345",
-        roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+        roles: [ { role: "root", db: "admin" } ]
       }
     )'
+  - 'echo "replication:" | sudo tee -a /etc/mongod.conf'
+  - 'echo "  replSetName: rs0" | sudo tee -a /etc/mongod.conf'
+  - sudo systemctl restart mongod
+  - sleep 20 # To Fix issue of https://docs.travis-ci.com/user/database-setup/#mongodb-does-not-immediately-accept-connections
+  - mongo -u root -p 12345 --eval 'rs.initiate()'
 
 script:
   - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
