@@ -345,6 +345,28 @@ if err != nil {
 }
 ````
 
+### Transaction (Available in version `1.1.1`)
+
+- To run a transaction on default connection use `mgm.Transaction()` function, e.g:
+```go
+d := &Doc{Name: "Mehran", Age: 10}
+
+err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+
+       // do not forget to pass the session's context to the collection methods.
+	err := mgm.Coll(d).SaveWithCtx(sc, d)
+
+	if err != nil {
+		return err
+	}
+
+	return session.CommitTransaction(sc)
+})
+```
+
+- To run a transaction with your context, use `mgm.TransactionWithCtx()` method.
+- To run a transaction on another connection, use `mgm.TransactionWithClient()` method.
+
 -----------------
 ### Mongo Go Models other packages 
 
