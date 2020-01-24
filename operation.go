@@ -7,13 +7,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func create(ctx context.Context, c *Collection, model Model) error {
+func create(ctx context.Context, c *Collection, model Model, opts ...*options.InsertOneOptions) error {
 	// Call to saving hook
 	if err := callToBeforeCreateHooks(model); err != nil {
 		return err
 	}
 
-	res, err := c.InsertOne(ctx, model)
+	res, err := c.InsertOne(ctx, model, opts...)
 
 	if err != nil {
 		return err
@@ -29,13 +29,13 @@ func first(ctx context.Context, c *Collection, filter interface{}, model Model, 
 	return c.FindOne(ctx, filter, opts...).Decode(model)
 }
 
-func update(ctx context.Context, c *Collection, model Model) error {
+func update(ctx context.Context, c *Collection, model Model, opts ...*options.UpdateOptions) error {
 	// Call to saving hook
 	if err := callToBeforeUpdateHooks(model); err != nil {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model})
+	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model}, opts...)
 
 	if err != nil {
 		return err
