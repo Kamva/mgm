@@ -45,27 +45,27 @@ func (coll *Collection) FirstWithCtx(ctx context.Context, filter interface{}, mo
 }
 
 // Create method insert new model into database.
-func (coll *Collection) Create(model Model) error {
-	return coll.CreateWithCtx(ctx(), model)
+func (coll *Collection) Create(model Model, opts ...*options.InsertOneOptions) error {
+	return coll.CreateWithCtx(ctx(), model, opts...)
 }
 
 // CreateWithCtx method insert new model into database.
-func (coll *Collection) CreateWithCtx(ctx context.Context, model Model) error {
-	return create(ctx, coll, model)
+func (coll *Collection) CreateWithCtx(ctx context.Context, model Model, opts ...*options.InsertOneOptions) error {
+	return create(ctx, coll, model, opts...)
 }
 
 // Update function update save changed model into database.
 // On call to this method also mgm call to model's updating,updated,
 // saving,saved hooks.
-func (coll *Collection) Update(model Model) error {
-	return coll.UpdateWithCtx(ctx(), model)
+func (coll *Collection) Update(model Model, opts ...*options.UpdateOptions) error {
+	return coll.UpdateWithCtx(ctx(), model, opts...)
 }
 
 // UpdateWithCtx function update save changed model into database.
 // On call to this method also mgm call to model's updating,updated,
 // saving,saved hooks.
-func (coll *Collection) UpdateWithCtx(ctx context.Context, model Model) error {
-	return update(ctx, coll, model)
+func (coll *Collection) UpdateWithCtx(ctx context.Context, model Model, opts ...*options.UpdateOptions) error {
+	return update(ctx, coll, model, opts...)
 }
 
 // Save method save model(insert,update).
