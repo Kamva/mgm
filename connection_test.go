@@ -9,6 +9,19 @@ import (
 	"testing"
 )
 
+func TestSetupDefaultConnection(t *testing.T) {
+	err := mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+
+	require.Nil(t, err)
+}
+
+func TestSetupWrongConnection(t *testing.T) {
+	err := mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("wrong://wrong:wrong@localhost:27017"))
+
+
+	require.NotNil(t, err)
+}
+
 func TestPanicOnGetCtx(t *testing.T) {
 	mgm.ResetDefaultConfig()
 
