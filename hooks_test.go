@@ -34,7 +34,7 @@ func insertPerson(person *Person) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	util.PanicErr(mgm.Coll(person).Save(person))
+	util.PanicErr(mgm.Coll(person).Create(person))
 }
 
 //--------------------------------
@@ -128,7 +128,7 @@ func TestReturnErrorInSavingHook(t *testing.T) {
 	person.On("Creating").Return(nil)
 	person.On("Saving").Return(savingErr)
 
-	err := mgm.Coll(person).Save(person)
+	err := mgm.Coll(person).Create(person)
 
 	require.Equal(t, savingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)

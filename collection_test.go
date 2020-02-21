@@ -7,6 +7,7 @@ import (
 	"github.com/Kamva/mgm/v2/operator"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"testing"
 )
 
@@ -26,7 +27,7 @@ func TestFindFirst(t *testing.T) {
 	d := &Doc{}
 	util.AssertErrIsNil(t, mgm.Coll(&Doc{}).First(bson.M{}, d))
 
-	require.False(t, d.IsNew())
+	require.NotEqual(t, primitive.ObjectID{}, d.ID)
 }
 
 func TestCollection_Create(t *testing.T) {
@@ -39,25 +40,6 @@ func TestCollection_Create(t *testing.T) {
 
 	// Inserted model's id should not be nil:
 	require.NotNil(t, doc.ID, "Expected document having id after insertion, got nil")
-
-	// We should have one document in database that is equal to this doc:
-	foundDoc := &Doc{}
-	util.AssertErrIsNil(t, mgm.Coll(doc).FindByID(doc.ID, foundDoc))
-
-	require.Equal(t, doc.Name, foundDoc.Name, "expected inserted and retrieved docs be equal, got %v and %v", doc.Name, foundDoc.Name)
-	require.Equal(t, doc.Age, foundDoc.Age, "expected inserted and retrieved docs be equal, got %v and %v", doc.Age, foundDoc.Age)
-}
-
-func TestSaveNewDoc(t *testing.T) {
-	setupDefConnection()
-	resetCollection()
-
-	doc := NewDoc("Ali", 24)
-
-	util.AssertErrIsNil(t, mgm.Coll(doc).Save(doc))
-
-	// Inserted model's id should not be nil:
-	require.NotNil(t, doc.ID, "Expected document having id after save, got nil")
 
 	// We should have one document in database that is equal to this doc:
 	foundDoc := &Doc{}
@@ -85,29 +67,6 @@ func TestCollection_Update(t *testing.T) {
 	if found.ID != newFound.ID {
 		panic("two fond document dont have same id!")
 	}
-	require.Equal(t, found.Name, newFound.Name)
-	require.Equal(t, found.Age, newFound.Age)
-}
-
-func TestSaveExistedDoc(t *testing.T) {
-	setupDefConnection()
-	resetCollection()
-	seed()
-
-	found := findDoc(t)
-
-	found.Name = found.Name + "_extra_val"
-	found.Age = found.Age + 4
-
-	util.AssertErrIsNil(t, mgm.Coll(found).Save(found))
-
-	// Find that doc again:
-	newFound := findDoc(t)
-
-	if found.ID != newFound.ID {
-		panic("two fond document dont have same id!")
-	}
-
 	require.Equal(t, found.Name, newFound.Name)
 	require.Equal(t, found.Age, newFound.Age)
 }

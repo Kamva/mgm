@@ -68,25 +68,6 @@ func (coll *Collection) UpdateWithCtx(ctx context.Context, model Model, opts ...
 	return update(ctx, coll, model, opts...)
 }
 
-// Save method save model(insert,update).
-//
-// Deprecated this method is deprecated, to create an entity, call to the
-// Create method and update the entity by calling to the Update method.
-func (coll *Collection) Save(model Model) error {
-	return coll.SaveWithCtx(ctx(), model)
-}
-
-// SaveWithCtx method save model(insert,update).
-// Deprecated this method is deprecated, to create an entity, call to the
-// CreateWithCtx method and update the entity by calling to the UpdateWithCtx method.
-func (coll *Collection) SaveWithCtx(ctx context.Context, model Model) error {
-	if model.IsNew() {
-		return create(ctx, coll, model)
-	}
-
-	return update(ctx, coll, model)
-}
-
 // Delete method delete model (doc) from collection.
 // If you want to doing something on deleting some model
 // use hooks, don't need to override this method.

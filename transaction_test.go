@@ -20,7 +20,7 @@ func TestTransactionCommit(t *testing.T) {
 
 	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
 
-		err := mgm.Coll(d).SaveWithCtx(sc, d)
+		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
 		if err != nil {
 			return err
@@ -45,7 +45,7 @@ func TestTransactionAbort(t *testing.T) {
 
 	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
 
-		err := mgm.Coll(d).SaveWithCtx(sc, d)
+		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
 		if err != nil {
 			return err
@@ -70,7 +70,7 @@ func TestTransactionWithCtx(t *testing.T) {
 
 	err := mgm.TransactionWithCtx(mgm.Ctx(), func(session mongo.Session, sc mongo.SessionContext) error {
 
-		err := mgm.Coll(d).SaveWithCtx(sc, d)
+		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
 		if err != nil {
 			return err

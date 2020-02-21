@@ -12,7 +12,7 @@ func crud() error {
 	}
 
 	book.Name = "Moulin Rouge!"
-	if err := booksColl.Save(book); err != nil {
+	if err := booksColl.Update(book); err != nil {
 		return err
 	}
 
