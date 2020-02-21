@@ -1,4 +1,4 @@
 package mgm
 
 // Version variable
-var Version = "1.1.1"
+var Version = "2.0.0"

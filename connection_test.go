@@ -1,8 +1,8 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal/util"
+	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v2/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
