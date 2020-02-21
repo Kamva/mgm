@@ -1,9 +1,9 @@
 package aggregate
 
 import (
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/builder"
-	"github.com/Kamva/mgm/field"
+	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v2/builder"
+	"github.com/Kamva/mgm/v2/field"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

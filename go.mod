@@ -1,4 +1,4 @@
-module github.com/Kamva/mgm
+module github.com/Kamva/mgm/v2
 
 go 1.12
 

@@ -2,8 +2,8 @@ package mgm
 
 import (
 	"context"
-	"github.com/Kamva/mgm/builder"
-	"github.com/Kamva/mgm/field"
+	"github.com/Kamva/mgm/v2/builder"
+	"github.com/Kamva/mgm/v2/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -66,25 +66,6 @@ func (coll *Collection) Update(model Model, opts ...*options.UpdateOptions) erro
 // saving,saved hooks.
 func (coll *Collection) UpdateWithCtx(ctx context.Context, model Model, opts ...*options.UpdateOptions) error {
 	return update(ctx, coll, model, opts...)
-}
-
-// Save method save model(insert,update).
-//
-// Deprecated: this method is deprecated, to create an entity, call to the
-// CreateWithCtx method and update the entity by calling to the UpdateWithCtx method.
-func (coll *Collection) Save(model Model) error {
-	return coll.SaveWithCtx(ctx(), model)
-}
-
-// SaveWithCtx method save model(insert,update).
-//
-// Deprecated: this method is deprecated, to create an entity, call to the
-// CreateWithCtx method and update the entity by calling to the UpdateWithCtx method.
-func (coll *Collection) SaveWithCtx(ctx context.Context, model Model) error {
-	if model.IsNew() {
-		return create(ctx, coll, model)
-	}
-	return update(ctx, coll, model)
 }
 
 // Delete method delete model (doc) from collection.

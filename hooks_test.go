@@ -2,8 +2,8 @@ package mgm_test
 
 import (
 	"errors"
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal/util"
+	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v2/internal/util"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -34,7 +34,7 @@ func insertPerson(person *Person) {
 	person.On("Saving").Return(nil)
 	person.On("Saved").Return(nil)
 
-	util.PanicErr(mgm.Coll(person).Save(person))
+	util.PanicErr(mgm.Coll(person).Create(person))
 }
 
 //--------------------------------
@@ -128,7 +128,7 @@ func TestReturnErrorInSavingHook(t *testing.T) {
 	person.On("Creating").Return(nil)
 	person.On("Saving").Return(savingErr)
 
-	err := mgm.Coll(person).Save(person)
+	err := mgm.Coll(person).Create(person)
 
 	require.Equal(t, savingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)

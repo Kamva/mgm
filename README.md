@@ -4,11 +4,11 @@
 
 
 <p align="center">
-  <a href="https://goreportcard.com/report/github.com/kamva/mgm">
-    <img src="https://goreportcard.com/badge/github.com/kamva/mgm">
+  <a href="https://goreportcard.com/report/github.com/Kamva/mgm/v2">
+    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm/v2">
   </a>
-  <a href="https://godoc.org/github.com/kamva/mgm">
-    <img src="https://godoc.org/github.com/kamva/mgm?status.svg" alt="GoDoc">
+  <a href="https://godoc.org/github.com/Kamva/mgm/v2">
+    <img src="https://godoc.org/github.com/Kamva/mgm/v2?status.svg" alt="GoDoc">
   </a>
   <a href="https://travis-ci.com/Kamva/mgm">
     <img src="https://travis-ci.com/Kamva/mgm.svg?branch=master" alt="Build Status">
@@ -48,7 +48,7 @@ The Mongo ODM for Go
 ### Install
 
 ```console
-go get github.com/Kamva/mgm
+go get github.com/Kamva/mgm/v2
 ```
 
 
@@ -56,7 +56,7 @@ go get github.com/Kamva/mgm
 To get started, import the `mgm` package, setup default config:
 ```go
 import (
-   "github.com/Kamva/mgm"
+   "github.com/Kamva/mgm/v2"
    "go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -89,8 +89,6 @@ book:=NewBook("Pride and Prejudice", 345)
 
 // Make sure pass the model by reference.
 err := mgm.Coll(book).Create(book)
-// Or 
-// err:=mgm.Coll(book).Save(book)
 ```
 
 Find one document 
@@ -116,7 +114,7 @@ book:=findMyFavoriteBook()
 
 // and update it
 book.Name="Moulin Rouge!"
-err:=mgm.Coll(book).Save(book)
+err:=mgm.Coll(book).Update(book)
 ```
 
 Delete document
@@ -303,9 +301,9 @@ _ := mgm.Coll(&Book{}).SimpleAggregate(&result,
 Do aggregate using mongo Aggregation method:
 ```go
 import (
-   "github.com/Kamva/mgm"
-   "github.com/Kamva/mgm/builder"
-   "github.com/Kamva/mgm/field"
+   "github.com/Kamva/mgm/v2"
+   "github.com/Kamva/mgm/v2/builder"
+   "github.com/Kamva/mgm/v2/field"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -322,10 +320,10 @@ cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
 More complex and mix with mongo raw pipelines:
 ```go
 import (
-   "github.com/Kamva/mgm"
-   "github.com/Kamva/mgm/builder"
-   "github.com/Kamva/mgm/field"
-   "github.com/Kamva/mgm/operator"
+   "github.com/Kamva/mgm/v2"
+   "github.com/Kamva/mgm/v2/builder"
+   "github.com/Kamva/mgm/v2/field"
+   "github.com/Kamva/mgm/v2/operator"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -345,7 +343,7 @@ if err != nil {
 }
 ````
 
-### Transaction (Available in version `1.1.1`)
+### Transaction
 
 - To run a transaction on default connection use `mgm.Transaction()` function, e.g:
 ```go
@@ -354,7 +352,7 @@ d := &Doc{Name: "Mehran", Age: 10}
 err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
 
        // do not forget to pass the session's context to the collection methods.
-	err := mgm.Coll(d).SaveWithCtx(sc, d)
+	err := mgm.Coll(d).CreateWithCtx(sc, d)
 
 	if err != nil {
 		return err
@@ -384,9 +382,9 @@ and ... as predefined variable.
  example:
  ```go
 import (
-   "github.com/Kamva/mgm"
-   f "github.com/Kamva/mgm/field"
-   o "github.com/Kamva/mgm/operator"
+   "github.com/Kamva/mgm/v2"
+   f "github.com/Kamva/mgm/v2/field"
+   o "github.com/Kamva/mgm/v2/operator"
    "go.mongodb.org/mongo-driver/bson"
 )
 
@@ -404,12 +402,12 @@ _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
  ```
  
 ### Bugs / Feature request
-New Features and bugs can be reported on [Github issue tracker](https://github.com/kamva/mgm/issues).
+New Features and bugs can be reported on [Github issue tracker](https://github.com/Kamva/mgm/v2/issues).
 
 ### Communicate With Us
 
 * Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
-* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/kamva/mgm/issues)  
+* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/Kamva/mgm/v2/issues)  
 
 ### Contributing
 
@@ -423,4 +421,4 @@ New Features and bugs can be reported on [Github issue tracker](https://github.c
 
 ### License
 
-Mongo Go Models is released under the [Apache License](https://github.com/kamva/mgm/blob/master/LICENSE)
+Mongo Go Models is released under the [Apache License](https://github.com/Kamva/mgm/v2/blob/master/LICENSE)

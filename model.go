@@ -22,8 +22,6 @@ type Model interface {
 	// return it.(e.g convert string to objectId)
 	PrepareID(id interface{}) (interface{}, error)
 
-	// Deprecated: this method is deprecated and remove in version 2.
-	IsNew() bool
 	GetID() interface{}
 	SetID(id interface{})
 }

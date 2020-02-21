@@ -1,8 +1,8 @@
 package builder
 
 import (
-	f "github.com/Kamva/mgm/field"
-	o "github.com/Kamva/mgm/operator"
+	f "github.com/Kamva/mgm/v2/field"
+	o "github.com/Kamva/mgm/v2/operator"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

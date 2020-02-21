@@ -1,8 +1,8 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm"
-	"github.com/Kamva/mgm/internal/util"
+	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v2/internal/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"testing"
