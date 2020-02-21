@@ -18,7 +18,6 @@ func TestSetupDefaultConnection(t *testing.T) {
 func TestSetupWrongConnection(t *testing.T) {
 	err := mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("wrong://wrong:wrong@localhost:27017"))
 
-
 	require.NotNil(t, err)
 }
 
