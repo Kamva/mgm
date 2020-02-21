@@ -29,6 +29,8 @@ func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
 }
 
 // IsNew method check and say that model is new or not.
+//
+// Deprecated: this method is deprecated and remove in version 2.
 func (f *IDField) IsNew() bool {
 	return f.GetID() == primitive.ObjectID{}
 }
