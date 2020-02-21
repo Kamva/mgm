@@ -101,12 +101,12 @@ func (coll *Collection) DeleteWithCtx(ctx context.Context, model Model) error {
 	return del(ctx, coll, model)
 }
 
-// SimpleFindWithCtx find and decode result to results.
+// SimpleFind find and decode result to results.
 func (coll *Collection) SimpleFind(results interface{}, filter interface{}, opts ...*options.FindOptions) error {
 	return coll.SimpleFindWithCtx(ctx(), results, filter, opts...)
 }
 
-// SimpleFind find and decode result to results.
+// SimpleFindWithCtx find and decode result to results.
 func (coll *Collection) SimpleFindWithCtx(ctx context.Context, results interface{}, filter interface{}, opts ...*options.FindOptions) error {
 	cur, err := coll.Find(ctx, filter, opts...)
 

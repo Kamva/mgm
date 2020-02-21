@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// TransactionFunc is handler to manage transaction.
 type TransactionFunc func(session mongo.Session, sc mongo.SessionContext) error
 
 // Transaction run a transaction with default client..
