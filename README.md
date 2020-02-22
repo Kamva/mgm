@@ -7,8 +7,8 @@
   <a href="https://goreportcard.com/report/github.com/Kamva/mgm/v2">
     <img src="https://goreportcard.com/badge/github.com/Kamva/mgm/v2">
   </a>
-  <a href="https://godoc.org/github.com/Kamva/mgm/v2">
-    <img src="https://godoc.org/github.com/Kamva/mgm/v2?status.svg" alt="GoDoc">
+  <a href="https://godoc.org/github.com/Kamva/mgm">
+    <img src="https://godoc.org/github.com/Kamva/mgm?status.svg" alt="GoDoc">
   </a>
   <a href="https://travis-ci.com/Kamva/mgm">
     <img src="https://travis-ci.com/Kamva/mgm.svg?branch=master" alt="Build Status">
