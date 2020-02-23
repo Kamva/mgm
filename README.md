@@ -4,8 +4,8 @@
 
 
 <p align="center">
-  <a href="https://goreportcard.com/report/github.com/Kamva/mgm/v2">
-    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm/v2">
+  <a href="https://goreportcard.com/report/github.com/Kamva/mgm">
+    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm">
   </a>
   <a href="https://godoc.org/github.com/Kamva/mgm">
     <img src="https://godoc.org/github.com/Kamva/mgm?status.svg" alt="GoDoc">
