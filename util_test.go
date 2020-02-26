@@ -1,7 +1,7 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v3"
 	"github.com/stretchr/testify/require"
 	"testing"
 )

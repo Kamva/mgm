@@ -4,11 +4,11 @@
 
 
 <p align="center">
-  <a href="https://goreportcard.com/report/github.com/Kamva/mgm/v2">
-    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm/v2">
+  <a href="https://goreportcard.com/report/github.com/Kamva/mgm">
+    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm">
   </a>
-  <a href="https://godoc.org/github.com/Kamva/mgm/v2">
-    <img src="https://godoc.org/github.com/Kamva/mgm/v2?status.svg" alt="GoDoc">
+  <a href="https://godoc.org/github.com/Kamva/mgm">
+    <img src="https://godoc.org/github.com/Kamva/mgm?status.svg" alt="GoDoc">
   </a>
   <a href="https://travis-ci.com/Kamva/mgm">
     <img src="https://travis-ci.com/Kamva/mgm.svg?branch=master" alt="Build Status">
@@ -48,7 +48,7 @@ The Mongo ODM for Go
 ### Install
 
 ```console
-go get github.com/Kamva/mgm/v2
+go get github.com/Kamva/mgm/v3
 ```
 
 
@@ -56,7 +56,7 @@ go get github.com/Kamva/mgm/v2
 To get started, import the `mgm` package, setup default config:
 ```go
 import (
-   "github.com/Kamva/mgm/v2"
+   "github.com/Kamva/mgm/v3"
    "go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -301,9 +301,9 @@ _ := mgm.Coll(&Book{}).SimpleAggregate(&result,
 Do aggregate using mongo Aggregation method:
 ```go
 import (
-   "github.com/Kamva/mgm/v2"
-   "github.com/Kamva/mgm/v2/builder"
-   "github.com/Kamva/mgm/v2/field"
+   "github.com/Kamva/mgm/v3"
+   "github.com/Kamva/mgm/v3/builder"
+   "github.com/Kamva/mgm/v3/field"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -320,10 +320,10 @@ cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
 More complex and mix with mongo raw pipelines:
 ```go
 import (
-   "github.com/Kamva/mgm/v2"
-   "github.com/Kamva/mgm/v2/builder"
-   "github.com/Kamva/mgm/v2/field"
-   "github.com/Kamva/mgm/v2/operator"
+   "github.com/Kamva/mgm/v3"
+   "github.com/Kamva/mgm/v3/builder"
+   "github.com/Kamva/mgm/v3/field"
+   "github.com/Kamva/mgm/v3/operator"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -382,9 +382,9 @@ and ... as predefined variable.
  example:
  ```go
 import (
-   "github.com/Kamva/mgm/v2"
-   f "github.com/Kamva/mgm/v2/field"
-   o "github.com/Kamva/mgm/v2/operator"
+   "github.com/Kamva/mgm/v3"
+   f "github.com/Kamva/mgm/v3/field"
+   o "github.com/Kamva/mgm/v3/operator"
    "go.mongodb.org/mongo-driver/bson"
 )
 
@@ -402,12 +402,12 @@ _, _ = mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), bson.A{
  ```
  
 ### Bugs / Feature request
-New Features and bugs can be reported on [Github issue tracker](https://github.com/Kamva/mgm/v2/issues).
+New Features and bugs can be reported on [Github issue tracker](https://github.com/Kamva/mgm/issues).
 
 ### Communicate With Us
 
 * Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
-* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/Kamva/mgm/v2/issues)  
+* Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/Kamva/mgm/issues)  
 
 ### Contributing
 
@@ -421,4 +421,4 @@ New Features and bugs can be reported on [Github issue tracker](https://github.c
 
 ### License
 
-Mongo Go Models is released under the [Apache License](https://github.com/Kamva/mgm/v2/blob/master/LICENSE)
+Mongo Go Models is released under the [Apache License](https://github.com/Kamva/mgm/blob/master/LICENSE)

@@ -1,7 +1,7 @@
 package aggregate
 
 import (
-	"github.com/Kamva/mgm/v2"
+	"github.com/Kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 

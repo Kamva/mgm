@@ -3,7 +3,7 @@ package mgm
 import (
 	"context"
 	"errors"
-	"github.com/Kamva/mgm/v2/internal/util"
+	"github.com/Kamva/mgm/v3/internal/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"

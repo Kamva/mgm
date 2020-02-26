@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"github.com/Kamva/mgm/v2/internal/util"
+	"github.com/Kamva/mgm/v3/internal/util"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

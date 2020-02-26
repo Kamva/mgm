@@ -1,7 +1,7 @@
 package mgm
 
 import (
-	"github.com/Kamva/mgm/v2/internal/util"
+	"github.com/Kamva/mgm/v3/internal/util"
 	"github.com/jinzhu/inflection"
 	"reflect"
 )
