@@ -1,7 +1,7 @@
 #### Upgrade Instructions
 
 ##### Upgrade from 2.x to 3.x-alpha
-* Change your package import paths from `github.com/Kamva/mgm/v3` 
+* Change your package import paths from `github.com/Kamva/mgm/v2` 
 to `github.com/Kamva/v3`.
 
 - built-in `ID` field changed json tag value from `_id` to `id` [f665e15](https://github.com/Kamva/mgm/commit/f665e1592cdac43fb7fd00b1427a91590f14a9ff)  
