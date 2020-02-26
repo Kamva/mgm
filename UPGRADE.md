@@ -1,6 +1,6 @@
 #### Upgrade Instructions
 
-##### Upgrade from 2.x to 3.x
+##### Upgrade from 2.x to 3.x-alpha
 * Change your package import paths from `github.com/Kamva/mgm/v3` 
 to `github.com/Kamva/v3`.
 

@@ -48,7 +48,7 @@ The Mongo ODM for Go
 ### Install
 
 ```console
-go get github.com/Kamva/mgm/v3
+go get github.com/Kamva/mgm/v2
 ```
 
 
@@ -56,7 +56,7 @@ go get github.com/Kamva/mgm/v3
 To get started, import the `mgm` package, setup default config:
 ```go
 import (
-   "github.com/Kamva/mgm/v3"
+   "github.com/Kamva/mgm/v2"
    "go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -301,9 +301,9 @@ _ := mgm.Coll(&Book{}).SimpleAggregate(&result,
 Do aggregate using mongo Aggregation method:
 ```go
 import (
-   "github.com/Kamva/mgm/v3"
-   "github.com/Kamva/mgm/v3/builder"
-   "github.com/Kamva/mgm/v3/field"
+   "github.com/Kamva/mgm/v2"
+   "github.com/Kamva/mgm/v2/builder"
+   "github.com/Kamva/mgm/v2/field"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -320,10 +320,10 @@ cur, err := mgm.Coll(&Book{}).Aggregate(mgm.Ctx(), A{
 More complex and mix with mongo raw pipelines:
 ```go
 import (
-   "github.com/Kamva/mgm/v3"
-   "github.com/Kamva/mgm/v3/builder"
-   "github.com/Kamva/mgm/v3/field"
-   "github.com/Kamva/mgm/v3/operator"
+   "github.com/Kamva/mgm/v2"
+   "github.com/Kamva/mgm/v2/builder"
+   "github.com/Kamva/mgm/v2/field"
+   "github.com/Kamva/mgm/v2/operator"
    . "go.mongodb.org/mongo-driver/bson"
    "go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -382,9 +382,9 @@ and ... as predefined variable.
  example:
  ```go
 import (
-   "github.com/Kamva/mgm/v3"
-   f "github.com/Kamva/mgm/v3/field"
-   o "github.com/Kamva/mgm/v3/operator"
+   "github.com/Kamva/mgm/v2"
+   f "github.com/Kamva/mgm/v2/field"
+   o "github.com/Kamva/mgm/v2/operator"
    "go.mongodb.org/mongo-driver/bson"
 )
 
