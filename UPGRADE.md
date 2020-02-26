@@ -14,7 +14,7 @@ to `github.com/Kamva/v3`.
     * To Create an entity use the `Create` or `CreateWithCtx` methods.
     * To update an entity use the `Update` or `UpdateWithCtx` methods.
 
-* method `IsNew` method was removed from model interface,
+* method `IsNew` method was removed from the `model` interface,
  don't use it.
 
 
