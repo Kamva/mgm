@@ -141,10 +141,10 @@ this fields:
 #### Model's hooks:
 
 Each model has these hooks :
-- `Creating`: Call On creating a new model.  
+- `Creating`: Call on creating a new model.  
 Signature : `Creating() error`
 
-- `Created`: Call On new model created.  
+- `Created`: Call on new model created.  
 Signature : `Created() error` 
 
 - `Updating`: Call on updating model.  
@@ -165,9 +165,13 @@ Signature: `Deleting() error`
 - `Deleted`: Call on models deleted.  
 Signature: `Deleted(result *mongo.DeleteResult) error`
 
-**Important Note**: Each model by default is using 
-`Creating` and `Saving` hooks, So if you want to define those hooks,
+**Notes about hooks**: 
+- Each model by default is using `Creating` and `Saving` hooks, So if you want to define those hooks,
 call to `DefaultModel` hooks in your defined hooks.
+- collection's methods that call to the hooks:
+	- `Create` & `CreateWithCtx`
+	- `Update` & `UpdateWithCtx`
+	- `Delete` & `DeleteWithCtx`
 
 Example:
 ```go
