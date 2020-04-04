@@ -3,6 +3,7 @@ package mgm
 import (
 	"github.com/Kamva/mgm/v3/internal/util"
 	"github.com/jinzhu/inflection"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"reflect"
 )
 
@@ -28,4 +29,11 @@ func CollName(m Model) string {
 	name := reflect.TypeOf(m).Elem().Name()
 
 	return inflection.Plural(util.ToSnakeCase(name))
+}
+
+// UpsertTrueOption returns new instance of the
+//UpdateOptions with upsert=true property.
+func UpsertTrueOption() *options.UpdateOptions {
+	upsert := true
+	return &options.UpdateOptions{Upsert: &upsert}
 }

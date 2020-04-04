@@ -2,6 +2,7 @@ package mgm_test
 
 import (
 	"github.com/Kamva/mgm/v3"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -39,4 +40,13 @@ func (user *User) CollectionName() string {
 
 func TestGetSpecifiedCollName(t *testing.T) {
 	require.Equal(t, "my_users", mgm.CollName(&User{}))
+}
+
+func TestUpsertTrueOption(t *testing.T) {
+	option := mgm.UpsertTrueOption()
+	upsert := true
+	assert.Equal(t, option.Upsert, &upsert)
+	assert.Nil(t, option.ArrayFilters)
+	assert.Nil(t, option.BypassDocumentValidation)
+	assert.Nil(t, option.Collation)
 }
