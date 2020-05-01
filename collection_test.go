@@ -5,6 +5,7 @@ import (
 	"github.com/Kamva/mgm/v3/builder"
 	"github.com/Kamva/mgm/v3/internal/util"
 	"github.com/Kamva/mgm/v3/operator"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -113,6 +114,43 @@ func TestCollection_SimpleFind(t *testing.T) {
 			t.Errorf("Expected %v, got %v", expectedDoc, gotResult[i])
 		}
 	}
+}
+
+func TestCollection_SimpleAggregateFirst(t *testing.T) {
+	setupDefConnection()
+	resetCollection()
+	seed()
+
+	expectedResult := []Doc{}
+	gotResult := Doc{}
+
+	// We dont want to change document.
+	group := builder.Group("$_id", nil)
+
+	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(&gotResult, group)
+
+	assert.True(t, found)
+	util.AssertErrIsNil(t, err)
+
+	// Create same aggregation by raw methods
+	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group)}, nil)
+	util.AssertErrIsNil(t, err)
+	util.AssertErrIsNil(t, cur.All(mgm.Ctx(), &expectedResult))
+	assert.Equal(t, expectedResult[0], gotResult)
+}
+
+func TestCollection_SimpleAggregateFirstFalse(t *testing.T) {
+	setupDefConnection()
+	resetCollection()
+	seed()
+
+	var gotResult *Doc
+	match := bson.M{operator.Match: bson.M{"user_id": "unknown"}}
+	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(gotResult, match)
+
+	assert.False(t, found)
+	util.AssertErrIsNil(t, err)
+	assert.Nil(t, gotResult)
 }
 
 func TestCollection_SimpleAggregate(t *testing.T) {

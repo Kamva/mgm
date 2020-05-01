@@ -102,7 +102,22 @@ func (coll *Collection) SimpleFindWithCtx(ctx context.Context, results interface
 // Aggregation methods
 //--------------------------------
 
-// SimpleAggregate doing simple aggregation and decode aggregate result to the results.
+// SimpleAggregateFirst does simple aggregation and decode first aggregate result to the provided result param.
+// stages value can be Operator|bson.M
+// Note: you can not use this method in a transaction because it does not get context.
+// So you should use the regular aggregation method in transactions.
+func (coll *Collection) SimpleAggregateFirst(result interface{}, stages ...interface{}) (bool, error) {
+	cur, err := coll.SimpleAggregateCursor(stages...)
+	if err != nil {
+		return false, err
+	}
+	if cur.Next(ctx()) {
+		return true, cur.Decode(result)
+	}
+	return false, nil
+}
+
+// SimpleAggregate does simple aggregation and decode aggregate result to the results.
 // stages value can be Operator|bson.M
 // Note: you can not use this method in a transaction because it does not get context.
 //So you should use the regular aggregation method in transactions.
