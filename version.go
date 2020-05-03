@@ -1,4 +1,4 @@
 package mgm
 
-// Version variable
-var Version = "3.0.0"
+// Version of the package
+const Version = "3.0.0"
