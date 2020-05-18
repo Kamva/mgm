@@ -86,7 +86,7 @@ func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOption
 
 // CollectionByName return new collection from default config
 func CollectionByName(name string, opts ...*options.CollectionOptions) *Collection {
-	return NewCollection(db, name)
+	return NewCollection(db, name, opts...)
 }
 
 // DefaultConfigs return you'r default mongodb configs.
