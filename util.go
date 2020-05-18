@@ -8,13 +8,13 @@ import (
 )
 
 // Coll return model's collection.
-func Coll(m Model) *Collection {
+func Coll(m Model, opts ...*options.CollectionOptions) *Collection {
 
 	if collGetter, ok := m.(CollectionGetter); ok {
 		return collGetter.Collection()
 	}
 
-	return CollectionByName(CollName(m))
+	return CollectionByName(CollName(m), opts...)
 }
 
 // CollName check if you provided collection name in your
