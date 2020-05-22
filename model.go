@@ -25,7 +25,7 @@ type Model interface {
 	PrepareID(id interface{}) (primitive.ObjectID, error)
 
 	GetID() primitive.ObjectID
-	SetID(id interface{})
+	SetID(id interface{}) error
 }
 
 // DefaultModel struct contain model's default fields.
