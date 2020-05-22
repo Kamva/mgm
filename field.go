@@ -1,6 +1,7 @@
 package mgm
 
 import (
+	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -19,23 +20,41 @@ type DateFields struct {
 
 // PrepareID method prepare id value to using it as id in filtering,...
 // e.g convert hex-string id value to bson.ObjectId
-func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
-	if idStr, ok := id.(string); ok {
-		return primitive.ObjectIDFromHex(idStr)
+func (f *IDField) PrepareID(id interface{}) (oid primitive.ObjectID, err error) {
+	switch t := id.(type) {
+	case string:
+		oid, err = primitive.ObjectIDFromHex(t)
+		return
+	case primitive.ObjectID:
+		err = nil
+		oid = t
+		return
+	default:
+		err = errors.New("unknown type")
+		return
 	}
-
-	// Otherwise id must be ObjectId
-	return id, nil
 }
 
 // GetID method return model's id
-func (f *IDField) GetID() interface{} {
+func (f *IDField) GetID() primitive.ObjectID {
 	return f.ID
 }
 
 // SetID set id value of model's id field.
-func (f *IDField) SetID(id interface{}) {
-	f.ID = id.(primitive.ObjectID)
+func (f *IDField) SetID(id interface{}) error {
+	switch t := id.(type) {
+	case string:
+		id, err := primitive.ObjectIDFromHex(t)
+		if err != nil {
+			return err
+		}
+		f.ID = id
+	case primitive.ObjectID:
+		f.ID = t
+	default:
+		return errors.New("unknown type")
+	}
+	return nil
 }
 
 //--------------------------------

@@ -1,5 +1,7 @@
 package mgm
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 // CollectionGetter interface contain method to return
 // model's custom collection.
 type CollectionGetter interface {
@@ -20,9 +22,9 @@ type CollectionNameGetter interface {
 type Model interface {
 	// PrepareID convert id value if need, and then
 	// return it.(e.g convert string to objectId)
-	PrepareID(id interface{}) (interface{}, error)
+	PrepareID(id interface{}) (primitive.ObjectID, error)
 
-	GetID() interface{}
+	GetID() primitive.ObjectID
 	SetID(id interface{})
 }
 

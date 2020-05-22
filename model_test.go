@@ -20,6 +20,6 @@ func TestPrepareId(t *testing.T) {
 	hexId := "5df7fb2b1fff9ee374b6bd2a"
 	val, err := d.PrepareID(hexId)
 	id, _ := primitive.ObjectIDFromHex(hexId)
-	require.Equal(t, val.(primitive.ObjectID), id)
+	require.Equal(t, val, id)
 	util.AssertErrIsNil(t, err)
 }
