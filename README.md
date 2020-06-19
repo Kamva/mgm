@@ -168,7 +168,7 @@ Signature: `Deleted(result *mongo.DeleteResult) error`
 **Notes about hooks**: 
 - Each model by default use the `Creating` and `Saving` hooks, So if you want to define those hooks,
 call to `DefaultModel` hooks in your defined hooks.
-- collection's methods that call to the hooks:
+- collection's methods which call to the hooks:
 	- `Create` & `CreateWithCtx`
 	- `Update` & `UpdateWithCtx`
 	- `Delete` & `DeleteWithCtx`
