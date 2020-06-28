@@ -1,6 +1,6 @@
 module github.com/Kamva/mgm/v3
 
-go 1.12
+go 1.14
 
 require (
 	github.com/go-stack/stack v1.8.0 // indirect
