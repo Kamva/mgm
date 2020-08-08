@@ -1,12 +1,13 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/Kamva/mgm/v3"
 	"github.com/Kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"testing"
 )
 
 func TestSetupDefaultConnection(t *testing.T) {
@@ -69,6 +70,16 @@ func TestGetNewClient(t *testing.T) {
 	coll := mgm.NewCollection(client.Database("test_db"), "test_col")
 
 	require.Equal(t, coll.Name(), "test_col", "expected collection with %v name, got %v", "test_col", coll.Name())
+}
+
+func TestDisconnectDefaultConfig(t *testing.T) {
+	setupDefConnection()
+	require.Nil(t, mgm.DisconnectDefaultConfig())
+}
+
+func TestDisconnectDefaultConfigWithCtx(t *testing.T) {
+	setupDefConnection()
+	require.Nil(t, mgm.DisconnectDefaultConfigWithCtx(mgm.Ctx()))
 }
 
 func TestGetDefaultConfigBeforeSettingItUp(t *testing.T) {

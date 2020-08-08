@@ -3,10 +3,11 @@ package mgm
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/Kamva/mgm/v3/internal/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 var config *Config
@@ -82,6 +83,16 @@ func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOption
 	db = client.Database(dbName)
 
 	return nil
+}
+
+// DisconnectDefaultConfigWithCtx disconnects the default client
+func DisconnectDefaultConfigWithCtx(ctx context.Context) error {
+	return client.Disconnect(ctx)
+}
+
+// DisconnectDefaultConfig disconnects the default client
+func DisconnectDefaultConfig() error {
+	return DisconnectDefaultConfigWithCtx(ctx())
 }
 
 // CollectionByName return new collection from default config
