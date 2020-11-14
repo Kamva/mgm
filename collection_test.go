@@ -1,10 +1,10 @@
 package mgm_test
 
 import (
-	"github.com/Kamva/mgm/v3"
-	"github.com/Kamva/mgm/v3/builder"
-	"github.com/Kamva/mgm/v3/internal/util"
-	"github.com/Kamva/mgm/v3/operator"
+	"github.com/kamva/mgm/v3"
+	"github.com/kamva/mgm/v3/builder"
+	"github.com/kamva/mgm/v3/internal/util"
+	"github.com/kamva/mgm/v3/operator"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
