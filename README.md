@@ -52,6 +52,10 @@ The Mongo ODM for Go
 
 ### Install
 
+__Important Note__: We changed package name from 
+`github.com/Kamva/mgm/v3`(uppercase `Kamva`)
+ to `github.com/kamva/mgm/v3`(lowercase `kamva`) in version 3.1.0 and future versions.
+
 ```console
 go get github.com/kamva/mgm/v3
 ```
