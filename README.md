@@ -422,7 +422,9 @@ New Features and bugs can be reported on [Github issue tracker](https://github.c
 * Create new Topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
 * Ask your question or request new feature by creating issue at [Github issue tracker](https://github.com/Kamva/mgm/issues)  
 
-### Contributing
+### Contributing 
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/kamva/mgm)
 
 1. Fork the repository
 1. Clone your fork (`git clone https://github.com/<your_username>/mgm && cd mgm`)
