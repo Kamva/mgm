@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// appendIfHasVal append key and val to map if value is not empty.
+// appendIfHasVal appends the provided key and value to the map if the value is not nil.
 func appendIfHasVal(m bson.M, key string, val interface{}) {
 	if !util.IsNil(val) {
 		m[key] = val

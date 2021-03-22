@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-// Coll return model's collection.
 func TestGetModelCollection(t *testing.T) {
 	setupDefConnection()
 

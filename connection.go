@@ -13,21 +13,20 @@ var config *Config
 var client *mongo.Client
 var db *mongo.Database
 
-// Config struct contain extra config of mgm package.
+// Config struct contains extra configuration properties for the mgm package.
 type Config struct {
 	// Set to 10 second (10*time.Second) for example.
 	CtxTimeout time.Duration
 }
 
-// NewCtx function create and return new context with your specified timeout.
+// NewCtx function creates and returns a new context with the specified timeout.
 func NewCtx(timeout time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), timeout)
 
 	return ctx
 }
 
-// Ctx function create new context with default
-// timeout and return it.
+// Ctx function creates and returns a new context with a default timeout value.
 func Ctx() context.Context {
 	return ctx()
 }
@@ -36,7 +35,7 @@ func ctx() context.Context {
 	return NewCtx(config.CtxTimeout)
 }
 
-// NewClient return new mongodb client.
+// NewClient returns a new mongodb client.
 func NewClient(opts ...*options.ClientOptions) (*mongo.Client, error) {
 	client, err := mongo.NewClient(opts...)
 	if err != nil {
@@ -50,25 +49,25 @@ func NewClient(opts ...*options.ClientOptions) (*mongo.Client, error) {
 	return client, nil
 }
 
-// NewCollection return new collection with passed database
+// NewCollection returns a new collection with the supplied database.
 func NewCollection(db *mongo.Database, name string, opts ...*options.CollectionOptions) *Collection {
 	coll := db.Collection(name, opts...)
 
 	return &Collection{Collection: coll}
 }
 
-// ResetDefaultConfig reset all of the default config
+// ResetDefaultConfig resets the configuration values, client and database.
 func ResetDefaultConfig() {
 	config = nil
 	client = nil
 	db = nil
 }
 
-// SetDefaultConfig initial default client and Database .
+// SetDefaultConfig initializes the client and database using the specified configuration values, or default.
 func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOptions) (err error) {
 
-	// Get predefined config as default config if user
-	// do not provide it.
+	// Use the predefined configuration values as default if the user
+	// does not provide any.
 	if conf == nil {
 		conf = defaultConf()
 	}
@@ -84,12 +83,12 @@ func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOption
 	return nil
 }
 
-// CollectionByName return new collection from default config
+// CollectionByName returns a new collection using the current configuration values.
 func CollectionByName(name string, opts ...*options.CollectionOptions) *Collection {
 	return NewCollection(db, name, opts...)
 }
 
-// DefaultConfigs return you'r default mongodb configs.
+// DefaultConfigs returns the current configuration values, client and database.
 func DefaultConfigs() (*Config, *mongo.Client, *mongo.Database, error) {
 	if util.AnyNil(config, client, db) {
 		return nil, nil, nil, errors.New("please setup default config before acquiring it")
@@ -98,8 +97,8 @@ func DefaultConfigs() (*Config, *mongo.Client, *mongo.Database, error) {
 	return config, client, db, nil
 }
 
-// defaultConf is default config ,If you do not pass config
-// to `SetDefaultConfig` method, we using this config.
+// defaultConf are the default configuration values when none are provided 
+// to the `SetDefaultConfig` method.
 func defaultConf() *Config {
 	return &Config{CtxTimeout: 10 * time.Second}
 }

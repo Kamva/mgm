@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-// Coll return model's collection.
+// Coll returns the collection associated with a model.
 func Coll(m Model, opts ...*options.CollectionOptions) *Collection {
 
 	if collGetter, ok := m.(CollectionGetter); ok {
@@ -17,9 +17,9 @@ func Coll(m Model, opts ...*options.CollectionOptions) *Collection {
 	return CollectionByName(CollName(m), opts...)
 }
 
-// CollName check if you provided collection name in your
-// model, return it's name, otherwise guess model
-// collection's name.
+// CollName returns a model's collection name. The `CollectionNameGetter` will be used 
+// if the model implements this interface. Otherwise, the collection name is inferred 
+// based on the model's type using reflection.
 func CollName(m Model) string {
 
 	if collNameGetter, ok := m.(CollectionNameGetter); ok {
@@ -31,8 +31,7 @@ func CollName(m Model) string {
 	return inflection.Plural(util.ToSnakeCase(name))
 }
 
-// UpsertTrueOption returns new instance of the
-//UpdateOptions with upsert=true property.
+// UpsertTrueOption returns new instance of UpdateOptions with the upsert property set to true.
 func UpsertTrueOption() *options.UpdateOptions {
 	upsert := true
 	return &options.UpdateOptions{Upsert: &upsert}

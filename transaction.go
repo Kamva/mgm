@@ -5,20 +5,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// TransactionFunc is handler to manage transaction.
+// TransactionFunc is a handler to manage a transaction.
 type TransactionFunc func(session mongo.Session, sc mongo.SessionContext) error
 
-// Transaction run a transaction with default client..
+// Transaction creates a transaction with the default client.
 func Transaction(f TransactionFunc) error {
 	return TransactionWithClient(ctx(), client, f)
 }
 
-// TransactionWithCtx run transaction with the given context and default client.
+// TransactionWithCtx creates a transaction with the given context and the default client.
 func TransactionWithCtx(ctx context.Context, f TransactionFunc) error {
 	return TransactionWithClient(ctx, client, f)
 }
 
-// TransactionWithClient run transaction with the given client.
+// TransactionWithClient creates a transaction with the given client.
 func TransactionWithClient(ctx context.Context, client *mongo.Client, f TransactionFunc) error {
 	session, err := client.StartSession() //start session need to get options.
 	if err != nil {
