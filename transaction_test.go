@@ -9,9 +9,8 @@ import (
 	"testing"
 )
 
-// Note: to run Transaction tests:
-// - MongoDB daemon must run as replica set not standalone
-//	 daemon, to convert it [see this](https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/)
+// Note: to run Transaction tests, the MongoDB daemon must run as replica set, not as a standalone daemon. 
+// To convert it [see this](https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/)
 func TestTransactionCommit(t *testing.T) {
 	setupDefConnection()
 	resetCollection()

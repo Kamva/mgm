@@ -1,15 +1,15 @@
-// Package builder help us to write aggregate,filter,update maps simpler.
+// Package builder help us to write aggregates, filters, update maps simpler.
 package builder
 
 import "go.mongodb.org/mongo-driver/bson"
 
-// SMap is simple map that can be substitute  of `bson.M` to
-// having simpler map structure on query,aggregate,...
+// SMap is simple map that can be substitute of `bson.M` to
+// have a simpler map structure for queries, aggregations, etc.
 type SMap struct {
 	Operators []Operator
 }
 
-// ToMap function convert our Simple map to bson.M to using in filters,stages,...
+// ToMap function converts our SMap to bson.M for use in filters, stages, etc.
 func (s *SMap) ToMap() bson.M {
 	m := bson.M{}
 
@@ -20,7 +20,7 @@ func (s *SMap) ToMap() bson.M {
 	return m
 }
 
-// S get operators as param and return bson.M to using result as filter,stage,...
+// S receives operators as parameters and returns a bson.M that can be used in filters, stages, etc.
 func S(operators ...Operator) bson.M {
 	s := &SMap{Operators: operators}
 
