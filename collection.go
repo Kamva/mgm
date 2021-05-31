@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/kamva/mgm/v3/builder"
-	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -32,7 +31,7 @@ func (coll *Collection) FindByIDWithCtx(ctx context.Context, id interface{}, mod
 		return err
 	}
 
-	return first(ctx, coll, bson.M{field.ID: id}, model)
+	return first(ctx, coll, bson.M{model.PKField(): id}, model)
 }
 
 // First method searches and returns the first document in the search results.

@@ -2,7 +2,6 @@ package mgm
 
 import (
 	"context"
-	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -35,7 +34,7 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model}, opts...)
+	res, err := c.UpdateOne(ctx, bson.M{model.PKField(): model.GetID()}, bson.M{"$set": model}, opts...)
 
 	if err != nil {
 		return err
@@ -48,7 +47,7 @@ func del(ctx context.Context, c *Collection, model Model) error {
 	if err := callToBeforeDeleteHooks(model); err != nil {
 		return err
 	}
-	res, err := c.DeleteOne(ctx, bson.M{field.ID: model.GetID()})
+	res, err := c.DeleteOne(ctx, bson.M{model.PKField(): model.GetID()})
 	if err != nil {
 		return err
 	}

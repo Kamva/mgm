@@ -28,6 +28,10 @@ func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
 	return id, nil
 }
 
+func (f *IDField) PKField() string{
+	return "_id"
+}
+
 // GetID method returns a model's ID
 func (f *IDField) GetID() interface{} {
 	return f.ID

@@ -24,6 +24,7 @@ type Model interface {
 
 	GetID() interface{}
 	SetID(id interface{})
+	PKField() string
 }
 
 // DefaultModel struct contains a model's default fields.
