@@ -113,7 +113,7 @@ _ = coll.FindByID("5e0518aa8f1a52b0b9410ee3", book)
 _ = coll.First(bson.M{}, book)
 
 // Get the first doc of a collection using a filter
-_ = coll.First(bson.M{"page":400}, book)
+_ = coll.First(bson.M{"pages":400}, book)
 ```
 
 Update a document
@@ -136,7 +136,7 @@ Find and decode a result:
 ```go
 result := []Book{}
 
-err := mgm.Coll(&Book{}).SimpleFind(&result, bson.M{"age": bson.M{operator.Gt: 24}})
+err := mgm.Coll(&Book{}).SimpleFind(&result, bson.M{"pages": bson.M{operator.Gt: 24}})
 ```
 
 ### A Model's Default Fields
