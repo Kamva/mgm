@@ -2,6 +2,7 @@ package mgm
 
 import (
 	"context"
+
 	"github.com/kamva/mgm/v3/builder"
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
@@ -102,38 +103,54 @@ func (coll *Collection) SimpleFindWithCtx(ctx context.Context, results interface
 // Aggregation methods
 //--------------------------------
 
-// SimpleAggregateFirst does simple aggregation and decode first aggregate result to the provided result param.
+// SimpleAggregateFirst is just same as SimpleAggregateFirstWithCtx, but doesnt' get context param.
+func (coll *Collection) SimpleAggregateFirst(result interface{}, stages ...interface{}) (bool, error) {
+	return coll.SimpleAggregateFirstWithCtx(ctx(), result, stages...)
+}
+
+// SimpleAggregateFirstWithCtx does simple aggregation and decode first aggregate result to the provided result param.
 // stages value can be Operator|bson.M
 // Note: you can not use this method in a transaction because it does not get context.
 // So you should use the regular aggregation method in transactions.
-func (coll *Collection) SimpleAggregateFirst(result interface{}, stages ...interface{}) (bool, error) {
-	cur, err := coll.SimpleAggregateCursor(stages...)
+func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result interface{}, stages ...interface{}) (bool, error) {
+	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
 	if err != nil {
 		return false, err
 	}
-	if cur.Next(ctx()) {
+	if cur.Next(ctx) {
 		return true, cur.Decode(result)
 	}
 	return false, nil
 }
 
-// SimpleAggregate does simple aggregation and decode aggregate result to the results.
+// SimpleAggregate is just same as SimpleAggregateWithCtx, but doesn't get context param.
+func (coll *Collection) SimpleAggregate(results interface{}, stages ...interface{}) error {
+	return coll.SimpleAggregateWithCtx(ctx(), results, stages...)
+}
+
+// SimpleAggregateWithCtx does simple aggregation and decode aggregate result to the results.
 // stages value can be Operator|bson.M
 // Note: you can not use this method in a transaction because it does not get context.
 //So you should use the regular aggregation method in transactions.
-func (coll *Collection) SimpleAggregate(results interface{}, stages ...interface{}) error {
-	cur, err := coll.SimpleAggregateCursor(stages...)
+func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results interface{}, stages ...interface{}) error {
+	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
 	if err != nil {
 		return err
 	}
 
-	return cur.All(ctx(), results)
+	return cur.All(ctx, results)
 }
 
-// SimpleAggregateCursor doing simple aggregation and return cursor.
+// SimpleAggregateCursor is just same as SimpleAggregateCursorWithCtx, but
+// doesn't get context.
+func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cursor, error) {
+	return coll.SimpleAggregateCursorWithCtx(ctx(), stages...)
+}
+
+// SimpleAggregateCursorWithCtx doing simple aggregation and return cursor.
 // Note: you can not use this method in a transaction because it does not get context.
 // So you should use the regular aggregation method in transactions.
-func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cursor, error) {
+func (coll *Collection) SimpleAggregateCursorWithCtx(ctx context.Context, stages ...interface{}) (*mongo.Cursor, error) {
 	pipeline := bson.A{}
 
 	for _, stage := range stages {
@@ -144,5 +161,5 @@ func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cur
 		}
 	}
 
-	return coll.Aggregate(ctx(), pipeline, nil)
+	return coll.Aggregate(ctx, pipeline, nil)
 }
