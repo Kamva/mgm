@@ -2,11 +2,9 @@ package util
 
 import "reflect"
 
-// IsNil function check value is nil or no. To check real value of interface
-// is nil or not, should using reflection, check this
-// https://play.golang.org/p/Isoo0CcAvr. Firstly check
-// `val==nil` because reflection can not get value of
-// zero val.
+// IsNil function determines whether the parameter is nil or not. If the value itself is not nil,
+// reflection is used to determine whether the underlying value is nil.
+// See https://play.golang.org/p/Isoo0CcAvr for an example.
 func IsNil(val interface{}) (result bool) {
 
 	if val == nil {
@@ -22,7 +20,7 @@ func IsNil(val interface{}) (result bool) {
 	return
 }
 
-// AnyNil return true if exists any nil value in passed params.
+// AnyNil returns true if any of the passed in parameters are nil, and returns false otherwise.
 func AnyNil(values ...interface{}) bool {
 	for _, val := range values {
 

@@ -10,21 +10,21 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// Collection performs operations on models and given Mongodb collection
+// Collection performs operations on models and the given Mongodb collection
 type Collection struct {
 	*mongo.Collection
 }
 
-// FindByID method find a doc and decode it to model, otherwise return error.
-// id field can be any value that if passed to `PrepareID` method, it return
-// valid id(e.g string,bson.ObjectId).
+// FindByID method finds a doc and decodes it to a model, otherwise returns an error.
+// The id field can be any value that if passed to the `PrepareID` method, it returns
+// a valid ID (e.g string, bson.ObjectId).
 func (coll *Collection) FindByID(id interface{}, model Model) error {
 	return coll.FindByIDWithCtx(ctx(), id, model)
 }
 
-// FindByIDWithCtx method find a doc and decode it to model, otherwise return error.
-// id field can be any value that if passed to `PrepareID` method, it return
-// valid id(e.g string,bson.ObjectId).
+// FindByIDWithCtx method finds a doc and decodes it to a model, otherwise returns an error.
+// The id field can be any value that if passed to the `PrepareID` method, it returns
+// a valid ID (e.g string, bson.ObjectId).
 func (coll *Collection) FindByIDWithCtx(ctx context.Context, id interface{}, model Model) error {
 	id, err := model.PrepareID(id)
 
@@ -35,60 +35,60 @@ func (coll *Collection) FindByIDWithCtx(ctx context.Context, id interface{}, mod
 	return first(ctx, coll, bson.M{field.ID: id}, model)
 }
 
-// First method search and return first document of search result.
+// First method searches and returns the first document in the search results.
 func (coll *Collection) First(filter interface{}, model Model, opts ...*options.FindOneOptions) error {
 	return coll.FirstWithCtx(ctx(), filter, model, opts...)
 }
 
-// FirstWithCtx method search and return first document of search result.
+// FirstWithCtx method searches and returns the first document in the search results.
 func (coll *Collection) FirstWithCtx(ctx context.Context, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
 	return first(ctx, coll, filter, model, opts...)
 }
 
-// Create method insert new model into database.
+// Create method inserts a new model into the database.
 func (coll *Collection) Create(model Model, opts ...*options.InsertOneOptions) error {
 	return coll.CreateWithCtx(ctx(), model, opts...)
 }
 
-// CreateWithCtx method insert new model into database.
+// CreateWithCtx method inserts a new model into the database.
 func (coll *Collection) CreateWithCtx(ctx context.Context, model Model, opts ...*options.InsertOneOptions) error {
 	return create(ctx, coll, model, opts...)
 }
 
-// Update function update save changed model into database.
-// On call to this method also mgm call to model's updating,updated,
-// saving,saved hooks.
+// Update function persists the changes made to a model to the database.
+// Calling this method also invokes the model's mgm updating, updated,
+// saving, and saved hooks.
 func (coll *Collection) Update(model Model, opts ...*options.UpdateOptions) error {
 	return coll.UpdateWithCtx(ctx(), model, opts...)
 }
 
-// UpdateWithCtx function update save changed model into database.
-// On call to this method also mgm call to model's updating,updated,
-// saving,saved hooks.
+// UpdateWithCtx function persists the changes made to a model to the database using the specified context.
+// Calling this method also invokes the model's mgm updating, updated,
+// saving, and saved hooks.
 func (coll *Collection) UpdateWithCtx(ctx context.Context, model Model, opts ...*options.UpdateOptions) error {
 	return update(ctx, coll, model, opts...)
 }
 
-// Delete method delete model (doc) from collection.
-// If you want to doing something on deleting some model
-// use hooks, don't need to override this method.
+// Delete method deletes a model (doc) from a collection.
+// To perform additional operations when deleting a model
+// you should use hooks rather than overriding this method.
 func (coll *Collection) Delete(model Model) error {
 	return del(ctx(), coll, model)
 }
 
-// DeleteWithCtx method delete model (doc) from collection.
-// If you want to doing something on deleting some model
-// use hooks, don't need to override this method.
+// DeleteWithCtx method deletes a model (doc) from a collection using the specified context.
+// To perform additional operations when deleting a model
+// you should use hooks rather than overriding this method.
 func (coll *Collection) DeleteWithCtx(ctx context.Context, model Model) error {
 	return del(ctx, coll, model)
 }
 
-// SimpleFind find and decode result to results.
+// SimpleFind finds, decodes and returns the results.
 func (coll *Collection) SimpleFind(results interface{}, filter interface{}, opts ...*options.FindOptions) error {
 	return coll.SimpleFindWithCtx(ctx(), results, filter, opts...)
 }
 
-// SimpleFindWithCtx find and decode result to results.
+// SimpleFindWithCtx finds, decodes and returns the results using the specified context.
 func (coll *Collection) SimpleFindWithCtx(ctx context.Context, results interface{}, filter interface{}, opts ...*options.FindOptions) error {
 	cur, err := coll.Find(ctx, filter, opts...)
 
@@ -108,10 +108,10 @@ func (coll *Collection) SimpleAggregateFirst(result interface{}, stages ...inter
 	return coll.SimpleAggregateFirstWithCtx(ctx(), result, stages...)
 }
 
-// SimpleAggregateFirstWithCtx does simple aggregation and decode first aggregate result to the provided result param.
-// stages value can be Operator|bson.M
-// Note: you can not use this method in a transaction because it does not get context.
-// So you should use the regular aggregation method in transactions.
+// SimpleAggregateFirstWithCtx performs a simple aggregation, decodes the first aggregate result and returns it using the provided result parameter.
+// The value of `stages` can be Operator|bson.M
+// Note: you can not use this method in a transaction because it does not accept a context.
+// To participate in transactions, please use the regular aggregation method.
 func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result interface{}, stages ...interface{}) (bool, error) {
 	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
 	if err != nil {
@@ -123,15 +123,16 @@ func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result 
 	return false, nil
 }
 
+
 // SimpleAggregate is just same as SimpleAggregateWithCtx, but doesn't get context param.
 func (coll *Collection) SimpleAggregate(results interface{}, stages ...interface{}) error {
 	return coll.SimpleAggregateWithCtx(ctx(), results, stages...)
 }
 
-// SimpleAggregateWithCtx does simple aggregation and decode aggregate result to the results.
-// stages value can be Operator|bson.M
-// Note: you can not use this method in a transaction because it does not get context.
-//So you should use the regular aggregation method in transactions.
+// SimpleAggregateWithCtx performs a simple aggregation, decodes the aggregate result and returns the list using the provided result parameter.
+// The value of `stages` can be Operator|bson.M
+// Note: you can not use this method in a transaction because it does not accept a context.
+// To participate in transactions, please use the regular aggergation method.
 func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results interface{}, stages ...interface{}) error {
 	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
 	if err != nil {
@@ -147,9 +148,9 @@ func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cur
 	return coll.SimpleAggregateCursorWithCtx(ctx(), stages...)
 }
 
-// SimpleAggregateCursorWithCtx doing simple aggregation and return cursor.
-// Note: you can not use this method in a transaction because it does not get context.
-// So you should use the regular aggregation method in transactions.
+// SimpleAggregateCursorWithCtx performs a simple aggregation and returns a cursor over the resulting documents.
+// Note: you can not use this method in a transaction because it does not accept a context.
+// To participate in transactions, please use the regular aggergation method.
 func (coll *Collection) SimpleAggregateCursorWithCtx(ctx context.Context, stages ...interface{}) (*mongo.Cursor, error) {
 	pipeline := bson.A{}
 
