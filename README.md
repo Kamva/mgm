@@ -21,11 +21,6 @@
 
 # Mongo Go Models 
 
-__Important Note__: We changed the package name from 
-`github.com/Kamva/mgm/v3` (uppercase `Kamva`)
- to `github.com/kamva/mgm/v3` (lowercase `kamva`) starting with version 3.1.0.
-
-
 The Mongo ODM for Go
 
 - [Features](#features)
