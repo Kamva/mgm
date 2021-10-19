@@ -43,8 +43,6 @@ The Mongo ODM for Go
 - Go 1.10 or higher.
 - MongoDB 2.6 and higher.
 
-
-
 ## Installation
 
 __Important Note__: We changed the package name from 
