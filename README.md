@@ -144,28 +144,28 @@ the following fields:
 
 Each model has the following hooks:
 - `Creating`: Called when creating a new model.
-Signature : `Creating() error`
+Signature : `Creating(context.Context) error`
 
 - `Created`: Called after a new model is created.
-Signature : `Created() error`
+Signature : `Created(context.Context) error`
 
 - `Updating`: Called when updating model.
-Signature : `Updating() error`
+Signature : `Updating(context.Context) error`
 
 - `Updated` : Called after a model is updated.
-Signature : `Updated(result *mongo.UpdateResult) error`
+Signature : `Updated(ctx context.Context, result *mongo.UpdateResult) error`
 
 - `Saving`: Called when creating or updating a model.
-Signature : `Saving() error`
+Signature : `Saving(context.Context) error`
 
 - `Saved`: Called after a model is created or updated.
-Signature: `Saved() error`
+Signature: `Saved(context.Context) error`
 
 - `Deleting`: Called when deleting a model.
-Signature: `Deleting() error`
+Signature: `Deleting(context.Context) error`
 
 - `Deleted`: Called after a model is deleted.
-Signature: `Deleted(result *mongo.DeleteResult) error`
+Signature: `Deleted(ctx context.Context, result *mongo.DeleteResult) error`
 
 **Notes about hooks**: 
 - Each model by default uses the `Creating` and `Saving` hooks, so if you want to define those hooks yourself, remember to invoke the `DefaultModel` hooks from your own hooks.
@@ -176,9 +176,9 @@ Signature: `Deleted(result *mongo.DeleteResult) error`
 
 Example:
 ```go
-func (model *Book) Creating() error {
+func (model *Book) Creating(ctx context.Context) error {
    // Call the DefaultModel Creating hook
-   if err := model.DefaultModel.Creating(); err!=nil {
+   if err := model.DefaultModel.Creating(ctx); err!=nil {
       return err
    }
 
