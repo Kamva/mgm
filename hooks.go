@@ -6,7 +6,7 @@ import (
 )
 
 // CreatingHook is called before saving a new model to the database
-// Deprecated : please use creating hook with context
+// Deprecated: please use CreatingHookWithCtx
 type CreatingHook interface {
 	Creating() error
 }
@@ -17,7 +17,7 @@ type CreatingHookWithCtx interface {
 }
 
 // CreatedHook is called after a model has been created
-// Deprecated : Please use CreatedHookWithCtx
+// Deprecated: Please use CreatedHookWithCtx
 type CreatedHook interface {
 	Created() error
 }
@@ -28,7 +28,7 @@ type CreatedHookWithCtx interface {
 }
 
 // UpdatingHook is called before updating a model
-// Deprecated : Please use UpdatingHookWithCtx
+// Deprecated: Please use UpdatingHookWithCtx
 type UpdatingHook interface {
 	Updating() error
 }
@@ -39,8 +39,9 @@ type UpdatingHookWithCtx interface {
 }
 
 // UpdatedHook is called after a model is updated
-// Deprecated : Please use UpdatedHookWithCtx
+// Deprecated: Please use UpdatedHookWithCtx
 type UpdatedHook interface {
+	// Deprecated:
 	Updated(result *mongo.UpdateResult) error
 }
 
@@ -50,7 +51,7 @@ type UpdatedHookWithCtx interface {
 }
 
 // SavingHook is called before a model (new or existing) is saved to the database.
-// Deprecated : Please use SavingHookWithCtx
+// Deprecated: Please use SavingHookWithCtx
 type SavingHook interface {
 	Saving() error
 }
@@ -61,7 +62,7 @@ type SavingHookWithCtx interface {
 }
 
 // SavedHook is called after a model is saved to the database.
-// Deprecated : Please use SavedHookWithCtx
+// Deprecated: Please use SavedHookWithCtx
 type SavedHook interface {
 	Saved() error
 }
@@ -72,7 +73,7 @@ type SavedHookWithCtx interface {
 }
 
 // DeletingHook is called before a model is deleted
-// Deprecated : Please use DeletingHookWithCtx
+// Deprecated: Please use DeletingHookWithCtx
 type DeletingHook interface {
 	Deleting() error
 }
@@ -83,7 +84,7 @@ type DeletingHookWithCtx interface {
 }
 
 // DeletedHook is called after a model is deleted
-// Deprecated : Please use DeletedHookWithCtx
+// Deprecated: Please use DeletedHookWithCtx
 type DeletedHook interface {
 	Deleted(result *mongo.DeleteResult) error
 }
