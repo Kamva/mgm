@@ -1,56 +1,59 @@
 package mgm
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
 // CreatingHook is called before saving a new model to the database
 type CreatingHook interface {
-	Creating() error
+	Creating(context.Context) error
 }
 
 // CreatedHook is called after a model has been created
 type CreatedHook interface {
-	Created() error
+	Created(context.Context) error
 }
 
 // UpdatingHook is called before updating a model
 type UpdatingHook interface {
-	Updating() error
+	Updating(context.Context) error
 }
 
 // UpdatedHook is called after a model is updated
 type UpdatedHook interface {
-	Updated(result *mongo.UpdateResult) error
+	Updated(ctx context.Context, result *mongo.UpdateResult) error
 }
 
 // SavingHook is called before a model (new or existing) is saved to the database.
 type SavingHook interface {
-	Saving() error
+	Saving(context.Context) error
 }
 
 // SavedHook is called after a model is saved to the database.
 type SavedHook interface {
-	Saved() error
+	Saved(context.Context) error
 }
 
 // DeletingHook is called before a model is deleted
 type DeletingHook interface {
-	Deleting() error
+	Deleting(context.Context) error
 }
 
 // DeletedHook is called after a model is deleted
 type DeletedHook interface {
-	Deleted(result *mongo.DeleteResult) error
+	Deleted(ctx context.Context, result *mongo.DeleteResult) error
 }
 
-func callToBeforeCreateHooks(model Model) error {
+func callToBeforeCreateHooks(ctx context.Context, model Model) error {
 	if hook, ok := model.(CreatingHook); ok {
-		if err := hook.Creating(); err != nil {
+		if err := hook.Creating(ctx); err != nil {
 			return err
 		}
 	}
 
 	if hook, ok := model.(SavingHook); ok {
-		if err := hook.Saving(); err != nil {
+		if err := hook.Saving(ctx); err != nil {
 			return err
 		}
 	}
@@ -58,15 +61,15 @@ func callToBeforeCreateHooks(model Model) error {
 	return nil
 }
 
-func callToBeforeUpdateHooks(model Model) error {
+func callToBeforeUpdateHooks(ctx context.Context, model Model) error {
 	if hook, ok := model.(UpdatingHook); ok {
-		if err := hook.Updating(); err != nil {
+		if err := hook.Updating(ctx); err != nil {
 			return err
 		}
 	}
 
 	if hook, ok := model.(SavingHook); ok {
-		if err := hook.Saving(); err != nil {
+		if err := hook.Saving(ctx); err != nil {
 			return err
 		}
 	}
@@ -74,15 +77,15 @@ func callToBeforeUpdateHooks(model Model) error {
 	return nil
 }
 
-func callToAfterCreateHooks(model Model) error {
+func callToAfterCreateHooks(ctx context.Context, model Model) error {
 	if hook, ok := model.(CreatedHook); ok {
-		if err := hook.Created(); err != nil {
+		if err := hook.Created(ctx); err != nil {
 			return err
 		}
 	}
 
 	if hook, ok := model.(SavedHook); ok {
-		if err := hook.Saved(); err != nil {
+		if err := hook.Saved(ctx); err != nil {
 			return err
 		}
 	}
@@ -90,15 +93,15 @@ func callToAfterCreateHooks(model Model) error {
 	return nil
 }
 
-func callToAfterUpdateHooks(updateResult *mongo.UpdateResult, model Model) error {
+func callToAfterUpdateHooks(ctx context.Context, updateResult *mongo.UpdateResult, model Model) error {
 	if hook, ok := model.(UpdatedHook); ok {
-		if err := hook.Updated(updateResult); err != nil {
+		if err := hook.Updated(ctx, updateResult); err != nil {
 			return err
 		}
 	}
 
 	if hook, ok := model.(SavedHook); ok {
-		if err := hook.Saved(); err != nil {
+		if err := hook.Saved(ctx); err != nil {
 			return err
 		}
 	}
@@ -106,9 +109,9 @@ func callToAfterUpdateHooks(updateResult *mongo.UpdateResult, model Model) error
 	return nil
 }
 
-func callToBeforeDeleteHooks(model Model) error {
+func callToBeforeDeleteHooks(ctx context.Context, model Model) error {
 	if hook, ok := model.(DeletingHook); ok {
-		if err := hook.Deleting(); err != nil {
+		if err := hook.Deleting(ctx); err != nil {
 			return err
 		}
 	}
@@ -116,9 +119,9 @@ func callToBeforeDeleteHooks(model Model) error {
 	return nil
 }
 
-func callToAfterDeleteHooks(deleteResult *mongo.DeleteResult, model Model) error {
+func callToAfterDeleteHooks(ctx context.Context, deleteResult *mongo.DeleteResult, model Model) error {
 	if hook, ok := model.(DeletedHook); ok {
-		if err := hook.Deleted(deleteResult); err != nil {
+		if err := hook.Deleted(ctx, deleteResult); err != nil {
 			return err
 		}
 	}

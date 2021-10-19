@@ -1,6 +1,7 @@
 package mgm
 
 import (
+	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 )
@@ -44,14 +45,14 @@ func (f *IDField) SetID(id interface{}) {
 
 // Creating hook is used here to set the `created_at` field
 // value when inserting a new model into the database.
-func (f *DateFields) Creating() error {
+func (f *DateFields) Creating(context.Context) error {
 	f.CreatedAt = time.Now().UTC()
 	return nil
 }
 
 // Saving hook is used here to set the `updated_at` field 
 // value when creating or updateing a model.
-func (f *DateFields) Saving() error {
+func (f *DateFields) Saving(context.Context) error {
 	f.UpdatedAt = time.Now().UTC()
 	return nil
 }

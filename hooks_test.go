@@ -1,6 +1,7 @@
 package mgm_test
 
 import (
+	"context"
 	"errors"
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
@@ -27,57 +28,57 @@ func NewPerson(name string, age int) *Person {
 	return &Person{Name: name, Age: age}
 }
 
-func insertPerson(person *Person) {
+func insertPerson(person *Person, ctx context.Context) {
 	// Set listeners to mocked hooks:
-	person.On("Creating").Return(nil)
-	person.On("Created").Return(nil)
-	person.On("Saving").Return(nil)
-	person.On("Saved").Return(nil)
+	person.On("Creating", ctx).Return(nil)
+	person.On("Created", ctx).Return(nil)
+	person.On("Saving", ctx).Return(nil)
+	person.On("Saved", ctx).Return(nil)
 
-	util.PanicErr(mgm.Coll(person).Create(person))
+	util.PanicErr(mgm.Coll(person).CreateWithCtx(ctx, person))
 }
 
 //--------------------------------
 // Mock hooks
 //--------------------------------
 
-func (d *Person) Creating() error {
-	args := d.Called()
+func (d *Person) Creating(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Created() error {
-	args := d.Called()
+func (d *Person) Created(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Updating() error {
-	args := d.Called()
+func (d *Person) Updating(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Updated(result *mongo.UpdateResult) error {
-	args := d.Called(result.MatchedCount, result.ModifiedCount)
+func (d *Person) Updated(ctx context.Context, result *mongo.UpdateResult) error {
+	args := d.Called(ctx, result.MatchedCount, result.ModifiedCount)
 	return args.Error(0)
 }
 
-func (d *Person) Saving() error {
-	args := d.Called()
+func (d *Person) Saving(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Saved() error {
-	args := d.Called()
+func (d *Person) Saved(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Deleting() error {
-	args := d.Called()
+func (d *Person) Deleting(ctx context.Context) error {
+	args := d.Called(ctx)
 	return args.Error(0)
 }
 
-func (d *Person) Deleted(result *mongo.DeleteResult) error {
-	args := d.Called(result.DeletedCount)
+func (d *Person) Deleted(ctx context.Context, result *mongo.DeleteResult) error {
+	args := d.Called(ctx, result.DeletedCount)
 	return args.Error(0)
 }
 
@@ -89,9 +90,10 @@ func TestReturnErrorInCreatingHook(t *testing.T) {
 	person := NewPerson("Ali", 24)
 
 	// Set listeners to mocked hooks:
-	person.On("Creating").Return(creatingErr)
+	ctx := mgm.Ctx()
+	person.On("Creating", ctx).Return(creatingErr)
 
-	err := mgm.Coll(person).Create(person)
+	err := mgm.Coll(person).CreateWithCtx(ctx, person)
 
 	require.Equal(t, creatingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
@@ -108,12 +110,13 @@ func TestCreatingDocHooks(t *testing.T) {
 	person := NewPerson("Ali", 24)
 
 	// Set listeners to mocked hooks:
-	person.On("Creating").Return(nil)
-	person.On("Created").Return(nil)
-	person.On("Saving").Return(nil)
-	person.On("Saved").Return(nil)
+	ctx := mgm.Ctx()
+	person.On("Creating", ctx).Return(nil)
+	person.On("Created", ctx).Return(nil)
+	person.On("Saving", ctx).Return(nil)
+	person.On("Saved", ctx).Return(nil)
 
-	util.AssertErrIsNil(t, mgm.Coll(person).Create(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).CreateWithCtx(ctx, person))
 	person.AssertExpectations(t)
 }
 
@@ -125,10 +128,11 @@ func TestReturnErrorInSavingHook(t *testing.T) {
 	person := NewPerson("Ali", 24)
 
 	// Set listeners to mocked hooks:
-	person.On("Creating").Return(nil)
-	person.On("Saving").Return(savingErr)
+	ctx := mgm.Ctx()
+	person.On("Creating", ctx).Return(nil)
+	person.On("Saving", ctx).Return(savingErr)
 
-	err := mgm.Coll(person).Create(person)
+	err := mgm.Coll(person).CreateWithCtx(ctx, person)
 
 	require.Equal(t, savingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
@@ -145,28 +149,31 @@ func TestSavingDocHooks(t *testing.T) {
 	person := NewPerson("Ali", 24)
 
 	// Set listeners to mocked hooks:
-	person.On("Creating").Return(nil)
-	person.On("Created").Return(nil)
-	person.On("Saving").Return(nil)
-	person.On("Saved").Return(nil)
+	ctx := mgm.Ctx()
+	person.On("Creating", ctx).Return(nil)
+	person.On("Created", ctx).Return(nil)
+	person.On("Saving", ctx).Return(nil)
+	person.On("Saved", ctx).Return(nil)
 
-	util.AssertErrIsNil(t, mgm.Coll(person).Create(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).CreateWithCtx(ctx, person))
 	person.AssertExpectations(t)
 }
 func TestReturnErrorInUpdatingHook(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
+	ctx := mgm.Ctx()
+
 	oldName := "Ali"
 	updatingErr := errors.New("test error")
 	person := NewPerson(oldName, 24)
 
-	insertPerson(person)
+	insertPerson(person, ctx)
 	person.Name = "Mehran"
 
 	// Set listeners to mocked hooks:
-	person.On("Updating").Return(updatingErr)
+	person.On("Updating", ctx).Return(updatingErr)
 
-	err := mgm.Coll(person).Update(person)
+	err := mgm.Coll(person).UpdateWithCtx(ctx, person)
 
 	require.Equal(t, updatingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
@@ -180,18 +187,20 @@ func TestReturnErrorInUpdatingHook(t *testing.T) {
 func TestUpdatingDocHooks(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
+	ctx := mgm.Ctx()
+
 	newName := "Mehran"
 	person := NewPerson("Ali", 24)
 
-	insertPerson(person)
+	insertPerson(person, ctx)
 
 	person.Name = newName
 
 	// Set listeners to mocked hooks:
-	person.On("Updating").Return(nil)
-	person.On("Updated", int64(1), int64(1)).Return(nil)
+	person.On("Updating", ctx).Return(nil)
+	person.On("Updated", ctx, int64(1), int64(1)).Return(nil)
 
-	err := mgm.Coll(person).Update(person)
+	err := mgm.Coll(person).UpdateWithCtx(ctx, person)
 
 	util.AssertErrIsNil(t, err)
 	person.AssertExpectations(t)
@@ -205,15 +214,17 @@ func TestUpdatingDocHooks(t *testing.T) {
 func TestReturnErrorInDeletingHook(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
+	ctx := mgm.Ctx()
+
 	deletingErr := errors.New("test error")
 	person := NewPerson("Ali", 24)
 
-	insertPerson(person)
+	insertPerson(person, ctx)
 
 	// Set listeners to mocked hooks:
-	person.On("Deleting").Return(deletingErr)
+	person.On("Deleting", ctx).Return(deletingErr)
 
-	err := mgm.Coll(person).Delete(person)
+	err := mgm.Coll(person).DeleteWithCtx(ctx, person)
 
 	require.Equal(t, deletingErr, err, "Expected returning hook's error")
 	person.AssertExpectations(t)
@@ -226,15 +237,17 @@ func TestReturnErrorInDeletingHook(t *testing.T) {
 func TestDeletingDocHooks(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
+	ctx := mgm.Ctx()
+
 	person := NewPerson("Ali", 24)
 
-	insertPerson(person)
+	insertPerson(person, ctx)
 
 	// Set listeners to mocked hooks:
-	person.On("Deleting").Return(nil)
-	person.On("Deleted", int64(1)).Return(nil)
+	person.On("Deleting", ctx).Return(nil)
+	person.On("Deleted", ctx, int64(1)).Return(nil)
 
-	util.AssertErrIsNil(t, mgm.Coll(person).Delete(person))
+	util.AssertErrIsNil(t, mgm.Coll(person).DeleteWithCtx(ctx, person))
 
 	person.AssertExpectations(t)
 

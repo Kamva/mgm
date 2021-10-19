@@ -9,7 +9,7 @@ import (
 
 func create(ctx context.Context, c *Collection, model Model, opts ...*options.InsertOneOptions) error {
 	// Call to saving hook
-	if err := callToBeforeCreateHooks(model); err != nil {
+	if err := callToBeforeCreateHooks(ctx, model); err != nil {
 		return err
 	}
 
@@ -22,7 +22,7 @@ func create(ctx context.Context, c *Collection, model Model, opts ...*options.In
 	// Set new id
 	model.SetID(res.InsertedID)
 
-	return callToAfterCreateHooks(model)
+	return callToAfterCreateHooks(ctx, model)
 }
 
 func first(ctx context.Context, c *Collection, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
@@ -31,7 +31,7 @@ func first(ctx context.Context, c *Collection, filter interface{}, model Model, 
 
 func update(ctx context.Context, c *Collection, model Model, opts ...*options.UpdateOptions) error {
 	// Call to saving hook
-	if err := callToBeforeUpdateHooks(model); err != nil {
+	if err := callToBeforeUpdateHooks(ctx, model); err != nil {
 		return err
 	}
 
@@ -41,11 +41,11 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 		return err
 	}
 
-	return callToAfterUpdateHooks(res, model)
+	return callToAfterUpdateHooks(ctx, res, model)
 }
 
 func del(ctx context.Context, c *Collection, model Model) error {
-	if err := callToBeforeDeleteHooks(model); err != nil {
+	if err := callToBeforeDeleteHooks(ctx, model); err != nil {
 		return err
 	}
 	res, err := c.DeleteOne(ctx, bson.M{field.ID: model.GetID()})
@@ -53,5 +53,5 @@ func del(ctx context.Context, c *Collection, model Model) error {
 		return err
 	}
 
-	return callToAfterDeleteHooks(res, model)
+	return callToAfterDeleteHooks(ctx, res, model)
 }
