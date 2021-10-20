@@ -1,7 +1,5 @@
 package mgm
 
-import "context"
-
 // CollectionGetter interface contains a method to return
 // a model's custom collection.
 type CollectionGetter interface {
@@ -35,11 +33,13 @@ type DefaultModel struct {
 }
 
 // Creating function calls the inner fields' defined hooks
-func (model *DefaultModel) Creating(ctx context.Context) error {
-	return model.DateFields.Creating(ctx)
+// TODO: get context as param in the next version (4).
+func (model *DefaultModel) Creating() error {
+	return model.DateFields.Creating()
 }
 
 // Saving function calls the inner fields' defined hooks
-func (model *DefaultModel) Saving(ctx context.Context) error {
-	return model.DateFields.Saving(ctx)
+// TODO: get context as param the next version(4).
+func (model *DefaultModel) Saving() error {
+	return model.DateFields.Saving()
 }
