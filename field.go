@@ -14,7 +14,7 @@ type IDField struct {
 // DateFields struct contains the `created_at` and `updated_at`
 // fields that autofill when inserting or updating a model.
 type DateFields struct {
-	CreatedAt time.Time `json:"created_at" bson:"created_at"`
+	CreatedAt time.Time `json:"created_at" bson:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 }
 
@@ -51,7 +51,7 @@ func (f *DateFields) Creating() error {
 	return nil
 }
 
-// Saving hook is used here to set the `updated_at` field 
+// Saving hook is used here to set the `updated_at` field
 // value when creating or updateing a model.
 // TODO: get context as param the next version(4).
 func (f *DateFields) Saving() error {
