@@ -26,10 +26,17 @@ type Model interface {
 	SetID(id interface{})
 }
 
+type Versionable interface {
+	GetVersion() interface{}
+	GetVersionFieldName() string
+	IncrementVersion()
+}
+
 // DefaultModel struct contains a model's default fields.
 type DefaultModel struct {
-	IDField    `bson:",inline"`
-	DateFields `bson:",inline"`
+	IDField      `bson:",inline"`
+	DateFields   `bson:",inline"`
+	VersionField `bson:",inline"`
 }
 
 // Creating function calls the inner fields' defined hooks

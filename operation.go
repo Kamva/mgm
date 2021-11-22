@@ -2,6 +2,7 @@ package mgm
 
 import (
 	"context"
+
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -35,7 +36,14 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model}, opts...)
+	query := bson.M{field.ID: model.GetID()}
+	modelVersionable, isVersionable := model.(Versionable)
+	if isVersionable {
+		query[modelVersionable.GetVersionFieldName()] = modelVersionable.GetVersion()
+		modelVersionable.IncrementVersion()
+	}
+
+	res, err := c.UpdateOne(ctx, query, bson.M{"$set": model}, opts...)
 
 	if err != nil {
 		return err

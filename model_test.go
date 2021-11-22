@@ -1,10 +1,11 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"testing"
 )
 
 func TestPrepareInvalidId(t *testing.T) {
@@ -22,4 +23,12 @@ func TestPrepareId(t *testing.T) {
 	id, _ := primitive.ObjectIDFromHex(hexId)
 	require.Equal(t, val.(primitive.ObjectID), id)
 	util.AssertErrIsNil(t, err)
+}
+
+func TestVersion(t *testing.T) {
+	d := &Doc{}
+	require.Equal(t, 0, d.GetVersion())
+	require.Equal(t, "version", d.GetVersionFieldName())
+	d.IncrementVersion()
+	require.Equal(t, 1, d.GetVersion())
 }
