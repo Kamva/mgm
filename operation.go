@@ -2,6 +2,7 @@ package mgm
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
@@ -44,6 +45,10 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 	}
 
 	res, err := c.UpdateOne(ctx, query, bson.M{"$set": model}, opts...)
+
+	if isVersionable && res.MatchedCount == 0 {
+		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), modelVersionable.GetVersion())
+	}
 
 	if err != nil {
 		return err
