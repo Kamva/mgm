@@ -46,12 +46,12 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 
 	res, err := c.UpdateOne(ctx, query, bson.M{"$set": model}, opts...)
 
-	if isVersionable && res.MatchedCount == 0 {
-		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), modelVersionable.GetVersion())
-	}
-
 	if err != nil {
 		return err
+	}
+
+	if isVersionable && res.MatchedCount == 0 {
+		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), modelVersionable.GetVersion())
 	}
 
 	return callToAfterUpdateHooks(ctx, res, model)
