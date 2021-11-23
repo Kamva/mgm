@@ -39,8 +39,13 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 
 	query := bson.M{field.ID: model.GetID()}
 	modelVersionable, isVersionable := model.(Versionable)
+	var currentVersion interface{}
 	if isVersionable {
-		query[modelVersionable.GetVersionFieldName()] = modelVersionable.GetVersion()
+		currentVersion = modelVersionable.GetVersion()
+		//handle adding versionning to documents that were created without versionning
+		if currentVersion != 0 && currentVersion != nil {
+			query[modelVersionable.GetVersionFieldName()] = currentVersion
+		}
 		modelVersionable.IncrementVersion()
 	}
 
@@ -51,7 +56,7 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 	}
 
 	if isVersionable && res.MatchedCount == 0 {
-		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), modelVersionable.GetVersion())
+		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), currentVersion)
 	}
 
 	return callToAfterUpdateHooks(ctx, res, model)
