@@ -3,6 +3,7 @@ package mgm
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
@@ -42,10 +43,26 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 	var currentVersion interface{}
 	if isVersionable {
 		currentVersion = modelVersionable.GetVersion()
-		//handle adding versionning to documents that were created without versionning
-		if currentVersion != 0 && currentVersion != nil {
+
+		//Handle adding versionning for documents that were created without it
+		//In this case, the version field would be of zero value and not exist in the DB
+		//Add $or exists false in the query condition for this case
+		isCurrentVersionZero := false
+		switch c := currentVersion.(type) {
+		case string:
+			isCurrentVersionZero = c == ""
+		case int:
+			isCurrentVersionZero = c == 0
+		case time.Time:
+			isCurrentVersionZero = c.IsZero()
+		}
+
+		if isCurrentVersionZero {
+			query["$or"] = bson.A{bson.M{modelVersionable.GetVersionFieldName(): currentVersion}, bson.M{modelVersionable.GetVersionFieldName(): bson.M{"$exists": false}}}
+		} else {
 			query[modelVersionable.GetVersionFieldName()] = currentVersion
 		}
+
 		modelVersionable.IncrementVersion()
 	}
 
