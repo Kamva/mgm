@@ -28,7 +28,7 @@ func TestPrepareId(t *testing.T) {
 func TestVersion(t *testing.T) {
 	d := &Doc{}
 	require.Equal(t, 0, d.GetVersion())
-	require.Equal(t, "version", d.GetVersionFieldName())
+	require.Equal(t, "_v", d.GetVersionFieldName())
 	d.IncrementVersion()
 	require.Equal(t, 1, d.GetVersion())
 }

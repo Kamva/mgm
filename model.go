@@ -30,13 +30,13 @@ type Versionable interface {
 	GetVersion() interface{}
 	GetVersionFieldName() string
 	IncrementVersion()
+	IsVersionZero() bool
 }
 
 // DefaultModel struct contains a model's default fields.
 type DefaultModel struct {
-	IDField      `bson:",inline"`
-	DateFields   `bson:",inline"`
-	VersionField `bson:",inline"`
+	IDField    `bson:",inline"`
+	DateFields `bson:",inline"`
 }
 
 // Creating function calls the inner fields' defined hooks

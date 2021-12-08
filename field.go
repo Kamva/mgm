@@ -19,7 +19,7 @@ type DateFields struct {
 }
 
 type VersionField struct {
-	Version int `json:"version" bson:"version"`
+	Version int `json:"_v" bson:"_v"`
 }
 
 // PrepareID method prepares the ID value to be used for filtering
@@ -50,12 +50,17 @@ func (f *VersionField) GetVersion() interface{} {
 
 // GetVersionFieldName returns the field name holding the version field (has to match the bson tag)
 func (f *VersionField) GetVersionFieldName() string {
-	return "version"
+	return "_v"
 }
 
 // SetVersion returns the model version field
 func (f *VersionField) IncrementVersion() {
 	f.Version++
+}
+
+// Determines whether the version field is in its zero value
+func (f *VersionField) IsVersionZero() bool {
+	return f.Version == 0
 }
 
 //--------------------------------

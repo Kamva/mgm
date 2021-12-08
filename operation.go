@@ -3,7 +3,6 @@ package mgm
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
@@ -39,31 +38,21 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 	}
 
 	query := bson.M{field.ID: model.GetID()}
-	modelVersionable, isVersionable := model.(Versionable)
-	var currentVersion interface{}
+
+	var v interface{}
+	vmodel, isVersionable := model.(Versionable)
 	if isVersionable {
-		currentVersion = modelVersionable.GetVersion()
-
-		//Handle adding versionning for documents that were created without it
-		//In this case, the version field would be of zero value and not exist in the DB
-		//Add $or exists false in the query condition for this case
-		isCurrentVersionZero := false
-		switch c := currentVersion.(type) {
-		case string:
-			isCurrentVersionZero = c == ""
-		case int:
-			isCurrentVersionZero = c == 0
-		case time.Time:
-			isCurrentVersionZero = c.IsZero()
-		}
-
-		if isCurrentVersionZero {
-			query["$or"] = bson.A{bson.M{modelVersionable.GetVersionFieldName(): currentVersion}, bson.M{modelVersionable.GetVersionFieldName(): bson.M{"$exists": false}}}
+		v = vmodel.GetVersion()
+		if vmodel.IsVersionZero() {
+			query["$or"] = bson.A{
+				bson.M{vmodel.GetVersionFieldName(): v},
+				bson.M{vmodel.GetVersionFieldName(): bson.M{"$exists": false}},
+			}
 		} else {
-			query[modelVersionable.GetVersionFieldName()] = currentVersion
+			query[vmodel.GetVersionFieldName()] = v
 		}
 
-		modelVersionable.IncrementVersion()
+		vmodel.IncrementVersion()
 	}
 
 	res, err := c.UpdateOne(ctx, query, bson.M{"$set": model}, opts...)
@@ -73,7 +62,7 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 	}
 
 	if isVersionable && res.MatchedCount == 0 {
-		return fmt.Errorf("versioning error : document %v %v with version %v could not be found", c.Name(), model.GetID(), currentVersion)
+		return fmt.Errorf("document %v %v with version %v could not be found %w", c.Name(), model.GetID(), v, ErrVersionning)
 	}
 
 	return callToAfterUpdateHooks(ctx, res, model)
