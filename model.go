@@ -27,8 +27,8 @@ type Model interface {
 }
 
 type Versionable interface {
-	GetVersion() interface{}
-	GetVersionFieldName() string
+	Version() interface{}
+	GetVersionBsonFieldName() string
 	IncrementVersion()
 	IsVersionZero() bool
 }

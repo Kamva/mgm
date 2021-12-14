@@ -15,6 +15,12 @@ func create(ctx context.Context, c *Collection, model Model, opts ...*options.In
 		return err
 	}
 
+	//If this model is versionable and its version value is zero, increment it to initialize it in the db
+	vmodel, isVersionable := model.(Versionable)
+	if isVersionable && vmodel.IsVersionZero() {
+		vmodel.IncrementVersion()
+	}
+
 	res, err := c.InsertOne(ctx, model, opts...)
 
 	if err != nil {
@@ -32,6 +38,14 @@ func first(ctx context.Context, c *Collection, filter interface{}, model Model, 
 }
 
 func update(ctx context.Context, c *Collection, model Model, opts ...*options.UpdateOptions) error {
+
+	//Get current version before calling hooks that could alter it
+	var v interface{}
+	vmodel, isVersionable := model.(Versionable)
+	if isVersionable {
+		v = vmodel.Version()
+	}
+
 	// Call to saving hook
 	if err := callToBeforeUpdateHooks(ctx, model); err != nil {
 		return err
@@ -39,17 +53,14 @@ func update(ctx context.Context, c *Collection, model Model, opts ...*options.Up
 
 	query := bson.M{field.ID: model.GetID()}
 
-	var v interface{}
-	vmodel, isVersionable := model.(Versionable)
 	if isVersionable {
-		v = vmodel.GetVersion()
 		if vmodel.IsVersionZero() {
 			query["$or"] = bson.A{
-				bson.M{vmodel.GetVersionFieldName(): v},
-				bson.M{vmodel.GetVersionFieldName(): bson.M{"$exists": false}},
+				bson.M{vmodel.GetVersionBsonFieldName(): v},
+				bson.M{vmodel.GetVersionBsonFieldName(): bson.M{"$exists": false}},
 			}
 		} else {
-			query[vmodel.GetVersionFieldName()] = v
+			query[vmodel.GetVersionBsonFieldName()] = v
 		}
 
 		vmodel.IncrementVersion()
