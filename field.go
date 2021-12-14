@@ -18,6 +18,10 @@ type DateFields struct {
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 }
 
+type VersionField struct {
+	Version_ int `json:"_v" bson:"_v"`
+}
+
 // PrepareID method prepares the ID value to be used for filtering
 // e.g convert hex-string ID value to bson.ObjectId
 func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
@@ -39,6 +43,26 @@ func (f *IDField) SetID(id interface{}) {
 	f.ID = id.(primitive.ObjectID)
 }
 
+// GetVersion returns the model version field
+func (f *VersionField) GetVersion() interface{} {
+	return f.Version_
+}
+
+// GetVersionFieldName returns the field name holding the version field (has to match the bson tag)
+func (f *VersionField) GetVersionFieldName() string {
+	return "_v"
+}
+
+// SetVersion returns the model version field
+func (f *VersionField) IncrementVersion() {
+	f.Version_++
+}
+
+// Determines whether the version field is in its zero value
+func (f *VersionField) IsVersionZero() bool {
+	return f.Version_ == 0
+}
+
 //--------------------------------
 // DateField methods
 //--------------------------------
@@ -51,7 +75,7 @@ func (f *DateFields) Creating() error {
 	return nil
 }
 
-// Saving hook is used here to set the `updated_at` field 
+// Saving hook is used here to set the `updated_at` field
 // value when creating or updateing a model.
 // TODO: get context as param the next version(4).
 func (f *DateFields) Saving() error {

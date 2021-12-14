@@ -1,11 +1,12 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
 )
 
 func setupDefConnection() {
@@ -43,6 +44,7 @@ func findDoc(t *testing.T) *Doc {
 
 type Doc struct {
 	mgm.DefaultModel `bson:",inline"`
+	mgm.VersionField `bson:",inline"`
 
 	Name string `bson:"name"`
 	Age  int    `bson:"age"`

@@ -2,6 +2,8 @@ package mgm
 
 import (
 	"context"
+	"fmt"
+
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -11,6 +13,12 @@ func create(ctx context.Context, c *Collection, model Model, opts ...*options.In
 	// Call to saving hook
 	if err := callToBeforeCreateHooks(ctx, model); err != nil {
 		return err
+	}
+
+	//If this model is versionable and its version value is zero, increment it to initialize it in the db
+	vmodel, isVersionable := model.(Versionable)
+	if isVersionable && vmodel.IsVersionZero() {
+		vmodel.IncrementVersion()
 	}
 
 	res, err := c.InsertOne(ctx, model, opts...)
@@ -30,15 +38,42 @@ func first(ctx context.Context, c *Collection, filter interface{}, model Model, 
 }
 
 func update(ctx context.Context, c *Collection, model Model, opts ...*options.UpdateOptions) error {
+
+	//Get current version before calling hooks that could alter it
+	var v interface{}
+	vmodel, isVersionable := model.(Versionable)
+	if isVersionable {
+		v = vmodel.Version()
+	}
+
 	// Call to saving hook
 	if err := callToBeforeUpdateHooks(ctx, model); err != nil {
 		return err
 	}
 
-	res, err := c.UpdateOne(ctx, bson.M{field.ID: model.GetID()}, bson.M{"$set": model}, opts...)
+	query := bson.M{field.ID: model.GetID()}
+
+	if isVersionable {
+		if vmodel.IsVersionZero() {
+			query["$or"] = bson.A{
+				bson.M{vmodel.GetVersionBsonFieldName(): v},
+				bson.M{vmodel.GetVersionBsonFieldName(): bson.M{"$exists": false}},
+			}
+		} else {
+			query[vmodel.GetVersionBsonFieldName()] = v
+		}
+
+		vmodel.IncrementVersion()
+	}
+
+	res, err := c.UpdateOne(ctx, query, bson.M{"$set": model}, opts...)
 
 	if err != nil {
 		return err
+	}
+
+	if isVersionable && res.MatchedCount == 0 {
+		return fmt.Errorf("document %v %v with version %v could not be found %w", c.Name(), model.GetID(), v, ErrVersionning)
 	}
 
 	return callToAfterUpdateHooks(ctx, res, model)

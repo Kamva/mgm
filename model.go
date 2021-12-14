@@ -26,6 +26,13 @@ type Model interface {
 	SetID(id interface{})
 }
 
+type Versionable interface {
+	Version() interface{}
+	GetVersionBsonFieldName() string
+	IncrementVersion()
+	IsVersionZero() bool
+}
+
 // DefaultModel struct contains a model's default fields.
 type DefaultModel struct {
 	IDField    `bson:",inline"`
