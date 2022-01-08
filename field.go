@@ -51,8 +51,8 @@ func (f *DateFields) Creating() error {
 	return nil
 }
 
-// Saving hook is used here to set the `updated_at` field 
-// value when creating or updateing a model.
+// Saving hook is used here to set the `updated_at` field
+// value when creating or updating a model.
 // TODO: get context as param the next version(4).
 func (f *DateFields) Saving() error {
 	f.UpdatedAt = time.Now().UTC()
