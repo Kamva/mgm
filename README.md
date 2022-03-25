@@ -407,6 +407,7 @@ New features can be requested and bugs can be reported on [Github issue tracker]
 ## Contributing 
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/kamva/mgm)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FKamva%2Fmgm.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FKamva%2Fmgm?ref=badge_shield)
 
 1. Fork the repository
 1. Clone your fork (`git clone https://github.com/<your_username>/mgm && cd mgm`)
@@ -419,3 +420,6 @@ New features can be requested and bugs can be reported on [Github issue tracker]
 ## License
 
 Mongo Go Models is released under the [Apache License](https://github.com/Kamva/mgm/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FKamva%2Fmgm.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FKamva%2Fmgm?ref=badge_large)
