@@ -18,21 +18,21 @@ type Collection struct {
 // FindByID method finds a doc and decodes it to a model, otherwise returns an error.
 // The id field can be any value that if passed to the `PrepareID` method, it returns
 // a valid ID (e.g string, bson.ObjectId).
-func (coll *Collection) FindByID(id interface{}, model Model) error {
-	return coll.FindByIDWithCtx(ctx(), id, model)
+func (coll *Collection) FindByID(id interface{}, model Model, opts ...*options.FindOneOptions) error {
+	return coll.FindByIDWithCtx(ctx(), id, model, opts...)
 }
 
 // FindByIDWithCtx method finds a doc and decodes it to a model, otherwise returns an error.
 // The id field can be any value that if passed to the `PrepareID` method, it returns
 // a valid ID (e.g string, bson.ObjectId).
-func (coll *Collection) FindByIDWithCtx(ctx context.Context, id interface{}, model Model) error {
+func (coll *Collection) FindByIDWithCtx(ctx context.Context, id interface{}, model Model, opts ...*options.FindOneOptions) error {
 	id, err := model.PrepareID(id)
 
 	if err != nil {
 		return err
 	}
 
-	return first(ctx, coll, bson.M{field.ID: id}, model)
+	return first(ctx, coll, bson.M{field.ID: id}, model, opts...)
 }
 
 // First method searches and returns the first document in the search results.
