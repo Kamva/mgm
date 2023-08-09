@@ -67,7 +67,7 @@ func init() {
 Define your model:
 ```go
 type Book struct {
-   // DefaultModel adds _id, created_at and updated_at fields to the Model
+   // DefaultModel adds _id, created_at and updated_at fields to the Model.
    mgm.DefaultModel `bson:",inline"`
    Name             string `json:"name" bson:"name"`
    Pages            int    `json:"pages" bson:"pages"`
@@ -135,6 +135,8 @@ the following fields:
 
 - `created_at`: The creation date of a doc. When saving a new doc, this is automatically populated by the `Creating` hook.
 - `updated_at`: The last updated date of a doc. When saving a doc, this is automatically populated by the `Saving` hook.
+
+You can even implement your own default model to customize its fields.
 
 ### A Model's Hooks
 
