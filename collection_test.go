@@ -1,6 +1,8 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/builder"
 	"github.com/kamva/mgm/v3/internal/util"
@@ -9,7 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"testing"
 )
 
 func TestFindByIdWithInvalidId(t *testing.T) {
@@ -127,7 +128,7 @@ func TestCollection_SimpleAggregateFirst(t *testing.T) {
 	// We dont want to change document.
 	group := builder.Group("$_id", nil)
 
-	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(&gotResult, group)
+	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(&gotResult, []interface{}{group})
 
 	assert.True(t, found)
 	util.AssertErrIsNil(t, err)
@@ -146,7 +147,7 @@ func TestCollection_SimpleAggregateFirstFalse(t *testing.T) {
 
 	var gotResult *Doc
 	match := bson.M{operator.Match: bson.M{"user_id": "unknown"}}
-	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(gotResult, match)
+	found, err := mgm.Coll(&Doc{}).SimpleAggregateFirst(gotResult, []interface{}{match})
 
 	assert.False(t, found)
 	util.AssertErrIsNil(t, err)
@@ -166,7 +167,7 @@ func TestCollection_SimpleAggregate(t *testing.T) {
 
 	project := bson.M{operator.Project: bson.M{"age": 0}}
 
-	err := mgm.Coll(&Doc{}).SimpleAggregate(&gotResult, group, project)
+	err := mgm.Coll(&Doc{}).SimpleAggregate(&gotResult, []interface{}{group, project})
 
 	util.AssertErrIsNil(t, err)
 
