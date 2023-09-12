@@ -40,8 +40,8 @@ The Mongo ODM for Go
 - `mgm` wraps the official Mongo Go Driver.
 
 ## Requirements
-- Go 1.10 or higher.
-- MongoDB 2.6 and higher.
+- Go 1.17 or higher.
+- MongoDB 3.6 and higher.
 
 ## Installation
 
