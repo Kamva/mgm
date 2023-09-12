@@ -41,7 +41,7 @@ The Mongo ODM for Go
 
 ## Requirements
 - Go 1.17 or higher.
-- MongoDB 4.2 and higher.
+- MongoDB 3.6 and higher.
 
 ## Installation
 
