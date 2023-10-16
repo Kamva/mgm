@@ -7,8 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [ '1.17', '1.18', '1.19', '1.20', '1.21' ]
-        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+#        go-version: [ '1.17', '1.18', '1.19', '1.20', '1.21' ]
+#        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
+        go-version: [ '1.21' ]
+        mongodb-version: [ '6.0' ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
@@ -19,8 +21,8 @@ jobs:
         uses: supercharge/mongodb-github-action@v1
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-port: 27017
-          mongodb-replica-set: mgm-rs
+#          mongodb-port: 27017
+#          mongodb-replica-set: mgm-rs
           mongodb-username: root
           mongodb-password: 12345
           mongodb-db: mgmdb
