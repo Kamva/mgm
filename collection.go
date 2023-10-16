@@ -99,21 +99,21 @@ func (coll *Collection) SimpleFindWithCtx(ctx context.Context, results interface
 	return cur.All(ctx, results)
 }
 
-//--------------------------------
+// --------------------------------
 // Aggregation methods
-//--------------------------------
+// --------------------------------
 
 // SimpleAggregateFirst is just same as SimpleAggregateFirstWithCtx, but doesn't get context param.
-func (coll *Collection) SimpleAggregateFirst(result interface{}, stages ...interface{}) (bool, error) {
-	return coll.SimpleAggregateFirstWithCtx(ctx(), result, stages...)
+func (coll *Collection) SimpleAggregateFirst(result interface{}, stages []interface{}, opts ...*options.AggregateOptions) (bool, error) {
+	return coll.SimpleAggregateFirstWithCtx(ctx(), result, stages, opts...)
 }
 
 // SimpleAggregateFirstWithCtx performs a simple aggregation, decodes the first aggregate result and returns it using the provided result parameter.
 // The value of `stages` can be Operator|bson.M
 // Note: you can not use this method in a transaction because it does not accept a context.
 // To participate in transactions, please use the regular aggregation method.
-func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result interface{}, stages ...interface{}) (bool, error) {
-	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
+func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result interface{}, stages []interface{}, opts ...*options.AggregateOptions) (bool, error) {
+	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages, opts...)
 	if err != nil {
 		return false, err
 	}
@@ -124,16 +124,16 @@ func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result 
 }
 
 // SimpleAggregate is just same as SimpleAggregateWithCtx, but doesn't get context param.
-func (coll *Collection) SimpleAggregate(results interface{}, stages ...interface{}) error {
-	return coll.SimpleAggregateWithCtx(ctx(), results, stages...)
+func (coll *Collection) SimpleAggregate(results interface{}, stages []interface{}, opts ...*options.AggregateOptions) error {
+	return coll.SimpleAggregateWithCtx(ctx(), results, stages, opts...)
 }
 
 // SimpleAggregateWithCtx performs a simple aggregation, decodes the aggregate result and returns the list using the provided result parameter.
 // The value of `stages` can be Operator|bson.M
 // Note: you can not use this method in a transaction because it does not accept a context.
 // To participate in transactions, please use the regular aggregation method.
-func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results interface{}, stages ...interface{}) error {
-	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages...)
+func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results interface{}, stages []interface{}, opts ...*options.AggregateOptions) error {
+	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages, opts...)
 	if err != nil {
 		return err
 	}
@@ -143,14 +143,14 @@ func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results inte
 
 // SimpleAggregateCursor is just same as SimpleAggregateCursorWithCtx, but
 // doesn't get context.
-func (coll *Collection) SimpleAggregateCursor(stages ...interface{}) (*mongo.Cursor, error) {
-	return coll.SimpleAggregateCursorWithCtx(ctx(), stages...)
+func (coll *Collection) SimpleAggregateCursor(stages []interface{}, opts ...*options.AggregateOptions) (*mongo.Cursor, error) {
+	return coll.SimpleAggregateCursorWithCtx(ctx(), stages, opts...)
 }
 
 // SimpleAggregateCursorWithCtx performs a simple aggregation and returns a cursor over the resulting documents.
 // Note: you can not use this method in a transaction because it does not accept a context.
 // To participate in transactions, please use the regular aggregation method.
-func (coll *Collection) SimpleAggregateCursorWithCtx(ctx context.Context, stages ...interface{}) (*mongo.Cursor, error) {
+func (coll *Collection) SimpleAggregateCursorWithCtx(ctx context.Context, stages []interface{}, opts ...*options.AggregateOptions) (*mongo.Cursor, error) {
 	pipeline := bson.A{}
 
 	for _, stage := range stages {
@@ -161,5 +161,5 @@ func (coll *Collection) SimpleAggregateCursorWithCtx(ctx context.Context, stages
 		}
 	}
 
-	return coll.Aggregate(ctx, pipeline, nil)
+	return coll.Aggregate(ctx, pipeline, opts...)
 }
