@@ -22,8 +22,6 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-replica-set: mgm-rs
-          mongodb-username: root
-          mongodb-password: 12345
           mongodb-db: mgmdb
 
       - uses: actions/cache@v3

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	defaultConnStr = "mongodb://root:12345@localhost:27017/mgmdb?replicaSet=mgm-rs&authSource=admin"
+	defaultConnStr = "mongodb://localhost:27017/mgmdb?replicaSet=mgm-rs&authSource=admin"
 	defaultDb      = "mgmdb"
 )
 
