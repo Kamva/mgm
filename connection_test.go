@@ -1,22 +1,23 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"testing"
 )
 
 func TestSetupDefaultConnection(t *testing.T) {
-	err := mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+	err := mgm.SetDefaultConfig(nil, "mgmdb", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
 
 	require.Nil(t, err)
 }
 
 func TestSetupWrongConnection(t *testing.T) {
-	err := mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("wrong://wrong:wrong@localhost:27017"))
+	err := mgm.SetDefaultConfig(nil, "mgmdb", options.Client().ApplyURI("wrong://wrong:wrong@localhost:27017"))
 
 	require.NotNil(t, err)
 }

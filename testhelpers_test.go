@@ -1,16 +1,22 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"testing"
+)
+
+const (
+	defaultConnStr = "mongodb://localhost:27017/mgmdb?replicaSet=mgm-rs&authSource=admin"
+	defaultDb      = "mgmdb"
 )
 
 func setupDefConnection() {
 	util.PanicErr(
-		mgm.SetDefaultConfig(nil, "models", options.Client().ApplyURI("mongodb://root:12345@localhost:27017")),
+		mgm.SetDefaultConfig(nil, defaultDb, options.Client().ApplyURI(defaultConnStr)),
 	)
 }
 
