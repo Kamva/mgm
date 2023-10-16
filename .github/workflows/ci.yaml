@@ -20,6 +20,7 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-port: 27017
+          mongodb-replica-set: mgm-rs
           mongodb-username: root
           mongodb-password: 12345
           mongodb-db: mgmdb
