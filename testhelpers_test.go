@@ -9,9 +9,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const (
+	defaultConnStr = "mongodb://root:12345@localhost:27017/mgmdb?replicaSet=mgm-rs&authSource=admin"
+	defaultDb      = "mgmdb"
+)
+
 func setupDefConnection() {
 	util.PanicErr(
-		mgm.SetDefaultConfig(nil, "mgmdb", options.Client().ApplyURI("mongodb://root:12345@localhost:27017/?replicaSet=mgm-rs&authSource=admin")),
+		mgm.SetDefaultConfig(nil, defaultDb, options.Client().ApplyURI(defaultConnStr)),
 	)
 }
 
