@@ -2,7 +2,7 @@ package mgm
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 // CreatingHook is called before saving a new model to the database

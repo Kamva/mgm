@@ -2,11 +2,11 @@ package mgm
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 // TransactionFunc is a handler to manage a transaction.
-type TransactionFunc func(session mongo.Session, sc mongo.SessionContext) error
+type TransactionFunc func(session *mongo.Session, sc context.Context) error
 
 // Transaction creates a transaction with the default client.
 func Transaction(f TransactionFunc) error {
@@ -20,19 +20,19 @@ func TransactionWithCtx(ctx context.Context, f TransactionFunc) error {
 
 // TransactionWithClient creates a transaction with the given client.
 func TransactionWithClient(ctx context.Context, client *mongo.Client, f TransactionFunc) error {
-	session, err := client.StartSession() //start session need to get options.
+	session, err := client.StartSession()
 	if err != nil {
 		return err
 	}
 
 	defer session.EndSession(ctx)
 
-	if err = session.StartTransaction(); err != nil { // startTransaction need to get options.
+	if err = session.StartTransaction(); err != nil {
 		return err
 	}
 
-	wrapperFn := func(sc mongo.SessionContext) error {
-		return f(session, sc)
+	wrapperFn := func(ctx context.Context) error {
+		return f(session, ctx)
 	}
 
 	return mongo.WithSession(ctx, session, wrapperFn)

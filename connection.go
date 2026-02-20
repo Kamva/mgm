@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/kamva/mgm/v3/internal/util"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"time"
 )
 
@@ -37,20 +37,11 @@ func ctx() context.Context {
 
 // NewClient returns a new mongodb client.
 func NewClient(opts ...*options.ClientOptions) (*mongo.Client, error) {
-	client, err := mongo.NewClient(opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = client.Connect(Ctx()); err != nil {
-		return nil, err
-	}
-
-	return client, nil
+	return mongo.Connect(opts...)
 }
 
 // NewCollection returns a new collection with the supplied database.
-func NewCollection(db *mongo.Database, name string, opts ...*options.CollectionOptions) *Collection {
+func NewCollection(db *mongo.Database, name string, opts ...options.Lister[options.CollectionOptions]) *Collection {
 	coll := db.Collection(name, opts...)
 
 	return &Collection{Collection: coll}
@@ -84,7 +75,7 @@ func SetDefaultConfig(conf *Config, dbName string, opts ...*options.ClientOption
 }
 
 // CollectionByName returns a new collection using the current configuration values.
-func CollectionByName(name string, opts ...*options.CollectionOptions) *Collection {
+func CollectionByName(name string, opts ...options.Lister[options.CollectionOptions]) *Collection {
 	return NewCollection(db, name, opts...)
 }
 

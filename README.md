@@ -406,6 +406,99 @@ New features can be requested and bugs can be reported on [Github issue tracker]
 * Create new topic at [mongo-go-models Google Group](https://groups.google.com/forum/#!forum/mongo-go-models)  
 * Ask your question or request new feature by creating an issue at [Github issue tracker](https://github.com/Kamva/mgm/issues)  
 
+## Development Setup
+
+### Prerequisites
+
+- Go 1.17+
+- MongoDB 3.6+ (installed locally or via Docker)
+
+### MongoDB Configuration
+
+Tests connect to MongoDB at `mongodb://localhost:27017` with no authentication. Make sure your local MongoDB instance is running on the default port.
+
+#### macOS (Homebrew)
+
+```bash
+brew install mongodb-community
+brew services start mongodb-community
+```
+
+The MongoDB configuration file is located at `/opt/homebrew/etc/mongod.conf` (Apple Silicon) or `/usr/local/etc/mongod.conf` (Intel).
+
+#### Linux
+
+Follow the [official MongoDB installation guide](https://www.mongodb.com/docs/manual/administration/install-on-linux/) for your distribution.
+
+### Replica Set Setup (Required for Transaction Tests)
+
+The transaction tests (`TestTransactionCommit`, `TestTransactionAbort`, `TestTransactionWithCtx`) require MongoDB to run as a **replica set** rather than a standalone instance. Without this, you will see errors like:
+
+```
+Transaction numbers are only allowed on a replica set member or mongos
+```
+
+To convert a standalone MongoDB instance to a single-node replica set:
+
+1. **Add the replica set configuration** to your `mongod.conf`:
+
+```yaml
+replication:
+  replSetName: rs0
+```
+
+A complete `mongod.conf` example (macOS/Homebrew):
+
+```yaml
+systemLog:
+  destination: file
+  path: /opt/homebrew/var/log/mongodb/mongo.log
+  logAppend: true
+storage:
+  dbPath: /opt/homebrew/var/mongodb
+net:
+  bindIp: 127.0.0.1, ::1
+  ipv6: true
+replication:
+  replSetName: rs0
+```
+
+2. **Restart MongoDB** to apply the config change:
+
+```bash
+# macOS (Homebrew)
+brew services restart mongodb-community
+
+# Linux (systemd)
+sudo systemctl restart mongod
+```
+
+3. **Initialize the replica set** (only needed once):
+
+```bash
+mongosh --eval "rs.initiate()"
+```
+
+You should see output containing `"ok": 1` confirming the replica set was initialized. Give it a few seconds to elect the primary node.
+
+4. **Verify the replica set** is running:
+
+```bash
+mongosh --eval "rs.status()"
+```
+
+Look for `"stateStr": "PRIMARY"` in the output to confirm the node is ready.
+
+### Running Tests
+
+Once MongoDB is running as a replica set, run all tests:
+
+```bash
+go test -v ./...
+```
+
+All tests — including transaction tests — should pass.
+
 ## Contributing 
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/kamva/mgm)
