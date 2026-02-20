@@ -4,6 +4,7 @@ import (
 	"github.com/kamva/mgm/v3"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"testing"
 )
 
@@ -42,10 +43,11 @@ func TestGetSpecifiedCollName(t *testing.T) {
 }
 
 func TestUpsertTrueOption(t *testing.T) {
-	option := mgm.UpsertTrueOption()
+	optBuilder := mgm.UpsertTrueOption()
+	var opts options.UpdateOneOptions
+	for _, set := range optBuilder.Opts {
+		require.Nil(t, set(&opts))
+	}
 	upsert := true
-	assert.Equal(t, option.Upsert, &upsert)
-	assert.Nil(t, option.ArrayFilters)
-	assert.Nil(t, option.BypassDocumentValidation)
-	assert.Nil(t, option.Collation)
+	assert.Equal(t, opts.Upsert, &upsert)
 }

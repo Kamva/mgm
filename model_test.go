@@ -3,7 +3,7 @@ package mgm_test
 import (
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"testing"
 )
 
@@ -19,7 +19,7 @@ func TestPrepareId(t *testing.T) {
 
 	hexId := "5df7fb2b1fff9ee374b6bd2a"
 	val, err := d.PrepareID(hexId)
-	id, _ := primitive.ObjectIDFromHex(hexId)
-	require.Equal(t, val.(primitive.ObjectID), id)
+	id, _ := bson.ObjectIDFromHex(hexId)
+	require.Equal(t, val.(bson.ObjectID), id)
 	util.AssertErrIsNil(t, err)
 }

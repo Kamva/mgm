@@ -5,7 +5,7 @@ import (
 	"github.com/kamva/mgm/v3/field"
 	"github.com/kamva/mgm/v3/operator"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"testing"
 )
 

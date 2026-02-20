@@ -3,7 +3,7 @@ package builder
 import (
 	f "github.com/kamva/mgm/v3/field"
 	o "github.com/kamva/mgm/v3/operator"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Bucket function returns a mongo $bucket operator used in aggregations.

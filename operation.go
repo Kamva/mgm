@@ -3,11 +3,11 @@ package mgm
 import (
 	"context"
 	"github.com/kamva/mgm/v3/field"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-func create(ctx context.Context, c *Collection, model Model, opts ...*options.InsertOneOptions) error {
+func create(ctx context.Context, c *Collection, model Model, opts ...options.Lister[options.InsertOneOptions]) error {
 	// Call to saving hook
 	if err := callToBeforeCreateHooks(ctx, model); err != nil {
 		return err
@@ -25,11 +25,11 @@ func create(ctx context.Context, c *Collection, model Model, opts ...*options.In
 	return callToAfterCreateHooks(ctx, model)
 }
 
-func first(ctx context.Context, c *Collection, filter interface{}, model Model, opts ...*options.FindOneOptions) error {
+func first(ctx context.Context, c *Collection, filter interface{}, model Model, opts ...options.Lister[options.FindOneOptions]) error {
 	return c.FindOne(ctx, filter, opts...).Decode(model)
 }
 
-func update(ctx context.Context, c *Collection, model Model, opts ...*options.UpdateOptions) error {
+func update(ctx context.Context, c *Collection, model Model, opts ...options.Lister[options.UpdateOneOptions]) error {
 	// Call to saving hook
 	if err := callToBeforeUpdateHooks(ctx, model); err != nil {
 		return err

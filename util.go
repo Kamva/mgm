@@ -3,12 +3,12 @@ package mgm
 import (
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/jinzhu/inflection"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"reflect"
 )
 
 // Coll returns the collection associated with a model.
-func Coll(m Model, opts ...*options.CollectionOptions) *Collection {
+func Coll(m Model, opts ...options.Lister[options.CollectionOptions]) *Collection {
 
 	if collGetter, ok := m.(CollectionGetter); ok {
 		return collGetter.Collection()
@@ -31,8 +31,7 @@ func CollName(m Model) string {
 	return inflection.Plural(util.ToSnakeCase(name))
 }
 
-// UpsertTrueOption returns new instance of UpdateOptions with the upsert property set to true.
-func UpsertTrueOption() *options.UpdateOptions {
-	upsert := true
-	return &options.UpdateOptions{Upsert: &upsert}
+// UpsertTrueOption returns a new UpdateOneOptions with the upsert property set to true.
+func UpsertTrueOption() *options.UpdateOneOptionsBuilder {
+	return options.UpdateOne().SetUpsert(true)
 }

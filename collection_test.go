@@ -9,8 +9,7 @@ import (
 	"github.com/kamva/mgm/v3/operator"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func TestFindByIdWithInvalidId(t *testing.T) {
@@ -29,7 +28,7 @@ func TestFindFirst(t *testing.T) {
 	d := &Doc{}
 	util.AssertErrIsNil(t, mgm.Coll(&Doc{}).First(bson.M{}, d))
 
-	require.NotEqual(t, primitive.ObjectID{}, d.ID)
+	require.NotEqual(t, bson.ObjectID{}, d.ID)
 }
 
 func TestCollection_Create(t *testing.T) {

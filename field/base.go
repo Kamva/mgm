@@ -1,6 +1,6 @@
 package field
 
-import "go.mongodb.org/mongo-driver/bson"
+import "go.mongodb.org/mongo-driver/v2/bson"
 
 // ID field is constant for referencing the "_id" field name.
 const ID = "_id"

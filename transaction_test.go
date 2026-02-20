@@ -1,11 +1,12 @@
 package mgm_test
 
 import (
+	"context"
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"testing"
 )
 
@@ -17,7 +18,7 @@ func TestTransactionCommit(t *testing.T) {
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.Transaction(func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
@@ -38,11 +39,10 @@ func TestTransactionCommit(t *testing.T) {
 func TestTransactionAbort(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
-	//seed()
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.Transaction(func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
@@ -63,11 +63,10 @@ func TestTransactionAbort(t *testing.T) {
 func TestTransactionWithCtx(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
-	//seed()
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.TransactionWithCtx(mgm.Ctx(), func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.TransactionWithCtx(mgm.Ctx(), func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
