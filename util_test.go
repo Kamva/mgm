@@ -49,3 +49,57 @@ func TestUpsertTrueOption(t *testing.T) {
 	optFuncs := option.List()
 	require.NotEmpty(t, optFuncs, "UpsertTrueOption should produce at least one option setter")
 }
+
+// CustomCollDoc implements CollectionGetter to return a custom collection.
+type CustomCollDoc struct {
+	mgm.DefaultModel `bson:",inline"`
+	Name             string `bson:"name"`
+}
+
+func (d *CustomCollDoc) Collection() *mgm.Collection {
+	// Return a collection with a custom name
+	return mgm.CollectionByName("custom_docs")
+}
+
+func TestCollWithCollectionGetter(t *testing.T) {
+	setupDefConnection()
+
+	doc := &CustomCollDoc{Name: "test"}
+	coll := mgm.Coll(doc)
+
+	require.Equal(t, "custom_docs", coll.Name(),
+		"Coll() should use CollectionGetter when implemented")
+}
+
+func TestCollNameIgnoresCollectionGetter(t *testing.T) {
+	// CollName uses reflection/CollectionNameGetter, not CollectionGetter
+	doc := &CustomCollDoc{}
+	name := mgm.CollName(doc)
+	require.Equal(t, "custom_coll_docs", name,
+		"CollName should use reflection, not CollectionGetter")
+}
+
+func TestCollWithOptions(t *testing.T) {
+	setupDefConnection()
+
+	doc := &Doc{}
+	coll := mgm.Coll(doc)
+
+	require.Equal(t, mgm.CollName(doc), coll.Name())
+}
+
+func TestCollNamePluralizations(t *testing.T) {
+	type Category struct {
+		mgm.DefaultModel `bson:",inline"`
+	}
+	type Person struct {
+		mgm.DefaultModel `bson:",inline"`
+	}
+	type Status struct {
+		mgm.DefaultModel `bson:",inline"`
+	}
+
+	require.Equal(t, "categories", mgm.CollName(&Category{}))
+	require.Equal(t, "people", mgm.CollName(&Person{}))
+	require.Equal(t, "statuses", mgm.CollName(&Status{}))
+}
