@@ -3,12 +3,12 @@ package mgm
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // IDField struct contains a model's ID field.
 type IDField struct {
-	ID primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	ID bson.ObjectID `json:"id" bson:"_id,omitempty"`
 }
 
 // DateFields struct contains the `created_at` and `updated_at`
@@ -22,7 +22,7 @@ type DateFields struct {
 // e.g convert hex-string ID value to bson.ObjectId
 func (f *IDField) PrepareID(id interface{}) (interface{}, error) {
 	if idStr, ok := id.(string); ok {
-		return primitive.ObjectIDFromHex(idStr)
+		return bson.ObjectIDFromHex(idStr)
 	}
 
 	// Otherwise id must be ObjectId
@@ -36,7 +36,7 @@ func (f *IDField) GetID() interface{} {
 
 // SetID sets the value of a model's ID field.
 func (f *IDField) SetID(id interface{}) {
-	f.ID = id.(primitive.ObjectID)
+	f.ID = id.(bson.ObjectID)
 }
 
 //--------------------------------

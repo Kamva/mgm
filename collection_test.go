@@ -9,8 +9,7 @@ import (
 	"github.com/kamva/mgm/v3/operator"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func TestFindByIdWithInvalidId(t *testing.T) {
@@ -29,7 +28,7 @@ func TestFindFirst(t *testing.T) {
 	d := &Doc{}
 	util.AssertErrIsNil(t, mgm.Coll(&Doc{}).First(bson.M{}, d))
 
-	require.NotEqual(t, primitive.ObjectID{}, d.ID)
+	require.NotEqual(t, bson.ObjectID{}, d.ID)
 }
 
 func TestCollection_Create(t *testing.T) {
@@ -134,7 +133,7 @@ func TestCollection_SimpleAggregateFirst(t *testing.T) {
 	util.AssertErrIsNil(t, err)
 
 	// Create same aggregation by raw methods
-	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group)}, nil)
+	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group)})
 	util.AssertErrIsNil(t, err)
 	util.AssertErrIsNil(t, cur.All(mgm.Ctx(), &expectedResult))
 	assert.Equal(t, expectedResult[0], gotResult)
@@ -172,7 +171,7 @@ func TestCollection_SimpleAggregate(t *testing.T) {
 	util.AssertErrIsNil(t, err)
 
 	// Create same aggregation by raw methods
-	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group), project}, nil)
+	cur, err := mgm.Coll(&Doc{}).Aggregate(mgm.Ctx(), bson.A{builder.S(group), project})
 	util.AssertErrIsNil(t, err)
 
 	util.AssertErrIsNil(t, cur.All(mgm.Ctx(), &expectedResult))

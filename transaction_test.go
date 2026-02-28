@@ -1,15 +1,17 @@
 package mgm_test
 
 import (
+	"context"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"testing"
 )
 
-// Note: to run Transaction tests, the MongoDB daemon must run as replica set, not as a standalone daemon. 
+// Note: to run Transaction tests, the MongoDB daemon must run as replica set, not as a standalone daemon.
 // To convert it [see this](https://docs.mongodb.com/manual/tutorial/convert-standalone-to-replica-set/)
 func TestTransactionCommit(t *testing.T) {
 	setupDefConnection()
@@ -17,7 +19,7 @@ func TestTransactionCommit(t *testing.T) {
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.Transaction(func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
@@ -42,7 +44,7 @@ func TestTransactionAbort(t *testing.T) {
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.Transaction(func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 
@@ -67,7 +69,7 @@ func TestTransactionWithCtx(t *testing.T) {
 
 	d := &Doc{Name: "check", Age: 10}
 
-	err := mgm.TransactionWithCtx(mgm.Ctx(), func(session mongo.Session, sc mongo.SessionContext) error {
+	err := mgm.TransactionWithCtx(mgm.Ctx(), func(session *mongo.Session, sc context.Context) error {
 
 		err := mgm.Coll(d).CreateWithCtx(sc, d)
 

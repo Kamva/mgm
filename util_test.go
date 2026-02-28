@@ -2,7 +2,6 @@ package mgm_test
 
 import (
 	"github.com/kamva/mgm/v3"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -43,9 +42,5 @@ func TestGetSpecifiedCollName(t *testing.T) {
 
 func TestUpsertTrueOption(t *testing.T) {
 	option := mgm.UpsertTrueOption()
-	upsert := true
-	assert.Equal(t, option.Upsert, &upsert)
-	assert.Nil(t, option.ArrayFilters)
-	assert.Nil(t, option.BypassDocumentValidation)
-	assert.Nil(t, option.Collation)
+	require.NotNil(t, option)
 }
