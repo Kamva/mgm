@@ -1,9 +1,10 @@
 package mgm_test
 
 import (
+	"testing"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestGetModelCollection(t *testing.T) {
@@ -43,4 +44,8 @@ func TestGetSpecifiedCollName(t *testing.T) {
 func TestUpsertTrueOption(t *testing.T) {
 	option := mgm.UpsertTrueOption()
 	require.NotNil(t, option)
+
+	// Verify the builder produces a non-empty options list
+	optFuncs := option.List()
+	require.NotEmpty(t, optFuncs, "UpsertTrueOption should produce at least one option setter")
 }
