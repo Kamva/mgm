@@ -147,6 +147,9 @@ func (m *errorHookModel) Saving() error {
 	return m.savingErr
 }
 
+// contextKey is a typed key for context.WithValue to satisfy go vet.
+type contextKey string
+
 // ------ Tests ------
 
 func TestCallToBeforeCreateHooks_LegacyFallback(t *testing.T) {
@@ -163,7 +166,7 @@ func TestCallToBeforeCreateHooks_LegacyFallback(t *testing.T) {
 func TestCallToBeforeCreateHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 
 	err := callToBeforeCreateHooks(ctx, model)
 
@@ -194,7 +197,7 @@ func TestCallToAfterCreateHooks_LegacyFallback(t *testing.T) {
 func TestCallToAfterCreateHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 
 	err := callToAfterCreateHooks(ctx, model)
 
@@ -217,7 +220,7 @@ func TestCallToBeforeUpdateHooks_LegacyFallback(t *testing.T) {
 func TestCallToBeforeUpdateHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 
 	err := callToBeforeUpdateHooks(ctx, model)
 
@@ -241,7 +244,7 @@ func TestCallToAfterUpdateHooks_LegacyFallback(t *testing.T) {
 func TestCallToAfterUpdateHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 	result := &mongo.UpdateResult{MatchedCount: 1, ModifiedCount: 1}
 
 	err := callToAfterUpdateHooks(ctx, result, model)
@@ -264,7 +267,7 @@ func TestCallToBeforeDeleteHooks_LegacyFallback(t *testing.T) {
 func TestCallToBeforeDeleteHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 
 	err := callToBeforeDeleteHooks(ctx, model)
 
@@ -286,7 +289,7 @@ func TestCallToAfterDeleteHooks_LegacyFallback(t *testing.T) {
 func TestCallToAfterDeleteHooks_CtxPreferred(t *testing.T) {
 	model := &ctxHookModel{}
 	model.ID = bson.NewObjectID()
-	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx := context.WithValue(context.Background(), contextKey("key"), "value")
 	result := &mongo.DeleteResult{DeletedCount: 1}
 
 	err := callToAfterDeleteHooks(ctx, result, model)

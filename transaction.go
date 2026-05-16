@@ -21,14 +21,14 @@ func TransactionWithCtx(ctx context.Context, f TransactionFunc) error {
 
 // TransactionWithClient creates a transaction with the given client.
 func TransactionWithClient(ctx context.Context, client *mongo.Client, f TransactionFunc) error {
-	session, err := client.StartSession() //start session need to get options.
+	session, err := client.StartSession()
 	if err != nil {
 		return err
 	}
 
 	defer session.EndSession(ctx)
 
-	if err = session.StartTransaction(); err != nil { // startTransaction need to get options.
+	if err = session.StartTransaction(); err != nil {
 		return err
 	}
 

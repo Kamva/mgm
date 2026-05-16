@@ -110,8 +110,6 @@ func (coll *Collection) SimpleAggregateFirst(result interface{}, stages []interf
 
 // SimpleAggregateFirstWithCtx performs a simple aggregation, decodes the first aggregate result and returns it using the provided result parameter.
 // The value of `stages` can be Operator|bson.M
-// Note: you can not use this method in a transaction because it does not accept a context.
-// To participate in transactions, please use the regular aggregation method.
 func (coll *Collection) SimpleAggregateFirstWithCtx(ctx context.Context, result interface{}, stages []interface{}, opts ...options.Lister[options.AggregateOptions]) (bool, error) {
 	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages, opts...)
 	if err != nil {
@@ -130,8 +128,6 @@ func (coll *Collection) SimpleAggregate(results interface{}, stages []interface{
 
 // SimpleAggregateWithCtx performs a simple aggregation, decodes the aggregate result and returns the list using the provided result parameter.
 // The value of `stages` can be Operator|bson.M
-// Note: you can not use this method in a transaction because it does not accept a context.
-// To participate in transactions, please use the regular aggregation method.
 func (coll *Collection) SimpleAggregateWithCtx(ctx context.Context, results interface{}, stages []interface{}, opts ...options.Lister[options.AggregateOptions]) error {
 	cur, err := coll.SimpleAggregateCursorWithCtx(ctx, stages, opts...)
 	if err != nil {

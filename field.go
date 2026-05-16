@@ -45,7 +45,6 @@ func (f *IDField) SetID(id interface{}) {
 
 // Creating hook is used here to set the `created_at` field
 // value when inserting a new model into the database.
-// TODO: get context as param the next version(4).
 func (f *DateFields) Creating() error {
 	f.CreatedAt = time.Now().UTC()
 	return nil
@@ -53,7 +52,6 @@ func (f *DateFields) Creating() error {
 
 // Saving hook is used here to set the `updated_at` field
 // value when creating or updating a model.
-// TODO: get context as param the next version(4).
 func (f *DateFields) Saving() error {
 	f.UpdatedAt = time.Now().UTC()
 	return nil

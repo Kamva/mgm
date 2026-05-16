@@ -22,8 +22,8 @@ type Config struct {
 
 // NewCtx function creates and returns a new context with the specified timeout.
 func NewCtx(timeout time.Duration) context.Context {
-	ctx, _ := context.WithTimeout(context.Background(), timeout)
-
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	_ = cancel
 	return ctx
 }
 
