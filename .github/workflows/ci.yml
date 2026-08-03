@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.22.x', '1.23.x']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+
+      # The test suite expects a single-node replica set (transactions) with a
+      # root/12345 user, reachable at localhost:27017 (see testhelpers_test.go).
+      # The member host is set to localhost so the driver's topology discovery
+      # resolves from outside the container.
+      - name: Start MongoDB replica set
+        run: |
+          docker run -d --name mongo -p 27017:27017 mongo:7 mongod --replSet rs0 --bind_ip_all
+
+          for i in $(seq 1 30); do
+            if docker exec mongo mongosh --quiet --eval 'db.runCommand({ping: 1})' >/dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
+
+          docker exec mongo mongosh --quiet --eval 'rs.initiate({_id: "rs0", members: [{_id: 0, host: "localhost:27017"}]})'
+
+          for i in $(seq 1 30); do
+            state=$(docker exec mongo mongosh --quiet --eval 'rs.status().myState' 2>/dev/null || echo 0)
+            if [ "$state" = "1" ]; then
+              break
+            fi
+            sleep 1
+          done
+
+          docker exec mongo mongosh --quiet --eval 'db.getSiblingDB("admin").createUser({user: "root", pwd: "12345", roles: [{role: "root", db: "admin"}]})'
+
+      - name: Run tests
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.txt
+          fail_ci_if_error: false

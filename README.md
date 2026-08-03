@@ -10,8 +10,8 @@
   <a href="https://godoc.org/github.com/Kamva/mgm">
     <img src="https://godoc.org/github.com/Kamva/mgm?status.svg" alt="GoDoc">
   </a>
-  <a href="https://travis-ci.com/Kamva/mgm">
-    <img src="https://travis-ci.com/Kamva/mgm.svg?branch=master" alt="Build Status">
+  <a href="https://github.com/Kamva/mgm/actions/workflows/ci.yml">
+    <img src="https://github.com/Kamva/mgm/actions/workflows/ci.yml/badge.svg?branch=master" alt="Build Status">
   </a>
   <a href="https://codecov.io/gh/Kamva/mgm">
     <img src="https://codecov.io/gh/Kamva/mgm/branch/master/graph/badge.svg" />
