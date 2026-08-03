@@ -22,6 +22,9 @@ type Config struct {
 
 // NewCtx function creates and returns a new context with the specified timeout.
 func NewCtx(timeout time.Duration) context.Context {
+	// The cancel func is intentionally discarded: this API only returns a
+	// context, so callers can't cancel early. Resources are released when
+	// the timeout expires.
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	_ = cancel
 	return ctx

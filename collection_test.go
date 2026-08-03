@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
@@ -74,9 +75,11 @@ func TestFirstWithNilFilter(t *testing.T) {
 	resetCollection()
 	seed()
 
+	// Driver v2 rejects nil filters client-side with ErrNilDocument.
 	d := &Doc{}
-	util.AssertErrIsNil(t, mgm.Coll(d).First(nil, d))
-	require.NotEqual(t, bson.ObjectID{}, d.ID)
+	err := mgm.Coll(d).First(nil, d)
+	require.Error(t, err)
+	require.ErrorIs(t, err, mongo.ErrNilDocument)
 }
 
 func TestFirstWithEmptyFilter(t *testing.T) {
@@ -139,8 +142,8 @@ func TestUpdateSetsUpdatedAt(t *testing.T) {
 	doc.Name = "Updated"
 	util.AssertErrIsNil(t, mgm.Coll(doc).Update(doc))
 
-	assert.True(t, doc.UpdatedAt.After(originalUpdatedAt) || doc.UpdatedAt.Equal(originalUpdatedAt),
-		"UpdatedAt should be >= original value after update")
+	assert.True(t, doc.UpdatedAt.After(originalUpdatedAt),
+		"UpdatedAt should advance after update")
 }
 
 func TestUpdateWithCtxAndOptions(t *testing.T) {
@@ -235,14 +238,19 @@ func TestSimpleFindWithCtx(t *testing.T) {
 func TestFindByIDWithCancelledContext(t *testing.T) {
 	setupDefConnection()
 	resetCollection()
-	seed()
+
+	// Use an existing doc's ID so a nil error can only mean the
+	// cancelled context was ignored, not that the doc was missing.
+	doc := NewDoc("Ali", 24)
+	util.AssertErrIsNil(t, mgm.Coll(doc).Create(doc))
 
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel() // cancel immediately
 
 	d := &Doc{}
-	err := mgm.Coll(d).FindByIDWithCtx(ctx, bson.NewObjectID(), d)
+	err := mgm.Coll(d).FindByIDWithCtx(ctx, doc.ID, d)
 	require.Error(t, err, "Cancelled context should produce error")
+	require.ErrorIs(t, err, context.Canceled)
 }
 
 func TestCreateWithCancelledContext(t *testing.T) {

@@ -126,9 +126,11 @@ func (m *ctxHookModel) Deleted(ctx context.Context, result *mongo.DeleteResult) 
 }
 
 // --- Model with no hooks at all ---
+// Embeds only IDField: embedding testModel would pull in the
+// DateFields legacy Creating/Saving hooks.
 
 type noHookModel struct {
-	testModel
+	IDField `bson:",inline"`
 }
 
 // --- Error-returning hook model ---
