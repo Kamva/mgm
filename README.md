@@ -2,10 +2,9 @@
 <img width="250" src="https://user-images.githubusercontent.com/22454054/71487214-759cb680-282f-11ea-9bcf-caa663b3e348.png" />
 </p>
 
-
 <p align="center">
-  <a href="https://goreportcard.com/report/github.com/Kamva/mgm">
-    <img src="https://goreportcard.com/badge/github.com/Kamva/mgm">
+  <a href="https://app.fossa.com/projects/git%2Bgithub.com%2FKamva%2Fmgm?ref=badge_shield&issueType=license">
+    <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2FKamva%2Fmgm.svg?type=shield&issueType=license">
   </a>
   <a href="https://godoc.org/github.com/Kamva/mgm">
     <img src="https://godoc.org/github.com/Kamva/mgm?status.svg" alt="GoDoc">
