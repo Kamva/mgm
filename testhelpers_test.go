@@ -3,8 +3,8 @@ package mgm_test
 import (
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"testing"
 )
 

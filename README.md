@@ -40,8 +40,21 @@ The Mongo ODM for Go
 - `mgm` wraps the official Mongo Go Driver.
 
 ## Requirements
-- Go 1.17 or higher.
-- MongoDB 3.6 and higher.
+- Go 1.22 or higher.
+- MongoDB 4.0 and higher (required by the official driver v2).
+
+## Upgrading to the mongo-driver v2 based release
+
+`mgm` now wraps `go.mongodb.org/mongo-driver/v2`. If you're upgrading from a
+release based on driver v1, note these breaking changes:
+
+- Import `go.mongodb.org/mongo-driver/v2/...` instead of `go.mongodb.org/mongo-driver/...`.
+- `primitive.ObjectID` is now `bson.ObjectID` (the `bson/primitive` package was removed in v2).
+- `TransactionFunc` receives `(session *mongo.Session, sc context.Context)`
+  instead of `(session mongo.Session, sc mongo.SessionContext)`.
+- Collection and operation options use the driver's builder API
+  (e.g. `options.FindOne().SetComment(...)`); bare option struct pointers are
+  no longer accepted.
 
 ## Installation
 
@@ -55,7 +68,7 @@ To get started, import the `mgm` package and setup the default config:
 ```go
 import (
    "github.com/kamva/mgm/v3"
-   "go.mongodb.org/mongo-driver/mongo/options"
+   "go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func init() {
@@ -302,8 +315,7 @@ import (
    "github.com/kamva/mgm/v3"
    "github.com/kamva/mgm/v3/builder"
    "github.com/kamva/mgm/v3/field"
-   . "go.mongodb.org/mongo-driver/bson"
-   "go.mongodb.org/mongo-driver/bson/primitive"
+   . "go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // The Author model collection
@@ -322,8 +334,7 @@ import (
    "github.com/kamva/mgm/v3/builder"
    "github.com/kamva/mgm/v3/field"
    "github.com/kamva/mgm/v3/operator"
-   . "go.mongodb.org/mongo-driver/bson"
-   "go.mongodb.org/mongo-driver/bson/primitive"
+   . "go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Author model collection
@@ -347,7 +358,7 @@ if err != nil {
 ```go
 d := &Doc{Name: "Mehran", Age: 10}
 
-err := mgm.Transaction(func(session mongo.Session, sc mongo.SessionContext) error {
+err := mgm.Transaction(func(session *mongo.Session, sc context.Context) error {
 
    // do not forget to pass the session's context to the collection methods.
 	err := mgm.Coll(d).CreateWithCtx(sc, d)
@@ -382,7 +393,7 @@ import (
    "github.com/kamva/mgm/v3"
    f "github.com/kamva/mgm/v3/field"
    o "github.com/kamva/mgm/v3/operator"
-   "go.mongodb.org/mongo-driver/bson"
+   "go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Instead of hard-coding mongo operators and fields

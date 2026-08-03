@@ -1,11 +1,13 @@
 package mgm_test
 
 import (
+	"time"
+
 	"github.com/kamva/mgm/v3"
 	"github.com/kamva/mgm/v3/internal/util"
 	"github.com/stretchr/testify/require"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 	"testing"
 )
 
@@ -43,6 +45,50 @@ func TestGetCtx(t *testing.T) {
 
 	_, ok := ctx.Deadline()
 	require.True(t, ok, "context should having deadline.")
+}
+
+func TestGetCtxDeadlineMatchesConfig(t *testing.T) {
+	setupDefConnection()
+
+	before := time.Now()
+	ctx := mgm.Ctx()
+	deadline, ok := ctx.Deadline()
+
+	require.True(t, ok, "context should have deadline")
+
+	// Default config timeout is 10 seconds
+	expectedDeadline := before.Add(10 * time.Second)
+	require.True(t, deadline.After(before), "deadline should be after now")
+	require.True(t, deadline.Before(expectedDeadline.Add(time.Second)),
+		"deadline should be within ~10s from now")
+}
+
+func TestNewCtxWithCustomTimeout(t *testing.T) {
+	setupDefConnection()
+
+	timeout := 5 * time.Second
+	before := time.Now()
+	ctx := mgm.NewCtx(timeout)
+	deadline, ok := ctx.Deadline()
+
+	require.True(t, ok, "context should have deadline")
+	require.True(t, deadline.After(before), "deadline should be after now")
+	require.True(t, deadline.Before(before.Add(timeout+time.Second)),
+		"deadline should be within custom timeout")
+}
+
+func TestSetDefaultConfigWithCustomTimeout(t *testing.T) {
+	conf := &mgm.Config{CtxTimeout: 3 * time.Second}
+	err := mgm.SetDefaultConfig(conf, "models", options.Client().ApplyURI("mongodb://root:12345@localhost:27017"))
+	require.Nil(t, err)
+
+	before := time.Now()
+	ctx := mgm.Ctx()
+	deadline, ok := ctx.Deadline()
+
+	require.True(t, ok)
+	require.True(t, deadline.Before(before.Add(4*time.Second)),
+		"deadline should reflect custom 3s timeout")
 }
 
 func TestGetCollection(t *testing.T) {
@@ -88,4 +134,14 @@ func TestGetDefaultConfigAfterSettingItUp(t *testing.T) {
 	}
 
 	util.AssertErrIsNil(t, err)
+}
+
+func TestCollectionByNameWithDifferentNames(t *testing.T) {
+	setupDefConnection()
+
+	tests := []string{"users", "orders", "test_collection_123"}
+	for _, name := range tests {
+		col := mgm.CollectionByName(name)
+		require.Equal(t, name, col.Name())
+	}
 }
